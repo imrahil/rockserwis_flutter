@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'schedule.dart';
+part of 'episode.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Schedule _$ScheduleFromJson(Map<String, dynamic> json) => Schedule(
+Episode _$EpisodeFromJson(Map<String, dynamic> json) => Episode(
       json['schedule_id'] as int,
       DateTime.parse(json['date'] as String),
       json['name'] as String,
@@ -14,10 +14,10 @@ Schedule _$ScheduleFromJson(Map<String, dynamic> json) => Schedule(
       (json['podcast_duration'] as num?)?.toDouble(),
     );
 
-Map<String, dynamic> _$ScheduleToJson(Schedule instance) => <String, dynamic>{
-      'schedule_id': instance.scheduleId,
+Map<String, dynamic> _$EpisodeToJson(Episode instance) => <String, dynamic>{
+      'schedule_id': instance.episodeId,
       'date': instance.date.toIso8601String(),
       'name': instance.name,
       'img_path': instance.imgPath,
-      'podcast_duration': instance.podcastDuration,
+      'podcast_duration': instance.episodeDuration,
     };

@@ -1,21 +1,20 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:music_player/models/schedule.dart';
-import '../models/broadcast.dart';
+import 'package:music_player/models/episode.dart';
+import '../models/podcast.dart';
 
 const mainUrl = 'https://rockserwis.fm';
 const broadCastUrl = '$mainUrl/broadcasts.json';
 const scheduleUrl = '$mainUrl/audycje';
 
 class API {
-  static Future<List<Broadcast>> getBroadcasts() async {
-    final response = await http
-        .get(Uri.parse(broadCastUrl));
+  static Future<List<Podcast>> getPodcasts() async {
+    final response = await http.get(Uri.parse(broadCastUrl));
 
     if (response.statusCode == 200) {
-      List<Broadcast> broadcastList;
+      List<Podcast> broadcastList;
       broadcastList = (json.decode(response.body) as List)
-          .map((i) => Broadcast.fromJson(i))
+          .map((i) => Podcast.fromJson(i))
           .toList();
 
       return broadcastList;
@@ -24,16 +23,15 @@ class API {
     }
   }
 
-  static Future<List<Schedule>> getSchedules(int broadcastId) async {
+  static Future<List<Episode>> getEpisodes(int broadcastId) async {
     String url = '$scheduleUrl/$broadcastId.json';
 
-    final response = await http
-        .get(Uri.parse(url));
+    final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
-      List<Schedule> scheduleList;
+      List<Episode> scheduleList;
       scheduleList = (json.decode(response.body) as List)
-          .map((i) => Schedule.fromJson(i))
+          .map((i) => Episode.fromJson(i))
           .toList();
 
       return scheduleList;

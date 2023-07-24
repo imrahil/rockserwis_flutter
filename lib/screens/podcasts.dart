@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/api/api.dart';
-import 'package:music_player/models/broadcast.dart';
-import 'package:music_player/screens/schedules.dart';
+import 'package:music_player/models/podcast.dart';
+import 'package:music_player/screens/episodes.dart';
 
-class HomePage extends StatelessWidget {
-  static const routeName = '/';
+class PodcastsPage extends StatelessWidget {
 
-  const HomePage({super.key});
+  const PodcastsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Podcasts'),
+        title: const Text('Podcasts!'),
       ),
-      body: FutureBuilder<List<Broadcast>>(
-          future: API.getBroadcasts(),
-          builder: (BuildContext context, AsyncSnapshot<List<Broadcast>> snapshot) {
+      body: FutureBuilder<List<Podcast>>(
+          future: API.getPodcasts(),
+          builder: (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
             if (!snapshot.hasData) {
               return const Center(
                   child: CircularProgressIndicator()
@@ -25,14 +24,14 @@ class HomePage extends StatelessWidget {
               return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  Broadcast currentEntry = snapshot.data![index];
+                  Podcast currentEntry = snapshot.data![index];
 
                   return ListTile(
-                    title: Text(currentEntry.broadcastName),
+                    title: Text(currentEntry.podcastName),
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SchedulePage(broadcastId: currentEntry.broadcastId, broadcastName: currentEntry.broadcastName)),
+                        MaterialPageRoute(builder: (context) => EpisodesPage(broadcastId: currentEntry.podcastId, broadcastName: currentEntry.podcastName)),
                       );
                     },
                   );
