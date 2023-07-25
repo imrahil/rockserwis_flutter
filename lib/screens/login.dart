@@ -63,8 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                         } else {
                           _showDialog('Unable to sign in.');
                         }
-                      }
-                  ),
+                      }),
                 ].expand(
                   (widget) => [
                     widget,

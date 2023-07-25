@@ -2,17 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:music_player/api/api.dart';
 import 'package:music_player/models/episode.dart';
+import 'package:music_player/screens/player.dart';
 
 class EpisodesPage extends StatelessWidget {
   final API apiProvider;
   final int podcastId;
   final String podcastName;
 
-  const EpisodesPage(
-      {super.key,
-      required this.apiProvider,
-      required this.podcastId,
-      required this.podcastName});
+  const EpisodesPage({super.key, required this.apiProvider, required this.podcastId, required this.podcastName});
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +19,7 @@ class EpisodesPage extends StatelessWidget {
       ),
       body: FutureBuilder<List<Episode>>(
           future: apiProvider.getEpisodes(podcastId),
-          builder:
-              (BuildContext context, AsyncSnapshot<List<Episode>> snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<List<Episode>> snapshot) {
             if (!snapshot.hasData) {
               return const Center(child: CircularProgressIndicator());
             } else {
@@ -32,11 +28,24 @@ class EpisodesPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   Episode currentEntry = snapshot.data![index];
 
+                  String episodeTitle = "${currentEntry.name} - ${DateFormat("yyyy-MM-dd").format(currentEntry.date)}";
+
                   return ListTile(
-                    title: Text(
-                        "${currentEntry.name} - ${DateFormat("yyyy-MM-dd").format(currentEntry.date)}"),
+                    title: Text(episodeTitle),
                     onTap: () {
-                      apiProvider.fetchUrl(currentEntry.episodeId);
+                      if (currentEntry.hasPodcast) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  Player(
+                                      apiProvider: apiProvider,
+                                      episodeId: currentEntry.episodeId,
+                                      episodeTitle: episodeTitle,
+                                      episodeImage: currentEntry.imgPath ?? "")
+                          ),
+                        );
+                      }
                     },
                   );
                 },

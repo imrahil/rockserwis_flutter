@@ -16,7 +16,10 @@ class Episode {
   @JsonKey(name: 'podcast_duration')
   final double? episodeDuration;
 
-  Episode(this.episodeId, this.date, this.name, this.imgPath, this.episodeDuration);
+  @JsonKey(name: 'has_podcast')
+  final bool hasPodcast;
+
+  Episode(this.episodeId, this.date, this.name, this.imgPath, this.episodeDuration, this.hasPodcast);
 
   factory Episode.fromJson(Map<String, dynamic> json) =>
       _$EpisodeFromJson(json);

@@ -12,15 +12,13 @@ class PodcastsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Podcasts!'),
+        title: const Text('Podcasts'),
       ),
       body: FutureBuilder<List<Podcast>>(
           future: apiProvider.getPodcasts(),
           builder: (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
             if (!snapshot.hasData) {
-              return const Center(
-                  child: CircularProgressIndicator()
-              );
+              return const Center(child: CircularProgressIndicator());
             } else {
               return ListView.builder(
                 itemCount: snapshot.data!.length,
@@ -32,7 +30,11 @@ class PodcastsPage extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => EpisodesPage(apiProvider: apiProvider, podcastId: currentEntry.podcastId, podcastName: currentEntry.podcastName)),
+                        MaterialPageRoute(
+                            builder: (context) => EpisodesPage(
+                                apiProvider: apiProvider,
+                                podcastId: currentEntry.podcastId,
+                                podcastName: currentEntry.podcastName)),
                       );
                     },
                   );

@@ -4,13 +4,13 @@ import 'package:music_player/models/episode.dart';
 import 'package:music_player/models/form_data.dart';
 import '../models/podcast.dart';
 
-const mainUrl = 'https://rockserwis.fm';
-const broadCastUrl = '$mainUrl/broadcasts.json';
-const scheduleUrl = '$mainUrl/audycje';
-const loginCsrfUrl = '$mainUrl/login?get=csrf';
-const loginPostUrl = '$mainUrl/login';
-
 class API {
+  static const mainUrl = 'https://rockserwis.fm';
+  static const broadCastUrl = '$mainUrl/broadcasts.json';
+  static const scheduleUrl = '$mainUrl/audycje';
+  static const loginCsrfUrl = '$mainUrl/login?get=csrf';
+  static const loginPostUrl = '$mainUrl/login';
+
   String masterCookie = "";
   String sessionCookie = "";
 
@@ -62,13 +62,8 @@ class API {
       form['password'] = formData.password;
       form['method'] = 'login';
 
-      final loginCall = await http.post(
-          Uri.parse(loginPostUrl),
-          body: form,
-          headers: {
-            'Cookie': masterCookie
-          }
-      );
+      final loginCall = await http.post(Uri.parse(loginPostUrl),
+          body: form, headers: {'Cookie': masterCookie});
 
       sessionCookie = parseCookie(loginCall);
       print('sessionCookie: $sessionCookie');
@@ -79,20 +74,11 @@ class API {
     }
   }
 
-  Future<void> fetchUrl(int episodeId) async {
-    final fetchCall = await http.head(
-        Uri.parse('$mainUrl/podcast/$episodeId'),
-        headers: {
-          'Cookie': [masterCookie, sessionCookie].join(";"),
-        }
-    );
+  String getEpisodeUrl(int episodeId) => '$mainUrl/podcast/$episodeId';
 
-    if (fetchCall.statusCode == 401) {
-      print("Damn!");
-    } else {
-      print("Dang!");
-    }
-  }
+  Map<String, String> getHeaders() => {
+        'Cookie': [masterCookie, sessionCookie].join(";")
+      };
 
   String parseCookie(http.Response response) {
     String? rawCookie = response.headers['set-cookie'];

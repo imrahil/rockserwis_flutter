@@ -12,6 +12,7 @@ Episode _$EpisodeFromJson(Map<String, dynamic> json) => Episode(
       json['name'] as String,
       json['img_path'] as String?,
       (json['podcast_duration'] as num?)?.toDouble(),
+      json['has_podcast'] as bool,
     );
 
 Map<String, dynamic> _$EpisodeToJson(Episode instance) => <String, dynamic>{
@@ -20,4 +21,5 @@ Map<String, dynamic> _$EpisodeToJson(Episode instance) => <String, dynamic>{
       'name': instance.name,
       'img_path': instance.imgPath,
       'podcast_duration': instance.episodeDuration,
+      'has_podcast': instance.hasPodcast,
     };
