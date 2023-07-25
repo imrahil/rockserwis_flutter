@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/screens/podcasts.dart';
+import 'package:music_player/api/api.dart';
+import 'package:music_player/screens/login.dart';
 
 void main() {
-  runApp(const MusicPlayer());
+  runApp(MusicPlayer());
 }
 
 class MusicPlayer extends StatelessWidget {
-  const MusicPlayer({super.key});
+  MusicPlayer({super.key});
+
+  final API apiProvider = API();
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +19,7 @@ class MusicPlayer extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const PodcastsPage(),
+      home: LoginPage(apiProvider: apiProvider),
     );
   }
 }

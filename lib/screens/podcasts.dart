@@ -4,8 +4,9 @@ import 'package:music_player/models/podcast.dart';
 import 'package:music_player/screens/episodes.dart';
 
 class PodcastsPage extends StatelessWidget {
+  final API apiProvider;
 
-  const PodcastsPage({super.key});
+  const PodcastsPage({super.key, required this.apiProvider});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class PodcastsPage extends StatelessWidget {
         title: const Text('Podcasts!'),
       ),
       body: FutureBuilder<List<Podcast>>(
-          future: API.getPodcasts(),
+          future: apiProvider.getPodcasts(),
           builder: (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
             if (!snapshot.hasData) {
               return const Center(
@@ -31,7 +32,7 @@ class PodcastsPage extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => EpisodesPage(broadcastId: currentEntry.podcastId, broadcastName: currentEntry.podcastName)),
+                        MaterialPageRoute(builder: (context) => EpisodesPage(apiProvider: apiProvider, podcastId: currentEntry.podcastId, podcastName: currentEntry.podcastName)),
                       );
                     },
                   );
