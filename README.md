@@ -1,4 +1,4 @@
-# music_player
+# rockserwis_podcaster
 
 A new Flutter project.
 

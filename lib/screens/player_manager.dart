@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:music_player/api/api.dart';
+import 'package:rockserwis_podcaster/api/api.dart';
 
 class PlayerManager {
   late AudioPlayer _audioPlayer;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/api/api.dart';
-import 'package:music_player/models/podcast.dart';
-import 'package:music_player/screens/episodes.dart';
+import 'package:rockserwis_podcaster/api/api.dart';
+import 'package:rockserwis_podcaster/models/podcast.dart';
+import 'package:rockserwis_podcaster/screens/episodes.dart';
 
 class PodcastsPage extends StatelessWidget {
   final API apiProvider;
@@ -16,7 +16,8 @@ class PodcastsPage extends StatelessWidget {
       ),
       body: FutureBuilder<List<Podcast>>(
           future: apiProvider.getPodcasts(),
-          builder: (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
+          builder:
+              (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
             if (!snapshot.hasData) {
               return const Center(child: CircularProgressIndicator());
             } else {

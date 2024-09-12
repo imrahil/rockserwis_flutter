@@ -1,8 +1,8 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:music_player/api/api.dart';
-import 'package:music_player/screens/player_manager.dart';
+import 'package:rockserwis_podcaster/api/api.dart';
+import 'package:rockserwis_podcaster/screens/player_manager.dart';
 
 class Player extends StatefulWidget {
   final API apiProvider;
@@ -27,7 +27,8 @@ class _PlayerState extends State<Player> {
   @override
   void initState() {
     super.initState();
-    _playerManager = PlayerManager(apiProvider: widget.apiProvider, episodeId: widget.episodeId);
+    _playerManager = PlayerManager(
+        apiProvider: widget.apiProvider, episodeId: widget.episodeId);
   }
 
   @override
@@ -49,13 +50,18 @@ class _PlayerState extends State<Player> {
         child: Column(
           children: [
             const Spacer(),
-            widget.episodeImage != "" ? Image.network(imagePath) : const Spacer(),
+            widget.episodeImage != ""
+                ? Image.network(imagePath)
+                : const Spacer(),
             const Spacer(),
             ValueListenableBuilder<ProgressBarState>(
               valueListenable: _playerManager.progressNotifier,
               builder: (_, value, __) {
                 return ProgressBar(
-                    progress: value.current, buffered: value.buffered, total: value.total, onSeek: _playerManager.seek);
+                    progress: value.current,
+                    buffered: value.buffered,
+                    total: value.total,
+                    onSeek: _playerManager.seek);
               },
             ),
             StreamBuilder<PlayerState>(
@@ -65,7 +71,8 @@ class _PlayerState extends State<Player> {
                 final processingState = playerState?.processingState;
                 final playing = playerState?.playing;
 
-                if (processingState == ProcessingState.loading || processingState == ProcessingState.buffering) {
+                if (processingState == ProcessingState.loading ||
+                    processingState == ProcessingState.buffering) {
                   return Container(
                     margin: const EdgeInsets.all(8.0),
                     width: 64.0,

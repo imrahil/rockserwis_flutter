@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/api/api.dart';
-import 'package:music_player/screens/login.dart';
+import 'package:rockserwis_podcaster/api/api.dart';
+import 'package:rockserwis_podcaster/screens/login.dart';
 
-void main() {
-  runApp(MusicPlayer());
-}
+void main() => runApp(MusicPlayer());
 
 class MusicPlayer extends StatelessWidget {
   MusicPlayer({super.key});
@@ -15,17 +13,27 @@ class MusicPlayer extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Rockserwis.fm Podcast Player',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // Define the default brightness and colors.
-        brightness: Brightness.dark,
-        primaryColor: Colors.lightBlue[800],
-
-        // Define the default `TextTheme`. Use this to specify the default
-        // text styling for headlines, titles, bodies of text, and more.
-        textTheme: const TextTheme(
-          displayLarge: TextStyle(fontSize: 72, fontWeight: FontWeight.bold),
-          titleLarge: TextStyle(fontSize: 24, fontStyle: FontStyle.italic),
-          bodyMedium: TextStyle(fontSize: 18, fontFamily: 'Hind'),
+        brightness: Brightness.dark, // Enable dark theme
+        primarySwatch: Colors.blue,
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: Colors.grey[850], // Dark background for input fields
+          labelStyle:
+              TextStyle(color: Colors.grey[400]), // Light text color for labels
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Colors.grey[600]!),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Colors.grey[600]!),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(color: Colors.blue),
+          ),
         ),
       ),
       home: LoginPage(apiProvider: apiProvider),

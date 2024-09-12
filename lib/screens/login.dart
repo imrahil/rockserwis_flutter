@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/api/api.dart';
-import 'package:music_player/models/form_data.dart';
-import 'package:music_player/screens/podcasts.dart';
+import 'package:rockserwis_podcaster/api/api.dart';
+import 'package:rockserwis_podcaster/models/form_data.dart';
+import 'package:rockserwis_podcaster/screens/podcasts.dart';
 
 class LoginPage extends StatefulWidget {
   final API apiProvider;
@@ -14,64 +14,102 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   FormData formData = FormData();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sign in Form'),
-      ),
-      body: Form(
-        child: Scrollbar(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
+      backgroundColor: Colors.black, // Dark background color
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Form(
+            key: _formKey,
             child: Column(
-              children: [
-                ...[
-                  TextFormField(
-                    autofocus: true,
-                    textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(
-                      filled: true,
-                      hintText: 'Your email address',
-                      labelText: 'Email',
-                    ),
-                    onChanged: (value) {
-                      formData.email = value;
-                    },
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text(
+                  'Rockserwis.fm',
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white, // Light text color
                   ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      filled: true,
-                      labelText: 'Password',
-                    ),
-                    obscureText: true,
-                    onChanged: (value) {
-                      formData.password = value;
-                    },
+                ),
+                const SizedBox(height: 40),
+                TextFormField(
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    prefixIcon: Icon(Icons.email, color: Colors.grey[400]),
                   ),
-                  TextButton(
-                      child: const Text('Sign in'),
-                      onPressed: () async {
-                        bool result = await widget.apiProvider.login(formData);
+                  style:
+                      const TextStyle(color: Colors.white), // Input text color
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    formData.email = value;
+                  },
+                ),
+                const SizedBox(height: 20),
+                TextFormField(
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    prefixIcon: Icon(Icons.lock, color: Colors.grey[400]),
+                  ),
+                  style:
+                      const TextStyle(color: Colors.white), // Input text color
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    formData.password = value;
+                  },
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState?.save();
 
-                        if (result && mounted) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => PodcastsPage(apiProvider: widget.apiProvider)),
-                          );
-                        } else {
-                          _showDialog('Unable to sign in.');
-                        }
-                      }),
-                ].expand(
-                  (widget) => [
-                    widget,
-                    const SizedBox(
-                      height: 24,
-                    )
-                  ],
-                )
+                      bool result = await widget.apiProvider.login(formData);
+
+                      if (result && context.mounted) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PodcastsPage(
+                                  apiProvider: widget.apiProvider)),
+                        );
+                      } else {
+                        _showDialog('Unable to sign in.');
+                      }
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 100, vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text(
+                    'Login',
+                    style: TextStyle(
+                      fontSize: 20, // Bigger font size for the label
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:music_player/models/episode.dart';
-import 'package:music_player/models/form_data.dart';
+import 'package:rockserwis_podcaster/models/episode.dart';
+import 'package:rockserwis_podcaster/models/form_data.dart';
 import '../models/podcast.dart';
 
 class API {
@@ -51,10 +51,10 @@ class API {
 
     if (loginCsrf.statusCode == 200) {
       masterCookie = parseCookie(loginCsrf);
-      print('csrfTokenCookie: $masterCookie');
+      //print('csrfTokenCookie: $masterCookie');
 
       String loginToken = loginCsrf.body;
-      print('loginToken: $loginToken');
+      //print('loginToken: $loginToken');
 
       var form = <String, dynamic>{};
       form['csrf-token'] = loginToken;
@@ -66,7 +66,7 @@ class API {
           body: form, headers: {'Cookie': masterCookie});
 
       sessionCookie = parseCookie(loginCall);
-      print('sessionCookie: $sessionCookie');
+      //print('sessionCookie: $sessionCookie');
 
       return loginCall.statusCode == 200;
     } else {
