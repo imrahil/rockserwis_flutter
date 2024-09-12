@@ -1,6 +1,9 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
+
 import '../models/podcast.dart';
 
 class API {
@@ -9,6 +12,8 @@ class API {
   static const scheduleUrl = '$mainUrl/audycje';
   static const loginCsrfUrl = '$mainUrl/login?get=csrf';
   static const loginPostUrl = '$mainUrl/login';
+
+  var logger = Logger();
 
   String masterCookie = "";
   String sessionCookie = "";
@@ -50,10 +55,10 @@ class API {
 
     if (loginCsrf.statusCode == 200) {
       masterCookie = parseCookie(loginCsrf);
-      //print('csrfTokenCookie: $masterCookie');
+      logger.d('csrfTokenCookie: $masterCookie');
 
       String loginToken = loginCsrf.body;
-      //print('loginToken: $loginToken');
+      logger.d('loginToken: $loginToken');
 
       var form = <String, dynamic>{};
       form['csrf-token'] = loginToken;
@@ -65,7 +70,7 @@ class API {
           body: form, headers: {'Cookie': masterCookie});
 
       sessionCookie = parseCookie(loginCall);
-      //print('sessionCookie: $sessionCookie');
+      logger.d('sessionCookie: $sessionCookie');
 
       return loginCall.statusCode == 200;
     } else {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/screens/podcasts.dart';
 
@@ -13,6 +14,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+
+  var logger = Logger();
 
   String _email = '';
   String _password = '';
@@ -81,9 +84,12 @@ class _LoginPageState extends State<LoginPage> {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState?.save();
 
-                      bool result = await widget.apiProvider.login(_email, _password);
+                      bool result =
+                          await widget.apiProvider.login(_email, _password);
 
                       if (result && context.mounted) {
+                        logger.d('Login successful');
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
