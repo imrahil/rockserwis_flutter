@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
-import 'package:rockserwis_podcaster/models/form_data.dart';
 import 'package:rockserwis_podcaster/screens/podcasts.dart';
 
 class LoginPage extends StatefulWidget {
@@ -13,8 +12,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  FormData formData = FormData();
   final _formKey = GlobalKey<FormState>();
+
+  String _email = '';
+  String _password = '';
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                     return null;
                   },
                   onSaved: (value) {
-                    formData.email = value;
+                    _email = value ?? '';
                   },
                 ),
                 const SizedBox(height: 20),
@@ -71,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                     return null;
                   },
                   onSaved: (value) {
-                    formData.password = value;
+                    _password = value ?? '';
                   },
                 ),
                 const SizedBox(height: 20),
@@ -80,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState?.save();
 
-                      bool result = await widget.apiProvider.login(formData);
+                      bool result = await widget.apiProvider.login(_email, _password);
 
                       if (result && context.mounted) {
                         Navigator.push(

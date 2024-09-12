@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:rockserwis_podcaster/models/episode.dart';
-import 'package:rockserwis_podcaster/models/form_data.dart';
 import '../models/podcast.dart';
 
 class API {
@@ -46,7 +45,7 @@ class API {
     }
   }
 
-  Future<bool> login(FormData formData) async {
+  Future<bool> login(String email, String password) async {
     final loginCsrf = await http.get(Uri.parse(loginCsrfUrl));
 
     if (loginCsrf.statusCode == 200) {
@@ -58,8 +57,8 @@ class API {
 
       var form = <String, dynamic>{};
       form['csrf-token'] = loginToken;
-      form['email'] = formData.email;
-      form['password'] = formData.password;
+      form['email'] = email;
+      form['password'] = password;
       form['method'] = 'login';
 
       final loginCall = await http.post(Uri.parse(loginPostUrl),
