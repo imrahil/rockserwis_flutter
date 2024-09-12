@@ -1,4 +1,4 @@
-package com.example.rockserwis_podcaster
+package com.imrahil.rockserwis_podcaster
 
 import io.flutter.embedding.android.FlutterActivity
 
