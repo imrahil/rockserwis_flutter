@@ -26,18 +26,32 @@ class PodcastsPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   Podcast currentEntry = snapshot.data![index];
 
-                  return ListTile(
-                    title: Text(currentEntry.podcastName),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EpisodesPage(
-                                apiProvider: apiProvider,
-                                podcastId: currentEntry.podcastId,
-                                podcastName: currentEntry.podcastName)),
-                      );
-                    },
+                  return Card(
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.all(16),
+                      leading: currentEntry.image != null
+                          ? Image.network(
+                              apiProvider.getImagePath(currentEntry.image))
+                          : const Icon(Icons.podcasts),
+                      title: Text(
+                        currentEntry.podcastName,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text('Podcast ID: ${currentEntry.podcastId}'),
+                      trailing: const Icon(Icons.arrow_forward),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EpisodesPage(
+                                  apiProvider: apiProvider,
+                                  podcastId: currentEntry.podcastId,
+                                  podcastName: currentEntry.podcastName)),
+                        );
+                      },
+                    ),
                   );
                 },
               );

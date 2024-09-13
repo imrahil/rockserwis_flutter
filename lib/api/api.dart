@@ -80,6 +80,8 @@ class API {
 
   String getEpisodeUrl(int episodeId) => '$mainUrl/podcast/$episodeId';
 
+  String getImagePath(String? imageUrl) => '$mainUrl/$imageUrl';
+
   Map<String, String> getHeaders() => {
         'Cookie': [masterCookie, sessionCookie].join(";")
       };
