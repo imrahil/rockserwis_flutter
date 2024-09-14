@@ -18,6 +18,8 @@ class API {
   String masterCookie = "";
   String sessionCookie = "";
 
+  List<Episode> selectedPodcastEpisodes = [];
+
   Future<List<Podcast>> getPodcasts() async {
     final response = await http.get(Uri.parse(broadCastUrl));
 
@@ -33,18 +35,17 @@ class API {
     }
   }
 
-  Future<List<Episode>> getEpisodes(int broadcastId) async {
-    String url = '$scheduleUrl/$broadcastId.json';
+  Future<List<Episode>> getEpisodes(Podcast currentPodcast) async {
+    String url = '$scheduleUrl/${currentPodcast.podcastId}.json';
 
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
-      List<Episode> scheduleList;
-      scheduleList = (json.decode(response.body) as List)
+      selectedPodcastEpisodes = (json.decode(response.body) as List)
           .map((i) => Episode.fromJson(i))
           .toList();
 
-      return scheduleList;
+      return selectedPodcastEpisodes;
     } else {
       throw Exception('Failed to load schedules...');
     }
@@ -96,5 +97,25 @@ class API {
     }
 
     return "";
+  }
+
+  Episode? getPreviousEpisode(int currentEpisodeId) {
+    final currentIndex = selectedPodcastEpisodes.indexWhere((episode) => episode.episodeId == currentEpisodeId);
+
+    if (currentIndex > 0 && currentIndex < selectedPodcastEpisodes.length) {
+      return selectedPodcastEpisodes[currentIndex - 1];
+    } else {
+      return null;
+    }
+  }
+
+  Episode? getNextEpisode(int currentEpisodeId) {
+    final currentIndex = selectedPodcastEpisodes.indexWhere((episode) => episode.episodeId == currentEpisodeId);
+
+    if (currentIndex >= 0 && currentIndex < selectedPodcastEpisodes.length - 1) {
+      return selectedPodcastEpisodes[currentIndex + 1];
+    } else {
+      return null;
+    }
   }
 }

@@ -19,7 +19,7 @@ class EpisodesPage extends StatelessWidget {
         title: const Text('Episodes'),
       ),
       body: FutureBuilder<List<Episode>>(
-          future: apiProvider.getEpisodes(currentPodcast.podcastId),
+          future: apiProvider.getEpisodes(currentPodcast),
           builder:
               (BuildContext context, AsyncSnapshot<List<Episode>> snapshot) {
             if (!snapshot.hasData) {

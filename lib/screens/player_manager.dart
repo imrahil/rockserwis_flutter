@@ -1,27 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:rockserwis_podcaster/api/api.dart';
 
 class PlayerManager {
   late AudioPlayer _audioPlayer;
-  final API apiProvider;
-  final int episodeId;
 
-  PlayerManager({required this.apiProvider, required this.episodeId}) {
+  PlayerManager() {
     _init();
   }
 
   void _init() async {
     _audioPlayer = AudioPlayer();
-
-    await _audioPlayer.setAudioSource(
-      AudioSource.uri(
-        Uri.parse(apiProvider.getEpisodeUrl(episodeId)),
-        headers: apiProvider.getHeaders(),
-      ),
-    );
-
-    _audioPlayer.play();
 
     _audioPlayer.positionStream.listen((position) {
       final oldState = progressNotifier.value;
@@ -79,6 +67,22 @@ class PlayerManager {
       total: Duration.zero,
     ),
   );
+
+  void rewind() {
+    final currentPosition = _audioPlayer.position;
+    final newPosition = currentPosition - const Duration(seconds: 30);
+    _audioPlayer.seek(newPosition.isNegative ? Duration.zero : newPosition);
+  }
+
+  void fastForward() {
+    final currentPosition = _audioPlayer.position;
+    final newPosition = currentPosition + const Duration(seconds: 30);
+    _audioPlayer.seek(newPosition);
+  }
+
+  Future<void> setAudioSource(AudioSource source) async {
+    await _audioPlayer.setAudioSource(source);
+  }
 }
 
 class ProgressBarState {
