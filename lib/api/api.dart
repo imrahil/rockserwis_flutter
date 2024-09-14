@@ -20,34 +20,49 @@ class API {
 
   List<Episode> selectedPodcastEpisodes = [];
 
-  Future<List<Podcast>> getPodcasts() async {
-    final response = await http.get(Uri.parse(broadCastUrl));
+  final Map<String, String> _jsonCache = {};
 
-    if (response.statusCode == 200) {
-      List<Podcast> broadcastList;
-      broadcastList = (json.decode(response.body) as List)
+  Future<List<Podcast>> getPodcasts() async {
+    return await _fetchAndCacheJson(broadCastUrl, (jsonData) {
+      return (json.decode(jsonData) as List)
           .map((i) => Podcast.fromJson(i))
           .toList();
-
-      return broadcastList;
-    } else {
-      throw Exception('Failed to load broadcasts...');
-    }
+    });
   }
 
   Future<List<Episode>> getEpisodes(Podcast currentPodcast) async {
     String url = '$scheduleUrl/${currentPodcast.podcastId}.json';
 
-    final response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      selectedPodcastEpisodes = (json.decode(response.body) as List)
+    return await _fetchAndCacheJson(url, (jsonData) {
+      selectedPodcastEpisodes = (json.decode(jsonData) as List)
           .map((i) => Episode.fromJson(i))
           .toList();
 
       return selectedPodcastEpisodes;
+    });
+  }
+
+  Future<dynamic> _fetchAndCacheJson(
+      String url, Function(String) parser) async {
+    // Check if data is in the cache
+    if (_jsonCache.containsKey(url)) {
+      logger.d('Loading from cache: $url');
+      return parser(_jsonCache[url]!);
+    }
+
+    // If not in cache, fetch from network
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      logger.d('Loading from network: $url');
+      final jsonData = response.body;
+
+      // Cache the JSON data
+      _jsonCache[url] = jsonData;
+
+      return parser(jsonData);
     } else {
-      throw Exception('Failed to load schedules...');
+      throw Exception('Failed to load data from: $url');
     }
   }
 
@@ -100,7 +115,8 @@ class API {
   }
 
   Episode? getPreviousEpisode(int currentEpisodeId) {
-    final currentIndex = selectedPodcastEpisodes.indexWhere((episode) => episode.episodeId == currentEpisodeId);
+    final currentIndex = selectedPodcastEpisodes
+        .indexWhere((episode) => episode.episodeId == currentEpisodeId);
 
     if (currentIndex > 0 && currentIndex < selectedPodcastEpisodes.length) {
       return selectedPodcastEpisodes[currentIndex - 1];
@@ -110,9 +126,11 @@ class API {
   }
 
   Episode? getNextEpisode(int currentEpisodeId) {
-    final currentIndex = selectedPodcastEpisodes.indexWhere((episode) => episode.episodeId == currentEpisodeId);
+    final currentIndex = selectedPodcastEpisodes
+        .indexWhere((episode) => episode.episodeId == currentEpisodeId);
 
-    if (currentIndex >= 0 && currentIndex < selectedPodcastEpisodes.length - 1) {
+    if (currentIndex >= 0 &&
+        currentIndex < selectedPodcastEpisodes.length - 1) {
       return selectedPodcastEpisodes[currentIndex + 1];
     } else {
       return null;
