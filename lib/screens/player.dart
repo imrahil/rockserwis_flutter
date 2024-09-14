@@ -1,4 +1,5 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
@@ -84,8 +85,14 @@ class _PlayerState extends State<Player> {
           children: [
             const Spacer(),
             _currentEpisode.imgPath != null
-                ? Image.network(
-                    apiProvider.getImagePath(_currentEpisode.imgPath))
+                ? CachedNetworkImage(
+                    // Use CachedNetworkImage
+                    imageUrl: apiProvider.getImagePath(_currentEpisode.imgPath),
+                    placeholder: (context, url) =>
+                        const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                  )
                 : const Spacer(),
             const Spacer(),
             ValueListenableBuilder<ProgressBarState>(

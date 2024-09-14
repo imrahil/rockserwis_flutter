@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
@@ -36,8 +37,15 @@ class EpisodesPage extends StatelessWidget {
                     child: ListTile(
                       contentPadding: const EdgeInsets.all(16),
                       leading: currentEpisode.imgPath != null
-                          ? Image.network(
-                              apiProvider.getImagePath(currentEpisode.imgPath))
+                          ? CachedNetworkImage(
+                              // Use CachedNetworkImage
+                              imageUrl: apiProvider
+                                  .getImagePath(currentEpisode.imgPath),
+                              placeholder: (context, url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                            )
                           : const Icon(Icons.podcasts),
                       title: Text(
                         currentEpisode.getEpisodeTitle(),
