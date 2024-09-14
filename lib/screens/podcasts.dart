@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 import 'package:rockserwis_podcaster/screens/episodes.dart';
 
 class PodcastsPage extends StatelessWidget {
-  final API apiProvider;
-
-  const PodcastsPage({super.key, required this.apiProvider});
+  const PodcastsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final apiProvider = Provider.of<API>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Podcasts'),
@@ -24,31 +25,29 @@ class PodcastsPage extends StatelessWidget {
               return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  Podcast currentEntry = snapshot.data![index];
+                  Podcast currentPodcast = snapshot.data![index];
 
                   return Card(
                     margin:
                         const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     child: ListTile(
                       contentPadding: const EdgeInsets.all(16),
-                      leading: currentEntry.image != null
+                      leading: currentPodcast.image != null
                           ? Image.network(
-                              apiProvider.getImagePath(currentEntry.image))
+                              apiProvider.getImagePath(currentPodcast.image))
                           : const Icon(Icons.podcasts),
                       title: Text(
-                        currentEntry.podcastName,
+                        currentPodcast.podcastName,
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      subtitle: Text('Podcast ID: ${currentEntry.podcastId}'),
+                      subtitle: Text('Podcast ID: ${currentPodcast.podcastId}'),
                       trailing: const Icon(Icons.arrow_forward),
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => EpisodesPage(
-                                  apiProvider: apiProvider,
-                                  podcastId: currentEntry.podcastId,
-                                  podcastName: currentEntry.podcastName)),
+                              builder: (context) =>
+                                  EpisodesPage(currentPodcast: currentPodcast)),
                         );
                       },
                     ),

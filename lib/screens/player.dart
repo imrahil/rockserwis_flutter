@@ -1,71 +1,51 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:provider/provider.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
+import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/screens/player_manager.dart';
 
-class Player extends StatefulWidget {
-  final API apiProvider;
-  final int episodeId;
-  final String episodeTitle;
-  final String episodeImage;
+class Player extends StatelessWidget {
+  final Episode currentEpisode;
 
-  const Player(
-      {super.key,
-      required this.apiProvider,
-      required this.episodeId,
-      required this.episodeTitle,
-      required this.episodeImage});
-
-  @override
-  State<Player> createState() => _PlayerState();
-}
-
-class _PlayerState extends State<Player> {
-  late final PlayerManager _playerManager;
-
-  @override
-  void initState() {
-    super.initState();
-    _playerManager = PlayerManager(
-        apiProvider: widget.apiProvider, episodeId: widget.episodeId);
-  }
-
-  @override
-  void dispose() {
-    _playerManager.dispose();
-    super.dispose();
-  }
+  const Player({super.key, required this.currentEpisode});
 
   @override
   Widget build(BuildContext context) {
-    var imagePath = API.mainUrl + widget.episodeImage;
+    final apiProvider = Provider.of<API>(context);
+
+    final playerManager = PlayerManager(
+      apiProvider: apiProvider,
+      episodeId: currentEpisode.episodeId,
+    );
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.episodeTitle),
+        title: Text(currentEpisode.getEpisodeTitle()),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
         child: Column(
           children: [
             const Spacer(),
-            widget.episodeImage != ""
-                ? Image.network(imagePath)
+            currentEpisode.imgPath != null
+                ? Image.network(
+                    apiProvider.getImagePath(currentEpisode.imgPath))
                 : const Spacer(),
             const Spacer(),
             ValueListenableBuilder<ProgressBarState>(
-              valueListenable: _playerManager.progressNotifier,
+              valueListenable: playerManager.progressNotifier,
               builder: (_, value, __) {
                 return ProgressBar(
                     progress: value.current,
                     buffered: value.buffered,
                     total: value.total,
-                    onSeek: _playerManager.seek);
+                    onSeek: playerManager.seek);
               },
             ),
             StreamBuilder<PlayerState>(
-              stream: _playerManager.getAudioPlayer().playerStateStream,
+              stream: playerManager.getAudioPlayer().playerStateStream,
               builder: (context, snapshot) {
                 final playerState = snapshot.data;
                 final processingState = playerState?.processingState;
@@ -83,19 +63,19 @@ class _PlayerState extends State<Player> {
                   return IconButton(
                     icon: const Icon(Icons.play_arrow),
                     iconSize: 64.0,
-                    onPressed: _playerManager.play,
+                    onPressed: playerManager.play,
                   );
                 } else if (processingState != ProcessingState.completed) {
                   return IconButton(
                     icon: const Icon(Icons.pause),
                     iconSize: 64.0,
-                    onPressed: _playerManager.pause,
+                    onPressed: playerManager.pause,
                   );
                 } else {
                   return IconButton(
                     icon: const Icon(Icons.replay),
                     iconSize: 64.0,
-                    onPressed: () => _playerManager.seek(Duration.zero),
+                    onPressed: () => playerManager.seek(Duration.zero),
                   );
                 }
               },

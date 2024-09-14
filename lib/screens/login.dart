@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/screens/podcasts.dart';
 
 class LoginPage extends StatefulWidget {
-  final API apiProvider;
-
-  const LoginPage({super.key, required this.apiProvider});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -22,6 +21,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final apiProvider = Provider.of<API>(context);
+
     return Scaffold(
       backgroundColor: Colors.black, // Dark background color
       body: Center(
@@ -85,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                       _formKey.currentState?.save();
 
                       bool result =
-                          await widget.apiProvider.login(_email, _password);
+                          await apiProvider.login(_email, _password);
 
                       if (result && context.mounted) {
                         logger.d('Login successful');
@@ -93,8 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => PodcastsPage(
-                                  apiProvider: widget.apiProvider)),
+                              builder: (context) => const PodcastsPage()),
                         );
                       } else {
                         _showDialog('Unable to sign in.');

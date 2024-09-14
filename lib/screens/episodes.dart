@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
+import 'package:rockserwis_podcaster/models/podcast.dart';
 import 'package:rockserwis_podcaster/screens/player.dart';
 
 class EpisodesPage extends StatelessWidget {
-  final API apiProvider;
-  final int podcastId;
-  final String podcastName;
+  final Podcast currentPodcast;
 
-  const EpisodesPage(
-      {super.key,
-      required this.apiProvider,
-      required this.podcastId,
-      required this.podcastName});
+  const EpisodesPage({super.key, required this.currentPodcast});
 
   @override
   Widget build(BuildContext context) {
+    final apiProvider = Provider.of<API>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Episodes'),
       ),
       body: FutureBuilder<List<Episode>>(
-          future: apiProvider.getEpisodes(podcastId),
+          future: apiProvider.getEpisodes(currentPodcast.podcastId),
           builder:
               (BuildContext context, AsyncSnapshot<List<Episode>> snapshot) {
             if (!snapshot.hasData) {
@@ -31,37 +28,31 @@ class EpisodesPage extends StatelessWidget {
               return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  Episode currentEntry = snapshot.data![index];
-
-                  String episodeTitle =
-                      "${currentEntry.name} - ${DateFormat("yyyy-MM-dd").format(currentEntry.date)}";
+                  Episode currentEpisode = snapshot.data![index];
 
                   return Card(
                     margin:
                         const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     child: ListTile(
                       contentPadding: const EdgeInsets.all(16),
-                      leading: currentEntry.imgPath != null
+                      leading: currentEpisode.imgPath != null
                           ? Image.network(
-                              apiProvider.getImagePath(currentEntry.imgPath))
+                              apiProvider.getImagePath(currentEpisode.imgPath))
                           : const Icon(Icons.podcasts),
                       title: Text(
-                        episodeTitle,
+                        currentEpisode.getEpisodeTitle(),
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       subtitle: Text(
-                          'Podcast duration: ${currentEntry.getReadableDuration()}'),
+                          'Podcast duration: ${currentEpisode.getReadableDuration()}'),
                       trailing: const Icon(Icons.arrow_forward),
                       onTap: () {
-                        if (currentEntry.hasPodcast) {
+                        if (currentEpisode.hasPodcast) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Player(
-                                    apiProvider: apiProvider,
-                                    episodeId: currentEntry.episodeId,
-                                    episodeTitle: episodeTitle,
-                                    episodeImage: currentEntry.imgPath ?? "")),
+                                builder: (context) =>
+                                    Player(currentEpisode: currentEpisode)),
                           );
                         }
                       },

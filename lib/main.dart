@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/screens/login.dart';
 
-void main() => runApp(MusicPlayer());
+void main() {
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider<API>(create: (_) => API()),
+      ],
+      child: const MusicPlayer(),
+    ),
+  );
+}
 
 class MusicPlayer extends StatelessWidget {
-  MusicPlayer({super.key});
-
-  final API apiProvider = API();
+  const MusicPlayer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +44,7 @@ class MusicPlayer extends StatelessWidget {
           ),
         ),
       ),
-      home: LoginPage(apiProvider: apiProvider),
+      home: const LoginPage(),
     );
   }
 }
