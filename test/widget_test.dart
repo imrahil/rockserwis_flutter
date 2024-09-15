@@ -16,7 +16,7 @@ void main() {
         providers: [
           Provider<API>(create: (_) => MockAPI()),
         ],
-        child: const MusicPlayer(),
+        child: const MusicPlayer(homeComp: LoginPage()),
       ),
     );
 
@@ -52,7 +52,9 @@ void main() {
         providers: [
           Provider<API>(create: (_) => MockAPI()),
         ],
-        child: const MusicPlayer(),
+        child: const MusicPlayer(
+          homeComp: LoginPage(),
+        ),
       ),
     );
 

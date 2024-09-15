@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/podcast.dart';
 
@@ -21,6 +22,8 @@ class API {
   List<Episode> selectedPodcastEpisodes = [];
 
   final Map<String, String> _jsonCache = {};
+
+  API({this.masterCookie = "", this.sessionCookie = ""});
 
   Future<List<Podcast>> getPodcasts() async {
     return await _fetchAndCacheJson(broadCastUrl, (jsonData) {
@@ -66,7 +69,7 @@ class API {
     }
   }
 
-  Future<bool> login(String email, String password) async {
+  Future<bool> login(String email, String password, bool rememberMe) async {
     final loginCsrf = await http.get(Uri.parse(loginCsrfUrl));
 
     if (loginCsrf.statusCode == 200) {
@@ -87,6 +90,15 @@ class API {
 
       sessionCookie = parseCookie(loginCall);
       logger.d('sessionCookie: $sessionCookie');
+
+      if (rememberMe) {
+        final prefs = await SharedPreferences.getInstance();
+
+        await prefs.setBool('rememberMe', rememberMe);
+
+        await prefs.setString('masterCookie', masterCookie);
+        await prefs.setString('sessionCookie', sessionCookie);
+      }
 
       return loginCall.statusCode == 200;
     } else {

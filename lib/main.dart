@@ -2,20 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/screens/login.dart';
+import 'package:rockserwis_podcaster/screens/podcasts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final prefs = await SharedPreferences.getInstance();
+  bool rememberMe = prefs.getBool('rememberMe') ?? false;
+
+  Provider provider = Provider<API>(create: (_) => API());
+
+  if (rememberMe) {
+    String masterCookie = prefs.getString('masterCookie') ?? "";
+    String sessionCookie = prefs.getString('sessionCookie') ?? "";
+
+    if (masterCookie != "" && sessionCookie != "") {
+      provider = Provider<API>(
+          create: (_) =>
+              API(masterCookie: masterCookie, sessionCookie: sessionCookie));
+    }
+  }
+
+  Widget homeComp = !rememberMe ? const LoginPage() : const PodcastsPage();
+
   runApp(
     MultiProvider(
       providers: [
-        Provider<API>(create: (_) => API()),
+        provider,
       ],
-      child: const MusicPlayer(),
+      child: MusicPlayer(homeComp: homeComp),
     ),
   );
 }
 
 class MusicPlayer extends StatelessWidget {
-  const MusicPlayer({super.key});
+  final Widget homeComp;
+
+  const MusicPlayer({super.key, required this.homeComp});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +68,7 @@ class MusicPlayer extends StatelessWidget {
           ),
         ),
       ),
-      home: const LoginPage(),
+      home: homeComp,
     );
   }
 }

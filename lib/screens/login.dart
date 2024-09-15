@@ -18,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
 
   String _email = '';
   String _password = '';
+  bool _rememberMe = false;
 
   @override
   Widget build(BuildContext context) {
@@ -80,13 +81,31 @@ class _LoginPageState extends State<LoginPage> {
                   },
                 ),
                 const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: _rememberMe,
+                      onChanged: (value) {
+                        setState(() {
+                          _rememberMe = value ?? false;
+                        });
+                      },
+                      activeColor: Colors.blueAccent,
+                    ),
+                    const Text(
+                      'Remember me',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState?.save();
 
-                      bool result =
-                          await apiProvider.login(_email, _password);
+                      bool result = await apiProvider.login(
+                          _email, _password, _rememberMe);
 
                       if (result && context.mounted) {
                         logger.d('Login successful');
