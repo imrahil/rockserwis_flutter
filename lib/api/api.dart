@@ -22,18 +22,20 @@ class API {
   List<Episode> selectedPodcastEpisodes = [];
 
   final Map<String, String> _jsonCache = {};
+  final Map<String, DateTime> _cacheLastUpdated = {};
 
   API({this.masterCookie = "", this.sessionCookie = ""});
 
-  Future<List<Podcast>> getPodcasts() async {
+  Future<List<Podcast>> getPodcasts({bool forceRefresh = false}) async {
     return await _fetchAndCacheJson(broadCastUrl, (jsonData) {
       return (json.decode(jsonData) as List)
           .map((i) => Podcast.fromJson(i))
           .toList();
-    });
+    }, forceRefresh: forceRefresh);
   }
 
-  Future<List<Episode>> getEpisodes(Podcast currentPodcast) async {
+  Future<List<Episode>> getEpisodes(Podcast currentPodcast,
+      {bool forceRefresh = false}) async {
     String url = '$scheduleUrl/${currentPodcast.podcastId}.json';
 
     return await _fetchAndCacheJson(url, (jsonData) {
@@ -42,13 +44,13 @@ class API {
           .toList();
 
       return selectedPodcastEpisodes;
-    });
+    }, forceRefresh: forceRefresh);
   }
 
-  Future<dynamic> _fetchAndCacheJson(
-      String url, Function(String) parser) async {
-    // Check if data is in the cache
-    if (_jsonCache.containsKey(url)) {
+  Future<dynamic> _fetchAndCacheJson(String url, Function(String) parser,
+      {bool forceRefresh = false}) async {
+    // Check if data is in the cache and not being forced to refresh
+    if (_jsonCache.containsKey(url) && !forceRefresh && _shouldUseCache(url)) {
       logger.d('Loading from cache: $url');
       return parser(_jsonCache[url]!);
     }
@@ -60,8 +62,9 @@ class API {
       logger.d('Loading from network: $url');
       final jsonData = response.body;
 
-      // Cache the JSON data
+      // Cache the JSON data and update last fetched time
       _jsonCache[url] = jsonData;
+      _cacheLastUpdated[url] = DateTime.now();
 
       return parser(jsonData);
     } else {
@@ -147,5 +150,20 @@ class API {
     } else {
       return null;
     }
+  }
+
+  // Helper function to determine if the cache should be used
+  bool _shouldUseCache(String url) {
+    // Cache for 2 hour
+    const cacheDuration = Duration(hours: 2);
+
+    if (!_cacheLastUpdated.containsKey(url)) {
+      return false;
+    }
+
+    final lastUpdated = _cacheLastUpdated[url]!;
+    final now = DateTime.now();
+
+    return now.difference(lastUpdated) < cacheDuration;
   }
 }
