@@ -1,4 +1,5 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:logger/logger.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
@@ -20,11 +21,15 @@ class _PlayerState extends State<Player> {
   late final PlayerManager _playerManager;
   late Episode _currentEpisode;
 
+  var logger = Logger();
+
   @override
   void initState() {
     super.initState();
     _playerManager = PlayerManager();
     _currentEpisode = widget.currentEpisode;
+
+    _setAudioSource();
   }
 
   @override
@@ -33,8 +38,22 @@ class _PlayerState extends State<Player> {
     super.dispose();
   }
 
-  void _skipToPrevious() {
-    _playerManager.pause();
+  void _setAudioSource() async {
+    final apiProvider = Provider.of<API>(context, listen: false);
+
+    AudioSource source = AudioSource.uri(
+      Uri.parse(apiProvider.getEpisodeUrl(_currentEpisode.episodeId)),
+      headers: apiProvider.getHeaders(),
+    );
+
+    logger.d('Audio source: $source');
+
+    await _playerManager.setAudioSource(source);
+    _playerManager.play();
+  }
+
+  void _skipToPrevious() async {
+    await _playerManager.stop();
 
     final apiProvider = Provider.of<API>(context, listen: false);
 
@@ -45,11 +64,13 @@ class _PlayerState extends State<Player> {
       setState(() {
         _currentEpisode = previousEpisode;
       });
+
+      _setAudioSource();
     }
   }
 
-  void _skipToNext() {
-    _playerManager.pause();
+  void _skipToNext() async {
+    await _playerManager.stop();
 
     final apiProvider = Provider.of<API>(context, listen: false);
 
@@ -60,20 +81,14 @@ class _PlayerState extends State<Player> {
       setState(() {
         _currentEpisode = nextEpisode;
       });
+
+      _setAudioSource();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final apiProvider = Provider.of<API>(context);
-
-    AudioSource source = AudioSource.uri(
-      Uri.parse(apiProvider.getEpisodeUrl(_currentEpisode.episodeId)),
-      headers: apiProvider.getHeaders(),
-    );
-
-    _playerManager.setAudioSource(source);
-    _playerManager.play();
 
     return Scaffold(
       appBar: AppBar(
@@ -95,6 +110,30 @@ class _PlayerState extends State<Player> {
                   )
                 : const Spacer(),
             const Spacer(),
+            Align(
+              alignment: Alignment.topRight,
+              child: FutureBuilder<bool>(
+                future: apiProvider.isFavorite(_currentEpisode.episodeId),
+                builder: (BuildContext context, snapshot) {
+                  bool isFavorite = false;
+
+                  if (snapshot.hasData) {
+                    isFavorite = snapshot.data ?? false;
+                  }
+
+                  return IconButton(
+                    icon: Icon(
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                    ),
+                    onPressed: () async {
+                      await apiProvider
+                          .toggleFavorite(_currentEpisode.episodeId);
+                      setState(() {}); // Rebuild to update icon
+                    },
+                  );
+                },
+              ),
+            ),
             ValueListenableBuilder<ProgressBarState>(
               valueListenable: _playerManager.progressNotifier,
               builder: (_, value, __) {

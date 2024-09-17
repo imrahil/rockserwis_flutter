@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:logger/logger.dart';
 
 class PlayerManager {
   late AudioPlayer _audioPlayer;
+
+  var logger = Logger();
 
   PlayerManager() {
     _init();
@@ -56,6 +59,10 @@ class PlayerManager {
     _audioPlayer.pause();
   }
 
+  Future<void> stop() async {
+    await _audioPlayer.stop();
+  }
+
   void seek(Duration position) {
     _audioPlayer.seek(position);
   }
@@ -81,7 +88,11 @@ class PlayerManager {
   }
 
   Future<void> setAudioSource(AudioSource source) async {
-    await _audioPlayer.setAudioSource(source);
+    try {
+      await _audioPlayer.setAudioSource(source);
+    } catch (e) {
+      logger.d("PlayerInterruptedException");
+    }
   }
 }
 

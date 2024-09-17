@@ -14,6 +14,8 @@ class API {
   static const loginCsrfUrl = '$mainUrl/login?get=csrf';
   static const loginPostUrl = '$mainUrl/login';
 
+  static const String favoritesKey = 'favoriteEpisodes';
+
   var logger = Logger();
 
   String masterCookie = "";
@@ -165,5 +167,35 @@ class API {
     final now = DateTime.now();
 
     return now.difference(lastUpdated) < cacheDuration;
+  }
+
+  Future<void> toggleFavorite(int episodeId) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    // Get current favorites from SharedPreferences
+    List<String> favoriteEpisodes = prefs.getStringList(favoritesKey) ?? [];
+
+    final episodeIdString = episodeId.toString();
+
+    // Toggle favorite status
+    if (favoriteEpisodes.contains(episodeIdString)) {
+      favoriteEpisodes.remove(episodeIdString);
+    } else {
+      favoriteEpisodes.add(episodeIdString);
+    }
+
+    // Save updated favorites back to SharedPreferences
+    await prefs.setStringList(favoritesKey, favoriteEpisodes);
+  }
+
+  // Function to check if an episode is a favorite
+  Future<bool> isFavorite(int episodeId) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    List<String> favoriteEpisodes = prefs.getStringList(favoritesKey) ?? [];
+
+    final episodeIdString = episodeId.toString();
+
+    return favoriteEpisodes.contains(episodeIdString);
   }
 }
