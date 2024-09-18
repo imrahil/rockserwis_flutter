@@ -147,12 +147,13 @@ class _PlayerState extends State<Player> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                    icon: const Icon(Icons.skip_previous),
-                    iconSize: 40.0,
-                    onPressed: _skipToPrevious),
+                  icon: const Icon(Icons.skip_previous),
+                  iconSize: 34.0,
+                  onPressed: _skipToPrevious,
+                ),
                 IconButton(
                   icon: const Icon(Icons.replay_30),
-                  iconSize: 42.0,
+                  iconSize: 36.0,
                   onPressed: _playerManager.rewind,
                 ),
                 StreamBuilder<PlayerState>(
@@ -193,13 +194,14 @@ class _PlayerState extends State<Player> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.forward_30),
-                  iconSize: 42.0,
+                  iconSize: 36.0,
                   onPressed: _playerManager.fastForward,
                 ),
                 IconButton(
-                    icon: const Icon(Icons.skip_next),
-                    iconSize: 40.0,
-                    onPressed: _skipToNext),
+                  icon: const Icon(Icons.skip_next),
+                  iconSize: 34.0,
+                  onPressed: _skipToNext,
+                ),
               ],
             ),
           ],

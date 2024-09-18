@@ -209,10 +209,12 @@ class API {
     final prefs = await SharedPreferences.getInstance();
     List<String> favoriteEpisodes = prefs.getStringList(favoritesKey) ?? [];
 
-    return favoriteEpisodes.map((episodeString) {
+    selectedPodcastEpisodes = favoriteEpisodes.map((episodeString) {
       final episodeJson = jsonDecode(episodeString);
       return Episode.fromJson(episodeJson);
     }).toList();
+
+    return selectedPodcastEpisodes;
   }
 
   /// Toggles the favorite status of an episode.
