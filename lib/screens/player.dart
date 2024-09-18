@@ -113,7 +113,7 @@ class _PlayerState extends State<Player> {
             Align(
               alignment: Alignment.topRight,
               child: FutureBuilder<bool>(
-                future: apiProvider.isFavorite(_currentEpisode.episodeId),
+                future: apiProvider.isFavorite(_currentEpisode),
                 builder: (BuildContext context, snapshot) {
                   bool isFavorite = false;
 
@@ -126,8 +126,7 @@ class _PlayerState extends State<Player> {
                       isFavorite ? Icons.favorite : Icons.favorite_border,
                     ),
                     onPressed: () async {
-                      await apiProvider
-                          .toggleFavorite(_currentEpisode.episodeId);
+                      await apiProvider.toggleFavorite(_currentEpisode);
                       setState(() {}); // Rebuild to update icon
                     },
                   );

@@ -28,6 +28,10 @@ class API {
 
   API({this.masterCookie = "", this.sessionCookie = ""});
 
+  /// Fetches and caches JSON data for all podcasts.
+  ///
+  /// @param forceRefresh Whether to force a refresh from the network, even if data is in the cache.
+  /// @return A list of all podcasts.
   Future<List<Podcast>> getPodcasts({bool forceRefresh = false}) async {
     return await _fetchAndCacheJson(broadCastUrl, (jsonData) {
       return (json.decode(jsonData) as List)
@@ -36,6 +40,11 @@ class API {
     }, forceRefresh: forceRefresh);
   }
 
+  /// Fetches and caches JSON data for episodes of a specific podcast.
+  ///
+  /// @param currentPodcast The podcast to fetch episodes for.
+  /// @param forceRefresh Whether to force a refresh from the network, even if data is in the cache.
+  /// @return A list of episodes for the given podcast.
   Future<List<Episode>> getEpisodes(Podcast currentPodcast,
       {bool forceRefresh = false}) async {
     String url = '$scheduleUrl/${currentPodcast.podcastId}.json';
@@ -49,6 +58,12 @@ class API {
     }, forceRefresh: forceRefresh);
   }
 
+  /// Fetches JSON data from the given URL and caches it.
+  ///
+  /// @param url The URL to fetch data from.
+  /// @param parser A function that parses the JSON data into the desired format.
+  /// @param forceRefresh Whether to force a refresh from the network, even if data is in the cache.
+  /// @return The parsed JSON data.
   Future<dynamic> _fetchAndCacheJson(String url, Function(String) parser,
       {bool forceRefresh = false}) async {
     // Check if data is in the cache and not being forced to refresh
@@ -74,6 +89,12 @@ class API {
     }
   }
 
+  /// Logs in to the Rockserwis.fm API.
+  ///
+  /// @param email The user's email address.
+  /// @param password The user's password.
+  /// @param rememberMe Whether to remember the user's login credentials.
+  /// @return True if the login was successful, false otherwise.
   Future<bool> login(String email, String password, bool rememberMe) async {
     final loginCsrf = await http.get(Uri.parse(loginCsrfUrl));
 
@@ -111,14 +132,24 @@ class API {
     }
   }
 
+  /// Gets the URL for a specific episode.
+  ///
+  /// @param episodeId The ID of the episode.
+  /// @return The URL for the episode.
   String getEpisodeUrl(int episodeId) => '$mainUrl/podcast/$episodeId';
 
+  /// Gets the URL for the podcast image.
+  ///
+  /// @param imageUrl The URL of the podcast image.
+  /// @return The URL for the podcast image.
   String getImagePath(String? imageUrl) => '$mainUrl/$imageUrl';
 
+  // Helper function to get the headers for API requests
   Map<String, String> getHeaders() => {
         'Cookie': [masterCookie, sessionCookie].join(";")
       };
 
+  // Helper function to parse the cookie from the response
   String parseCookie(http.Response response) {
     String? rawCookie = response.headers['set-cookie'];
 
@@ -131,6 +162,7 @@ class API {
     return "";
   }
 
+  /// Helper function to get the previous episode in the list
   Episode? getPreviousEpisode(int currentEpisodeId) {
     final currentIndex = selectedPodcastEpisodes
         .indexWhere((episode) => episode.episodeId == currentEpisodeId);
@@ -142,6 +174,7 @@ class API {
     }
   }
 
+  /// Helper function to get the next episode in the list
   Episode? getNextEpisode(int currentEpisodeId) {
     final currentIndex = selectedPodcastEpisodes
         .indexWhere((episode) => episode.episodeId == currentEpisodeId);
@@ -154,7 +187,7 @@ class API {
     }
   }
 
-  // Helper function to determine if the cache should be used
+  /// Helper function to determine if the cache should be used
   bool _shouldUseCache(String url) {
     // Cache for 2 hour
     const cacheDuration = Duration(hours: 2);
@@ -169,32 +202,51 @@ class API {
     return now.difference(lastUpdated) < cacheDuration;
   }
 
-  Future<void> toggleFavorite(int episodeId) async {
+  /// Gets the list of favorite episodes from SharedPreferences.
+  ///
+  /// @return A list of favorite episodes.
+  Future<List<Episode>> getFavorites() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> favoriteEpisodes = prefs.getStringList(favoritesKey) ?? [];
+
+    return favoriteEpisodes.map((episodeString) {
+      final episodeJson = jsonDecode(episodeString);
+      return Episode.fromJson(episodeJson);
+    }).toList();
+  }
+
+  /// Toggles the favorite status of an episode.
+  ///
+  /// @param episode The episode to toggle the favorite status of.
+  Future<void> toggleFavorite(Episode episode) async {
     final prefs = await SharedPreferences.getInstance();
 
     // Get current favorites from SharedPreferences
     List<String> favoriteEpisodes = prefs.getStringList(favoritesKey) ?? [];
 
-    final episodeIdString = episodeId.toString();
+    final episodeString = jsonEncode(episode);
 
     // Toggle favorite status
-    if (favoriteEpisodes.contains(episodeIdString)) {
-      favoriteEpisodes.remove(episodeIdString);
+    if (favoriteEpisodes.contains(episodeString)) {
+      favoriteEpisodes.remove(episodeString);
     } else {
-      favoriteEpisodes.add(episodeIdString);
+      favoriteEpisodes.add(episodeString);
     }
 
     // Save updated favorites back to SharedPreferences
     await prefs.setStringList(favoritesKey, favoriteEpisodes);
   }
 
-  // Function to check if an episode is a favorite
-  Future<bool> isFavorite(int episodeId) async {
+  /// Checks if an episode is a favorite.
+  ///
+  /// @param episode The episode to check.
+  /// @return True if the episode is a favorite, false otherwise.
+  Future<bool> isFavorite(Episode episode) async {
     final prefs = await SharedPreferences.getInstance();
 
     List<String> favoriteEpisodes = prefs.getStringList(favoritesKey) ?? [];
 
-    final episodeIdString = episodeId.toString();
+    final episodeIdString = jsonEncode(episode);
 
     return favoriteEpisodes.contains(episodeIdString);
   }

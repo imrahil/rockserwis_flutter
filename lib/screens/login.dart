@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
-import 'package:rockserwis_podcaster/screens/podcasts.dart';
+import 'package:rockserwis_podcaster/screens/podcasts_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -19,6 +19,40 @@ class _LoginPageState extends State<LoginPage> {
   String _email = '';
   String _password = '';
   bool _rememberMe = false;
+
+  Future<void> _onLoginHandler(API apiProvider, BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState?.save();
+
+      bool result = await apiProvider.login(_email, _password, _rememberMe);
+
+      if (result && context.mounted) {
+        logger.d('Login successful');
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const PodcastsPage()),
+        );
+      } else {
+        _showDialog('Unable to sign in.');
+      }
+    }
+  }
+
+  void _showDialog(String message) {
+    showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(message),
+        actions: [
+          TextButton(
+            child: const Text('OK'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,25 +134,9 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState?.save();
-
-                      bool result = await apiProvider.login(
-                          _email, _password, _rememberMe);
-
-                      if (result && context.mounted) {
-                        logger.d('Login successful');
-
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const PodcastsPage()),
-                        );
-                      } else {
-                        _showDialog('Unable to sign in.');
-                      }
-                    }
+                  onPressed: () {
+                    final currentContext = context;
+                    _onLoginHandler(apiProvider, currentContext);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
@@ -140,21 +158,6 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  void _showDialog(String message) {
-    showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(message),
-        actions: [
-          TextButton(
-            child: const Text('OK'),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
       ),
     );
   }

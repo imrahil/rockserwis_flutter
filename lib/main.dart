@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/screens/login.dart';
-import 'package:rockserwis_podcaster/screens/podcasts.dart';
+import 'package:rockserwis_podcaster/screens/podcasts_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
