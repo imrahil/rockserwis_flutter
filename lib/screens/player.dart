@@ -43,7 +43,7 @@ class _PlayerState extends State<Player> {
   void _setAudioSource() async {
     final apiProvider = Provider.of<API>(context, listen: false);
 
-    final source = LockCachingAudioSource(
+    AudioSource source = AudioSource.uri(
       Uri.parse(apiProvider.getEpisodeUrl(_currentEpisode.episodeId)),
       headers: apiProvider.getHeaders(),
       tag: MediaItem(

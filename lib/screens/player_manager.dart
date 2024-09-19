@@ -12,7 +12,8 @@ class PlayerManager {
   }
 
   void _init() async {
-    _audioPlayer = AudioPlayer();
+    _audioPlayer = AudioPlayer(
+        userAgent: "Rockserwis Podcaster", useProxyForRequestHeaders: false);
 
     _audioPlayer.positionStream.listen((position) {
       final oldState = progressNotifier.value;
