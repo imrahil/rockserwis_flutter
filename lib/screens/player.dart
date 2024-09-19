@@ -1,8 +1,10 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
-import 'package:logger/logger.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
@@ -41,12 +43,20 @@ class _PlayerState extends State<Player> {
   void _setAudioSource() async {
     final apiProvider = Provider.of<API>(context, listen: false);
 
-    AudioSource source = AudioSource.uri(
+    final source = LockCachingAudioSource(
       Uri.parse(apiProvider.getEpisodeUrl(_currentEpisode.episodeId)),
       headers: apiProvider.getHeaders(),
+      tag: MediaItem(
+        // Specify a unique ID for each media item
+        id: _currentEpisode.episodeId.toString(),
+        // Metadata to display in the notification
+        album: DateFormat("yyyy-MM-dd").format(_currentEpisode.date),
+        title: _currentEpisode.name,
+        artUri: _currentEpisode.imgPath != null
+            ? Uri.parse(apiProvider.getImagePath(_currentEpisode.imgPath))
+            : null,
+      ),
     );
-
-    logger.d('Audio source: $source');
 
     await _playerManager.setAudioSource(source);
     _playerManager.play();

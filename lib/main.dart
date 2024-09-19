@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/screens/login.dart';
@@ -25,6 +26,12 @@ Future<void> main() async {
   }
 
   Widget homeComp = !rememberMe ? const LoginPage() : const PodcastsPage();
+
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.imrahil.rockserwis.podcaster',
+    androidNotificationChannelName: 'Rockserwis.fm Podcast Player',
+    androidNotificationOngoing: true,
+  );
 
   runApp(
     MultiProvider(
