@@ -78,6 +78,8 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 40),
                 TextFormField(
+                  textInputAction: TextInputAction.next,
+                  autofocus: true,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     labelText: 'Email',
