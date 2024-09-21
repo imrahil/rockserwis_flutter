@@ -96,7 +96,11 @@ class API {
   /// @param rememberMe Whether to remember the user's login credentials.
   /// @return True if the login was successful, false otherwise.
   Future<bool> login(String email, String password, bool rememberMe) async {
+    logger.d('Logging in... - $loginCsrfUrl');
+
     final loginCsrf = await http.get(Uri.parse(loginCsrfUrl));
+
+    logger.d('status code: ${loginCsrf.statusCode}');
 
     if (loginCsrf.statusCode == 200) {
       masterCookie = parseCookie(loginCsrf);
@@ -128,6 +132,8 @@ class API {
 
       return loginCall.statusCode == 200;
     } else {
+      logger.d("Something went wrong... login failed!");
+
       return false;
     }
   }

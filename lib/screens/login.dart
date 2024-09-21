@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
+import 'package:rockserwis_podcaster/components/labeled_checkbox.dart';
 import 'package:rockserwis_podcaster/screens/podcasts_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -117,22 +118,14 @@ class _LoginPageState extends State<LoginPage> {
                   },
                 ),
                 const SizedBox(height: 20),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: _rememberMe,
-                      onChanged: (value) {
-                        setState(() {
-                          _rememberMe = value ?? false;
-                        });
-                      },
-                      activeColor: Colors.blueAccent,
-                    ),
-                    const Text(
-                      'Remember me',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
+                LabeledCheckbox(
+                  label: 'Remember me',
+                  value: _rememberMe,
+                  onChanged: (value) {
+                    setState(() {
+                      _rememberMe = value ?? false;
+                    });
+                  },
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
