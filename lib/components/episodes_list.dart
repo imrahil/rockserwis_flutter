@@ -42,9 +42,9 @@ class EpisodesList extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
-        actions: [
-          showFavorites
-              ? IconButton(
+        actions: showFavorites
+            ? [
+                IconButton(
                   icon: const Icon(Icons.favorite),
                   onPressed: () {
                     Navigator.push(
@@ -53,13 +53,13 @@ class EpisodesList extends StatelessWidget {
                           builder: (context) => const FavoritesEpisodesPage()),
                     );
                   },
-                )
-              : const Spacer(),
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () => _logout(context),
-          ),
-        ],
+                ),
+                IconButton(
+                  icon: const Icon(Icons.logout),
+                  onPressed: () => _logout(context),
+                ),
+              ]
+            : [],
       ),
       body: FutureBuilder<List<Episode>>(
           future: episodesFuture,

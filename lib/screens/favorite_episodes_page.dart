@@ -16,6 +16,7 @@ class FavoritesEpisodesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EpisodesList(
-        title: "Favorites", episodesFuture: fetchFavoriteEpisodes(context));
+        title: "Favorite episodes",
+        episodesFuture: fetchFavoriteEpisodes(context));
   }
 }

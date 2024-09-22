@@ -42,10 +42,10 @@ class PodcastsList extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
-        automaticallyImplyLeading: false,
-        actions: [
-          showFavorites
-              ? IconButton(
+        automaticallyImplyLeading: !showFavorites,
+        actions: showFavorites
+            ? [
+                IconButton(
                   icon: const Icon(Icons.favorite),
                   onPressed: () {
                     Navigator.push(
@@ -54,13 +54,13 @@ class PodcastsList extends StatelessWidget {
                           builder: (context) => const FavoritePodcastsPage()),
                     );
                   },
-                )
-              : const Spacer(),
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () => _logout(context),
-          ),
-        ],
+                ),
+                IconButton(
+                  icon: const Icon(Icons.logout),
+                  onPressed: () => _logout(context),
+                ),
+              ]
+            : [],
       ),
       body: FutureBuilder<List<Podcast>>(
           future: podcastsFuture,

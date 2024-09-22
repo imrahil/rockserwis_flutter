@@ -16,6 +16,8 @@ class PodcastsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PodcastsList(
-        title: "Podcasts", podcastsFuture: fetchPodcasts(context));
+        title: "Podcasts",
+        showFavorites: true,
+        podcastsFuture: fetchPodcasts(context));
   }
 }
