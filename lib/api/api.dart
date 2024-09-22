@@ -14,7 +14,8 @@ class API {
   static const loginCsrfUrl = '$mainUrl/login?get=csrf';
   static const loginPostUrl = '$mainUrl/login';
 
-  static const String favoritesKey = 'favoriteEpisodes';
+  static const String favoriteEpisodesKey = 'favoriteEpisodes';
+  static const String favoritePodcastsKey = 'favoritePodcasts';
 
   var logger = Logger();
 
@@ -208,12 +209,24 @@ class API {
     return now.difference(lastUpdated) < cacheDuration;
   }
 
-  /// Gets the list of favorite episodes from SharedPreferences.
+  /// Gets the list of favorite podcasts from SharedPreferences.
   ///
-  /// @return A list of favorite episodes.
-  Future<List<Episode>> getFavorites() async {
+  /// @return A list of favorite podcasts.
+  Future<List<Podcast>> getFavoritePodcasts() async {
     final prefs = await SharedPreferences.getInstance();
-    List<String> favoriteEpisodes = prefs.getStringList(favoritesKey) ?? [];
+    List<String> favoritePodcasts =
+        prefs.getStringList(favoritePodcastsKey) ?? [];
+
+    return favoritePodcasts.map((podcastString) {
+      final podcastJson = jsonDecode(podcastString);
+      return Podcast.fromJson(podcastJson);
+    }).toList();
+  }
+
+  Future<List<Episode>> getFavoriteEpisodes() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> favoriteEpisodes =
+        prefs.getStringList(favoriteEpisodesKey) ?? [];
 
     selectedPodcastEpisodes = favoriteEpisodes.map((episodeString) {
       final episodeJson = jsonDecode(episodeString);
@@ -226,11 +239,12 @@ class API {
   /// Toggles the favorite status of an episode.
   ///
   /// @param episode The episode to toggle the favorite status of.
-  Future<void> toggleFavorite(Episode episode) async {
+  Future<void> toggleFavoriteEpisode(Episode episode) async {
     final prefs = await SharedPreferences.getInstance();
 
     // Get current favorites from SharedPreferences
-    List<String> favoriteEpisodes = prefs.getStringList(favoritesKey) ?? [];
+    List<String> favoriteEpisodes =
+        prefs.getStringList(favoriteEpisodesKey) ?? [];
 
     final episodeString = jsonEncode(episode);
 
@@ -242,17 +256,18 @@ class API {
     }
 
     // Save updated favorites back to SharedPreferences
-    await prefs.setStringList(favoritesKey, favoriteEpisodes);
+    await prefs.setStringList(favoriteEpisodesKey, favoriteEpisodes);
   }
 
   /// Checks if an episode is a favorite.
   ///
   /// @param episode The episode to check.
   /// @return True if the episode is a favorite, false otherwise.
-  Future<bool> isFavorite(Episode episode) async {
+  Future<bool> isFavoriteEpisode(Episode episode) async {
     final prefs = await SharedPreferences.getInstance();
 
-    List<String> favoriteEpisodes = prefs.getStringList(favoritesKey) ?? [];
+    List<String> favoriteEpisodes =
+        prefs.getStringList(favoriteEpisodesKey) ?? [];
 
     final episodeIdString = jsonEncode(episode);
 

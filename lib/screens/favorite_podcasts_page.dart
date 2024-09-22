@@ -4,18 +4,18 @@ import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/components/podcasts_list.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 
-class PodcastsPage extends StatelessWidget {
-  const PodcastsPage({super.key});
+class FavoritePodcastsPage extends StatelessWidget {
+  const FavoritePodcastsPage({super.key});
 
   Future<List<Podcast>> fetchPodcasts(context) {
     final apiProvider = Provider.of<API>(context);
 
-    return apiProvider.getPodcasts();
+    return apiProvider.getFavoritePodcasts();
   }
 
   @override
   Widget build(BuildContext context) {
     return PodcastsList(
-        title: "Podcasts", podcastsFuture: fetchPodcasts(context));
+        title: "Favorite podcasts", podcastsFuture: fetchPodcasts(context));
   }
 }

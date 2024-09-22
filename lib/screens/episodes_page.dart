@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
-import 'package:rockserwis_podcaster/screens/episodes_list.dart';
+import 'package:rockserwis_podcaster/components/episodes_list.dart';
 
 class EpisodesPage extends StatelessWidget {
   final Podcast currentPodcast;
@@ -19,6 +19,8 @@ class EpisodesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EpisodesList(
-        title: "Episodes", episodesFuture: fetchEpisodes(context));
+        title: "Episodes",
+        showFavorites: true,
+        episodesFuture: fetchEpisodes(context));
   }
 }
