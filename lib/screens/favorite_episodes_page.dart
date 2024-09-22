@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
-import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/components/episodes_list.dart';
+import 'package:rockserwis_podcaster/models/episode.dart';
 
 class FavoritesEpisodesPage extends StatelessWidget {
   const FavoritesEpisodesPage({super.key});
@@ -15,8 +15,13 @@ class FavoritesEpisodesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return EpisodesList(
-        title: "Favorite episodes",
-        episodesFuture: fetchFavoriteEpisodes(context));
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Favorite episodes"),
+      ),
+      body: EpisodesList(
+        episodesFuture: fetchFavoriteEpisodes(context),
+      ),
+    );
   }
 }

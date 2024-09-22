@@ -15,7 +15,13 @@ class FavoritePodcastsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PodcastsList(
-        title: "Favorite podcasts", podcastsFuture: fetchPodcasts(context));
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Favorite podcasts"),
+      ),
+      body: PodcastsList(
+        podcastsFuture: fetchPodcasts(context),
+      ),
+    );
   }
 }

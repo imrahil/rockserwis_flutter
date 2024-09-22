@@ -223,6 +223,44 @@ class API {
     }).toList();
   }
 
+  /// Toggles the favorite status of an podcast.
+  ///
+  /// @param podcast The episode to toggle the favorite status of.
+  Future<void> toggleFavoritePodcast(Podcast podcast) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    // Get current favorites from SharedPreferences
+    List<String> favoritePodcasts =
+        prefs.getStringList(favoritePodcastsKey) ?? [];
+
+    final podcastString = jsonEncode(podcast);
+
+    // Toggle favorite status
+    if (favoritePodcasts.contains(podcastString)) {
+      favoritePodcasts.remove(podcastString);
+    } else {
+      favoritePodcasts.add(podcastString);
+    }
+
+    // Save updated favorites back to SharedPreferences
+    await prefs.setStringList(favoritePodcastsKey, favoritePodcasts);
+  }
+
+  /// Checks if a podcast is a favorite.
+  ///
+  /// @param podcast The podcast to check.
+  /// @return True if the podcast is a favorite, false otherwise.
+  Future<bool> isFavoritePodcast(Podcast podcast) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    List<String> favoritePodcasts =
+        prefs.getStringList(favoritePodcastsKey) ?? [];
+
+    final podcastIdString = jsonEncode(podcast);
+
+    return favoritePodcasts.contains(podcastIdString);
+  }
+
   Future<List<Episode>> getFavoriteEpisodes() async {
     final prefs = await SharedPreferences.getInstance();
     List<String> favoriteEpisodes =
