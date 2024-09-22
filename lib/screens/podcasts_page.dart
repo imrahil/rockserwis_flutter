@@ -5,8 +5,6 @@ import 'package:rockserwis_podcaster/components/podcasts_list.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 import 'package:rockserwis_podcaster/screens/favorite_episodes_page.dart';
 import 'package:rockserwis_podcaster/screens/favorite_podcasts_page.dart';
-import 'package:rockserwis_podcaster/screens/login.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class PodcastsPage extends StatelessWidget {
   const PodcastsPage({super.key});
@@ -17,25 +15,10 @@ class PodcastsPage extends StatelessWidget {
     return apiProvider.getPodcasts();
   }
 
-  Future<void> _logout(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('rememberMe', false);
-    await prefs.remove('masterCookie');
-    await prefs.remove('sessionCookie');
-
-    if (context.mounted) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const LoginPage(),
-        ),
-        (Route<dynamic> route) => false,
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final apiProvider = Provider.of<API>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Podcasts"),
@@ -65,7 +48,7 @@ class PodcastsPage extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(Icons.logout),
-            onPressed: () => _logout(context),
+            onPressed: () => apiProvider.logout(context),
           ),
         ],
       ),

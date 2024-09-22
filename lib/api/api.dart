@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
+import 'package:rockserwis_podcaster/screens/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/podcast.dart';
@@ -136,6 +138,26 @@ class API {
       logger.d("Something went wrong... login failed!");
 
       return false;
+    }
+  }
+
+  /// Logs out of the Rockserwis.fm API.
+  ///
+  /// @param context The current build context.
+  Future<void> logout(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('rememberMe', false);
+    await prefs.remove('masterCookie');
+    await prefs.remove('sessionCookie');
+
+    if (context.mounted) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const LoginPage(),
+        ),
+        (Route<dynamic> route) => false,
+      );
     }
   }
 
