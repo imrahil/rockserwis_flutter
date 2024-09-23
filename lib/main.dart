@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/screens/login.dart';
 import 'package:rockserwis_podcaster/screens/podcasts_page.dart';
+import 'package:rockserwis_podcaster/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
@@ -37,6 +38,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         provider,
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
       child: MusicPlayer(homeComp: homeComp),
     ),
@@ -50,31 +52,12 @@ class MusicPlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return MaterialApp(
       title: 'Rockserwis.fm Podcast Player',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        brightness: Brightness.dark, // Enable dark theme
-        primarySwatch: Colors.blue,
-        inputDecorationTheme: InputDecorationTheme(
-          filled: true,
-          fillColor: Colors.grey[850], // Dark background for input fields
-          labelStyle:
-              TextStyle(color: Colors.grey[400]), // Light text color for labels
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.grey[600]!),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.grey[600]!),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: Colors.blue),
-          ),
-        ),
-      ),
+      theme: themeProvider.isDarkMode ? darkTheme : lightTheme,
       home: homeComp,
     );
   }
