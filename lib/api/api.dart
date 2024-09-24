@@ -54,6 +54,7 @@ class API {
     return await _fetchAndCacheJson(url, (jsonData) {
       selectedPodcastEpisodes = (json.decode(jsonData) as List)
           .map((i) => Episode.fromJson(i))
+          .where((episode) => episode.hasPodcast)
           .toList();
 
       return selectedPodcastEpisodes;
