@@ -15,8 +15,6 @@ class EpisodesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final apiProvider = Provider.of<API>(context);
-
     return FutureBuilder<List<Episode>>(
       future: episodesFuture,
       builder: (BuildContext context, AsyncSnapshot<List<Episode>> snapshot) {
@@ -28,45 +26,58 @@ class EpisodesList extends StatelessWidget {
             itemBuilder: (context, index) {
               Episode currentEpisode = snapshot.data![index];
 
-              return Card(
-                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                child: ListTile(
-                  contentPadding: const EdgeInsets.all(16),
-                  leading: currentEpisode.imgPath != null
-                      ? CachedNetworkImage(
-                          // Use CachedNetworkImage
-                          imageUrl:
-                              apiProvider.getImagePath(currentEpisode.imgPath),
-                          placeholder: (context, url) =>
-                              const CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                        )
-                      : const Icon(Icons.podcasts),
-                  title: Text(
-                    currentEpisode.getEpisodeTitle(),
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(
-                      'Podcast duration: ${currentEpisode.getReadableDuration()}'),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {
-                    if (currentEpisode.hasPodcast) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              Player(currentEpisode: currentEpisode),
-                        ),
-                      );
-                    }
-                  },
-                ),
-              );
+              return EpisodeListTile(currentEpisode: currentEpisode);
             },
           );
         }
       },
+    );
+  }
+}
+
+class EpisodeListTile extends StatelessWidget {
+  const EpisodeListTile({
+    super.key,
+    required this.currentEpisode,
+  });
+
+  final Episode currentEpisode;
+
+  @override
+  Widget build(BuildContext context) {
+    final apiProvider = Provider.of<API>(context);
+
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      child: ListTile(
+        contentPadding: const EdgeInsets.all(16),
+        leading: currentEpisode.imgPath != null
+            ? CachedNetworkImage(
+                // Use CachedNetworkImage
+                imageUrl: apiProvider.getImagePath(currentEpisode.imgPath),
+                placeholder: (context, url) =>
+                    const CircularProgressIndicator(),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+              )
+            : const Icon(Icons.podcasts),
+        title: Text(
+          currentEpisode.getEpisodeTitle(),
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle:
+            Text('Podcast duration: ${currentEpisode.getReadableDuration()}'),
+        trailing: const Icon(Icons.arrow_forward),
+        onTap: () {
+          if (currentEpisode.hasPodcast) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Player(currentEpisode: currentEpisode),
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 }

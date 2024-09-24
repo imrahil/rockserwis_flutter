@@ -5,6 +5,7 @@ import 'package:rockserwis_podcaster/components/podcasts_list.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 import 'package:rockserwis_podcaster/screens/favorite_episodes_page.dart';
 import 'package:rockserwis_podcaster/screens/favorite_podcasts_page.dart';
+import 'package:rockserwis_podcaster/screens/login.dart';
 import 'package:rockserwis_podcaster/theme.dart';
 
 class PodcastsPage extends StatelessWidget {
@@ -16,9 +17,24 @@ class PodcastsPage extends StatelessWidget {
     return apiProvider.getPodcasts();
   }
 
+  void logout(context) async {
+    final apiProvider = Provider.of<API>(context, listen: false);
+
+    await apiProvider.logout();
+
+    if (context.mounted) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const LoginPage(),
+        ),
+        (Route<dynamic> route) => false,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final apiProvider = Provider.of<API>(context);
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
@@ -56,7 +72,7 @@ class PodcastsPage extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(Icons.logout),
-            onPressed: () => apiProvider.logout(context),
+            onPressed: () => logout(context),
           ),
         ],
       ),

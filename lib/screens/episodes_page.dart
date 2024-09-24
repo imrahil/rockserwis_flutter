@@ -58,10 +58,6 @@ class _EpisodesPageState extends State<EpisodesPage> {
               );
             },
           ),
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () => apiProvider.logout(context),
-          ),
         ],
       ),
       body: EpisodesList(

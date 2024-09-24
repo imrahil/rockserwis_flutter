@@ -15,8 +15,6 @@ class PodcastsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final apiProvider = Provider.of<API>(context);
-
     return FutureBuilder<List<Podcast>>(
       future: podcastsFuture,
       builder: (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
@@ -28,43 +26,57 @@ class PodcastsList extends StatelessWidget {
             itemBuilder: (context, index) {
               Podcast currentPodcast = snapshot.data![index];
 
-              return Card(
-                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                child: ListTile(
-                  contentPadding: const EdgeInsets.all(16),
-                  leading: currentPodcast.image != null
-                      ? CachedNetworkImage(
-                          // Use CachedNetworkImage
-                          imageUrl:
-                              apiProvider.getImagePath(currentPodcast.image),
-                          placeholder: (context, url) =>
-                              const CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                          fit: BoxFit.cover,
-                        )
-                      : const Icon(Icons.podcasts),
-                  title: Text(
-                    currentPodcast.podcastName,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text('Podcast ID: ${currentPodcast.podcastId}'),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            EpisodesPage(currentPodcast: currentPodcast),
-                      ),
-                    );
-                  },
-                ),
-              );
+              return PodcastListTile(currentPodcast: currentPodcast);
             },
           );
         }
       },
+    );
+  }
+}
+
+class PodcastListTile extends StatelessWidget {
+  const PodcastListTile({
+    super.key,
+    required this.currentPodcast,
+  });
+
+  final Podcast currentPodcast;
+
+  @override
+  Widget build(BuildContext context) {
+    final apiProvider = Provider.of<API>(context);
+
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      child: ListTile(
+        contentPadding: const EdgeInsets.all(16),
+        leading: currentPodcast.image != null
+            ? CachedNetworkImage(
+                // Use CachedNetworkImage
+                imageUrl: apiProvider.getImagePath(currentPodcast.image),
+                placeholder: (context, url) =>
+                    const CircularProgressIndicator(),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+                fit: BoxFit.cover,
+              )
+            : const Icon(Icons.podcasts),
+        title: Text(
+          currentPodcast.podcastName,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text('Podcast ID: ${currentPodcast.podcastId}'),
+        trailing: const Icon(Icons.arrow_forward),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  EpisodesPage(currentPodcast: currentPodcast),
+            ),
+          );
+        },
+      ),
     );
   }
 }

@@ -142,23 +142,11 @@ class API {
   }
 
   /// Logs out of the Rockserwis.fm API.
-  ///
-  /// @param context The current build context.
-  Future<void> logout(BuildContext context) async {
+  Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('rememberMe', false);
     await prefs.remove('masterCookie');
     await prefs.remove('sessionCookie');
-
-    if (context.mounted) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const LoginPage(),
-        ),
-        (Route<dynamic> route) => false,
-      );
-    }
   }
 
   /// Gets the URL for a specific episode.
