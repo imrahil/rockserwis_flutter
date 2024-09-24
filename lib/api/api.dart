@@ -1,10 +1,8 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
-import 'package:rockserwis_podcaster/screens/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/podcast.dart';
@@ -23,13 +21,14 @@ class API {
 
   String masterCookie = "";
   String sessionCookie = "";
+  http.Client client;
 
   List<Episode> selectedPodcastEpisodes = [];
 
   final Map<String, String> _jsonCache = {};
   final Map<String, DateTime> _cacheLastUpdated = {};
 
-  API({this.masterCookie = "", this.sessionCookie = ""});
+  API({required this.client, this.masterCookie = "", this.sessionCookie = ""});
 
   /// Fetches and caches JSON data for all podcasts.
   ///
@@ -76,7 +75,7 @@ class API {
     }
 
     // If not in cache, fetch from network
-    final response = await http.get(Uri.parse(url));
+    final response = await client.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       logger.d('Loading from network: $url');
@@ -101,7 +100,7 @@ class API {
   Future<bool> login(String email, String password, bool rememberMe) async {
     logger.d('Logging in... - $loginCsrfUrl');
 
-    final loginCsrf = await http.get(Uri.parse(loginCsrfUrl));
+    final loginCsrf = await client.get(Uri.parse(loginCsrfUrl));
 
     logger.d('status code: ${loginCsrf.statusCode}');
 
@@ -118,7 +117,7 @@ class API {
       form['password'] = password;
       form['method'] = 'login';
 
-      final loginCall = await http.post(Uri.parse(loginPostUrl),
+      final loginCall = await client.post(Uri.parse(loginPostUrl),
           body: form, headers: {'Cookie': masterCookie});
 
       sessionCookie = parseCookie(loginCall);

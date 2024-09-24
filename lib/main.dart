@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
@@ -13,7 +14,7 @@ Future<void> main() async {
   final prefs = await SharedPreferences.getInstance();
   bool rememberMe = prefs.getBool('rememberMe') ?? false;
 
-  Provider provider = Provider<API>(create: (_) => API());
+  Provider provider = Provider<API>(create: (_) => API(client: http.Client()));
 
   if (rememberMe) {
     String masterCookie = prefs.getString('masterCookie') ?? "";
@@ -21,8 +22,10 @@ Future<void> main() async {
 
     if (masterCookie != "" && sessionCookie != "") {
       provider = Provider<API>(
-          create: (_) =>
-              API(masterCookie: masterCookie, sessionCookie: sessionCookie));
+          create: (_) => API(
+              client: http.Client(),
+              masterCookie: masterCookie,
+              sessionCookie: sessionCookie));
     }
   }
 
