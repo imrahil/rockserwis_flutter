@@ -128,6 +128,33 @@ void main() {
 
         expect(result, false);
       });
+
+      test('returns true when login is with rememberMe', () async {
+        when(mockClient.get(Uri.parse(API.loginCsrfUrl))).thenAnswer(
+            (_) async => http.Response('test_csrf_token', 200, headers: {
+                  'content-type': 'application/json; charset=utf-8',
+                  'set-cookie':
+                      'csrftoken=test_csrf_cookie;session=test_session_cookie'
+                }));
+
+        when(mockClient.post(Uri.parse(API.loginPostUrl),
+                body: anyNamed('body'), headers: anyNamed('headers')))
+            .thenAnswer((_) async => http.Response('', 200, headers: {
+                  'content-type': 'application/json; charset=utf-8',
+                  'set-cookie':
+                      'sessionid=test_session_cookie;session=test_session_cookie'
+                }));
+
+        final result = await api.login('test@email.com', 'password', true);
+
+        expect(result, true);
+
+        final prefs = await SharedPreferences.getInstance();
+        expect(prefs.getBool('rememberMe'), true);
+        expect(prefs.getString('masterCookie'), 'csrftoken=test_csrf_cookie');
+        expect(
+            prefs.getString('sessionCookie'), 'sessionid=test_session_cookie');
+      });
     });
 
     group('logout', () {
@@ -185,8 +212,11 @@ void main() {
       test('returns the previous episode in the list', () {
         api.selectedPodcastEpisodes = parsedMockEpisodes;
 
-        final previousEpisode = api.getPreviousEpisode(21359);
-        expect(previousEpisode, isNull);
+        final previousEpisode = api.getPreviousEpisode(21284);
+        expect(previousEpisode?.episodeId, 21359);
+
+        final previousEpisode2 = api.getPreviousEpisode(21359);
+        expect(previousEpisode2, null);
       });
     });
 
@@ -196,6 +226,9 @@ void main() {
 
         final nextEpisode = api.getNextEpisode(21359);
         expect(nextEpisode?.episodeId, 21284);
+
+        final nextEpisode2 = api.getNextEpisode(21284);
+        expect(nextEpisode2, null);
       });
     });
 
