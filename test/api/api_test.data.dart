@@ -63,6 +63,13 @@ final mockPodcasts = [
 final List<Podcast> parsedMockPodcasts =
     mockPodcasts.map((podcast) => Podcast.fromJson(podcast)).toList();
 
+final List<Podcast> podcastsWithoutImages = mockPodcasts.map((podcastData) {
+  return Podcast.fromJson({
+    ...podcastData,
+    'image': null,
+  });
+}).toList();
+
 final mockEpisodes = [
   {
     "schedule_id": 21359,
