@@ -37,6 +37,27 @@ void main() {
         expect(podcasts.length, mockPodcasts.length);
         expect(podcasts[0].podcastId, mockPodcasts[0]['broadcast_id']);
         expect(podcasts[1].podcastName, mockPodcasts[1]['broadcast_name']);
+
+        final authors = mockPodcasts[2] as Map;
+        expect(podcasts[2].authors.length,
+            authors['broadcast_broadcasters'].length);
+        expect(podcasts[2].authors[0].name,
+            authors['broadcast_broadcasters'][0]['name']);
+
+        final schedule = mockPodcasts[2] as Map;
+        expect(
+            podcasts[2].schedules.length, schedule['broadcast_times'].length);
+        expect(podcasts[2].schedules[0].weekday,
+            schedule['broadcast_times'][0]['weekday']);
+        expect(podcasts[2].schedules[0].start,
+            schedule['broadcast_times'][0]['start']);
+        expect(podcasts[2].schedules[0].end,
+            schedule['broadcast_times'][0]['end']);
+
+        expect(podcasts[0].onlyMusic, mockPodcasts[0]['music_only']);
+        expect(podcasts[1].isActive, mockPodcasts[1]['podcasts_active']);
+        expect(podcasts[2].hasEpisodes, mockPodcasts[2]['has_podcasts']);
+        expect(podcasts[3].image, mockPodcasts[3]['image']);
       });
 
       test('throws an exception when unsuccessful', () async {
@@ -65,33 +86,28 @@ void main() {
     });
 
     group('getEpisodes', () {
-      final podcast = Podcast(
-          podcastId: 21359,
-          podcastName: 'Test Podcast',
-          image: 'image.jpg',
-          hasEpisodes: true);
-
       test('returns a list of episodes when successful', () async {
-        when(mockClient
-                .get(Uri.parse('${API.scheduleUrl}/${podcast.podcastId}.json')))
+        when(mockClient.get(Uri.parse(
+                '${API.scheduleUrl}/${parsedMockPodcasts[0].podcastId}.json')))
             .thenAnswer((_) async => http.Response(
                 json.encode(mockEpisodes), 200,
                 headers: {'content-type': 'application/json; charset=utf-8'}));
 
-        final episodes = await api.getEpisodes(podcast, forceRefresh: true);
+        final episodes =
+            await api.getEpisodes(parsedMockPodcasts[0], forceRefresh: true);
 
         expect(episodes, isA<List<Episode>>());
-        expect(episodes.length, mockEpisodes.length);
-        expect(episodes[0].episodeId, mockEpisodes[0]['schedule_id']);
-        expect(episodes[1].name, mockEpisodes[1]['name']);
+        expect(episodes.length, parsedMockEpisodes.length);
+        expect(episodes[0].episodeId, parsedMockEpisodes[0].episodeId);
+        expect(episodes[1].name, parsedMockEpisodes[1].name);
       });
 
       test('throws an exception when unsuccessful', () async {
-        when(mockClient
-                .get(Uri.parse('${API.scheduleUrl}/${podcast.podcastId}.json')))
+        when(mockClient.get(Uri.parse(
+                '${API.scheduleUrl}/${parsedMockPodcasts[0].podcastId}.json')))
             .thenAnswer((_) async => http.Response('Not Found', 404));
 
-        expect(() => api.getEpisodes(podcast, forceRefresh: true),
+        expect(() => api.getEpisodes(parsedMockPodcasts[0], forceRefresh: true),
             throwsException);
       });
     });
