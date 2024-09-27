@@ -66,7 +66,7 @@ final List<Podcast> parsedMockPodcasts =
 final List<Podcast> podcastsWithoutImages = mockPodcasts.map((podcastData) {
   return Podcast.fromJson({
     ...podcastData,
-    'image': null,
+    'image': "",
   });
 }).toList();
 
@@ -99,3 +99,10 @@ final mockEpisodes = [
 
 final List<Episode> parsedMockEpisodes =
     mockEpisodes.map((episode) => Episode.fromJson(episode)).toList();
+
+final List<Episode> episodesWithoutImages = mockEpisodes.map((episodeData) {
+  return Episode.fromJson({
+    ...episodeData,
+    'img_path': "",
+  });
+}).toList();

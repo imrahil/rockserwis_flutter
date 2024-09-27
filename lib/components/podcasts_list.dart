@@ -18,7 +18,7 @@ class PodcastsList extends StatelessWidget {
     return FutureBuilder<List<Podcast>>(
       future: podcastsFuture,
       builder: (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
-        if (!snapshot.hasData) {
+        if (snapshot.connectionState != ConnectionState.done) {
           return const Center(child: CircularProgressIndicator());
         } else {
           return ListView.builder(
@@ -51,7 +51,7 @@ class PodcastListTile extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: ListTile(
         contentPadding: const EdgeInsets.all(16),
-        leading: currentPodcast.image != null
+        leading: currentPodcast.image != null && currentPodcast.image != ""
             ? CachedNetworkImage(
                 // Use CachedNetworkImage
                 imageUrl: apiProvider.getImagePath(currentPodcast.image),

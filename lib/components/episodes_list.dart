@@ -18,7 +18,7 @@ class EpisodesList extends StatelessWidget {
     return FutureBuilder<List<Episode>>(
       future: episodesFuture,
       builder: (BuildContext context, AsyncSnapshot<List<Episode>> snapshot) {
-        if (!snapshot.hasData) {
+        if (snapshot.connectionState != ConnectionState.done) {
           return const Center(child: CircularProgressIndicator());
         } else {
           return ListView.builder(
@@ -51,7 +51,7 @@ class EpisodeListTile extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: ListTile(
         contentPadding: const EdgeInsets.all(16),
-        leading: currentEpisode.imgPath != null
+        leading: currentEpisode.imgPath != null && currentEpisode.imgPath != ""
             ? CachedNetworkImage(
                 // Use CachedNetworkImage
                 imageUrl: apiProvider.getImagePath(currentEpisode.imgPath),
