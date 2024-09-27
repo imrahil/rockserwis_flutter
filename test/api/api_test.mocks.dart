@@ -49,6 +49,10 @@ class _FakeStreamedResponse_1 extends _i1.SmartFake
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockClient extends _i1.Mock implements _i2.Client {
+  MockClient() {
+    _i1.throwOnMissingStub(this);
+  }
+
   @override
   _i3.Future<_i2.Response> head(
     Uri? url, {
@@ -61,15 +65,6 @@ class MockClient extends _i1.Mock implements _i2.Client {
           {#headers: headers},
         ),
         returnValue: _i3.Future<_i2.Response>.value(_FakeResponse_0(
-          this,
-          Invocation.method(
-            #head,
-            [url],
-            {#headers: headers},
-          ),
-        )),
-        returnValueForMissingStub:
-            _i3.Future<_i2.Response>.value(_FakeResponse_0(
           this,
           Invocation.method(
             #head,
@@ -98,15 +93,6 @@ class MockClient extends _i1.Mock implements _i2.Client {
             {#headers: headers},
           ),
         )),
-        returnValueForMissingStub:
-            _i3.Future<_i2.Response>.value(_FakeResponse_0(
-          this,
-          Invocation.method(
-            #get,
-            [url],
-            {#headers: headers},
-          ),
-        )),
       ) as _i3.Future<_i2.Response>);
 
   @override
@@ -127,19 +113,6 @@ class MockClient extends _i1.Mock implements _i2.Client {
           },
         ),
         returnValue: _i3.Future<_i2.Response>.value(_FakeResponse_0(
-          this,
-          Invocation.method(
-            #post,
-            [url],
-            {
-              #headers: headers,
-              #body: body,
-              #encoding: encoding,
-            },
-          ),
-        )),
-        returnValueForMissingStub:
-            _i3.Future<_i2.Response>.value(_FakeResponse_0(
           this,
           Invocation.method(
             #post,
@@ -182,19 +155,6 @@ class MockClient extends _i1.Mock implements _i2.Client {
             },
           ),
         )),
-        returnValueForMissingStub:
-            _i3.Future<_i2.Response>.value(_FakeResponse_0(
-          this,
-          Invocation.method(
-            #put,
-            [url],
-            {
-              #headers: headers,
-              #body: body,
-              #encoding: encoding,
-            },
-          ),
-        )),
       ) as _i3.Future<_i2.Response>);
 
   @override
@@ -215,19 +175,6 @@ class MockClient extends _i1.Mock implements _i2.Client {
           },
         ),
         returnValue: _i3.Future<_i2.Response>.value(_FakeResponse_0(
-          this,
-          Invocation.method(
-            #patch,
-            [url],
-            {
-              #headers: headers,
-              #body: body,
-              #encoding: encoding,
-            },
-          ),
-        )),
-        returnValueForMissingStub:
-            _i3.Future<_i2.Response>.value(_FakeResponse_0(
           this,
           Invocation.method(
             #patch,
@@ -270,19 +217,6 @@ class MockClient extends _i1.Mock implements _i2.Client {
             },
           ),
         )),
-        returnValueForMissingStub:
-            _i3.Future<_i2.Response>.value(_FakeResponse_0(
-          this,
-          Invocation.method(
-            #delete,
-            [url],
-            {
-              #headers: headers,
-              #body: body,
-              #encoding: encoding,
-            },
-          ),
-        )),
       ) as _i3.Future<_i2.Response>);
 
   @override
@@ -304,15 +238,6 @@ class MockClient extends _i1.Mock implements _i2.Client {
             {#headers: headers},
           ),
         )),
-        returnValueForMissingStub:
-            _i3.Future<String>.value(_i5.dummyValue<String>(
-          this,
-          Invocation.method(
-            #read,
-            [url],
-            {#headers: headers},
-          ),
-        )),
       ) as _i3.Future<String>);
 
   @override
@@ -327,8 +252,6 @@ class MockClient extends _i1.Mock implements _i2.Client {
           {#headers: headers},
         ),
         returnValue: _i3.Future<_i6.Uint8List>.value(_i6.Uint8List(0)),
-        returnValueForMissingStub:
-            _i3.Future<_i6.Uint8List>.value(_i6.Uint8List(0)),
       ) as _i3.Future<_i6.Uint8List>);
 
   @override
@@ -339,14 +262,6 @@ class MockClient extends _i1.Mock implements _i2.Client {
           [request],
         ),
         returnValue:
-            _i3.Future<_i2.StreamedResponse>.value(_FakeStreamedResponse_1(
-          this,
-          Invocation.method(
-            #send,
-            [request],
-          ),
-        )),
-        returnValueForMissingStub:
             _i3.Future<_i2.StreamedResponse>.value(_FakeStreamedResponse_1(
           this,
           Invocation.method(
