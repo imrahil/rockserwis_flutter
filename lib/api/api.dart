@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
+import 'package:rockserwis_podcaster/api/data/missing_podcasts.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,9 +37,17 @@ class API {
   /// @return A list of all podcasts.
   Future<List<Podcast>> getPodcasts({bool forceRefresh = false}) async {
     return await _fetchAndCacheJson(broadCastUrl, (jsonData) {
-      return (json.decode(jsonData) as List)
+      List<Podcast> podcasts = (json.decode(jsonData) as List)
           .map((i) => Podcast.fromJson(i))
           .toList();
+
+      List<Podcast> missingPodcastsParsed =
+          missingPodcasts.map((podcast) => Podcast.fromJson(podcast)).toList();
+
+      List<Podcast> output = [...podcasts, ...missingPodcastsParsed];
+      output.sort((a, b) => a.podcastName.compareTo(b.podcastName));
+
+      return output;
     }, forceRefresh: forceRefresh);
   }
 

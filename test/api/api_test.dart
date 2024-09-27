@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
+import 'package:rockserwis_podcaster/api/data/missing_podcasts.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,30 +35,23 @@ void main() {
         final podcasts = await api.getPodcasts(forceRefresh: true);
 
         expect(podcasts, isA<List<Podcast>>());
-        expect(podcasts.length, mockPodcasts.length);
-        expect(podcasts[0].podcastId, mockPodcasts[0]['broadcast_id']);
-        expect(podcasts[1].podcastName, mockPodcasts[1]['broadcast_name']);
+        expect(podcasts.length, mockPodcasts.length + missingPodcasts.length);
+        expect(podcasts[0].podcastId, 7);
+        expect(podcasts[1].podcastName, "Będzie głłośno");
 
-        final authors = mockPodcasts[2] as Map;
-        expect(podcasts[2].authors.length,
-            authors['broadcast_broadcasters'].length);
-        expect(podcasts[2].authors[0].name,
-            authors['broadcast_broadcasters'][0]['name']);
+        expect(podcasts[3].authors.length, 1);
+        expect(podcasts[3].authors[0].name, "Baśnia");
 
-        final schedule = mockPodcasts[2] as Map;
-        expect(
-            podcasts[2].schedules.length, schedule['broadcast_times'].length);
-        expect(podcasts[2].schedules[0].weekday,
-            schedule['broadcast_times'][0]['weekday']);
-        expect(podcasts[2].schedules[0].start,
-            schedule['broadcast_times'][0]['start']);
-        expect(podcasts[2].schedules[0].end,
-            schedule['broadcast_times'][0]['end']);
+        expect(podcasts[3].schedules.length, 1);
+        expect(podcasts[3].schedules[0].weekday, 5);
+        expect(podcasts[3].schedules[0].start, "21:00:00");
+        expect(podcasts[3].schedules[0].end, "23:00:00");
 
-        expect(podcasts[0].onlyMusic, mockPodcasts[0]['music_only']);
-        expect(podcasts[1].isActive, mockPodcasts[1]['podcasts_active']);
-        expect(podcasts[2].hasEpisodes, mockPodcasts[2]['has_podcasts']);
-        expect(podcasts[3].image, mockPodcasts[3]['image']);
+        expect(podcasts[4].onlyMusic, false);
+        expect(podcasts[4].isActive, true);
+        expect(podcasts[4].hasEpisodes, true);
+        expect(podcasts[4].image,
+            "/static/media/broadcasts/doctor-doctor_1000x1000.jpg");
       });
 
       test('throws an exception when unsuccessful', () async {
@@ -81,7 +75,7 @@ void main() {
         // Should still return the cached data
         final podcasts = await api.getPodcasts();
         expect(podcasts, isA<List<Podcast>>());
-        expect(podcasts.length, mockPodcasts.length);
+        expect(podcasts.length, mockPodcasts.length + missingPodcasts.length);
       });
     });
 
