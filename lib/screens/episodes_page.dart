@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/components/episodes_list.dart';
@@ -30,6 +31,62 @@ class _EpisodesPageState extends State<EpisodesPage> {
     return apiProvider.getEpisodes(_currentPodcast);
   }
 
+  void _showPodcastInfoDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Podcast Information'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Name: ${_currentPodcast.podcastName}'),
+              const SizedBox(height: 16.0),
+              const Text('Authors:'),
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: _currentPodcast.authors.map((author) {
+                    return Text('• ${author.name}');
+                  }).toList(),
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              const Text('Schedule:'),
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: _currentPodcast.schedules.map((schedule) {
+                    final startTime = DateFormat('HH:mm')
+                        .format(DateFormat('HH:mm:ss').parse(schedule.start));
+                    final endTime = DateFormat('HH:mm')
+                        .format(DateFormat('HH:mm:ss').parse(schedule.end));
+                    final dayName = DateFormat('EEEE').format(DateTime.now()
+                        .subtract(Duration(
+                            days: DateTime.now().weekday - schedule.weekday)));
+
+                    return Text('• $dayName, $startTime - $endTime');
+                  }).toList(),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final apiProvider = Provider.of<API>(context);
@@ -38,6 +95,10 @@ class _EpisodesPageState extends State<EpisodesPage> {
       appBar: AppBar(
         title: Text(_currentPodcast.podcastName),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            onPressed: () => _showPodcastInfoDialog(context),
+          ),
           FutureBuilder<bool>(
             future: apiProvider.isFavoritePodcast(_currentPodcast),
             builder: (BuildContext context, snapshot) {
