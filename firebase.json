@@ -1,0 +1,25 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "rockcaster",
+          "appId": "1:833618886347:android:697e3e508e8615e19be54e",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "rockcaster",
+          "configurations": {
+            "android": "1:833618886347:android:697e3e508e8615e19be54e",
+            "ios": "1:833618886347:ios:72f6d20404ec8c3b9be54e",
+            "macos": "1:833618886347:ios:72f6d20404ec8c3b9be54e",
+            "web": "1:833618886347:web:2bfe82dcf517ec749be54e",
+            "windows": "1:833618886347:web:84f65fc00a9bee1e9be54e"
+          }
+        }
+      }
+    }
+  }
+}

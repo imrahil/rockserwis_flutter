@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "833618886347",
+    "project_id": "rockcaster",
+    "storage_bucket": "rockcaster.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833618886347:android:697e3e508e8615e19be54e",
+        "android_client_info": {
+          "package_name": "com.imrahil.rockserwis_podcaster"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1doVY_iYqlTXuwgwEWHJMnqMAfX7L2DA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
