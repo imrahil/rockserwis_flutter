@@ -3,14 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
+import 'package:rockserwis_podcaster/models/podcast.dart';
 import 'package:rockserwis_podcaster/screens/player.dart';
 
 class EpisodesList extends StatelessWidget {
   final Future<List<Episode>> episodesFuture;
+  final Podcast? currentPodcast;
 
   const EpisodesList({
     super.key,
     required this.episodesFuture,
+    this.currentPodcast,
   });
 
   @override
@@ -25,6 +28,14 @@ class EpisodesList extends StatelessWidget {
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               Episode currentEpisode = snapshot.data![index];
+
+              /// Check if the episode has an image, if not, use the podcast image
+              if ((currentEpisode.imgPath == null ||
+                      currentEpisode.imgPath == "") &&
+                  currentPodcast != null &&
+                  ![null, ""].contains(currentPodcast?.image)) {
+                currentEpisode.imgPath = currentPodcast?.image;
+              }
 
               return EpisodeListTile(currentEpisode: currentEpisode);
             },

@@ -123,6 +123,7 @@ class _EpisodesPageState extends State<EpisodesPage> {
       ),
       body: EpisodesList(
         episodesFuture: fetchEpisodes(context),
+        currentPodcast: _currentPodcast,
       ),
     );
   }

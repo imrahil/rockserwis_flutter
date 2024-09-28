@@ -109,7 +109,7 @@ class _PlayerState extends State<Player> {
         child: Column(
           children: [
             const Spacer(),
-            _currentEpisode.imgPath != null
+            _currentEpisode.imgPath != null && _currentEpisode.imgPath != ""
                 ? CachedNetworkImage(
                     // Use CachedNetworkImage
                     imageUrl: apiProvider.getImagePath(_currentEpisode.imgPath),

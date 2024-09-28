@@ -12,7 +12,7 @@ class Episode {
   final String name;
 
   @JsonKey(name: 'img_path')
-  final String? imgPath;
+  String? imgPath;
 
   @JsonKey(name: 'podcast_duration')
   final double? episodeDuration;
