@@ -14,31 +14,31 @@ Simple podcast player for rockserwis.fm internet radio.
 Podcasts list
 
 <p align="center">
-  <img src="./docs/screenshot_podcasts.png" width="200" >
+  <img src="./docs/screenshot_podcasts.jpg" width="200" >
 </p>
 
 Episodes list
 
 <p align="center">
-  <img src="./docs/screenshot_episodes.png" width="200" >
+  <img src="./docs/screenshot_episodes.jpg" width="200" >
 </p>
 
 Player
 
 <p align="center">
-  <img src="./docs/screenshot_player.png" width="200" >
+  <img src="./docs/screenshot_player.jpg" width="200" >
 </p>
 
 Favorited podcasts list
 
 <p align="center">
-  <img src="./docs/screenshot_favorited_podcasts.png" width="200" >
+  <img src="./docs/screenshot_favorited_podcasts.jpg" width="200" >
 </p>
 
 Favorited episodes list
 
 <p align="center">
-  <img src="./docs/screenshot_favorited_episodes.png" width="200" >
+  <img src="./docs/screenshot_favorited_episodes.jpg" width="200" >
 </p>
 
 ## TODO
