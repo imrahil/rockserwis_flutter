@@ -18,9 +18,10 @@ jobs:
     steps:
     - name: Clone repository
       uses: actions/checkout@v4
-    - uses: jacopocarlini/action-autotag@stable
+    - name: Bump Version
+      uses: RodXander/flutter-bump-version@v0.0.02
       with:
-        GITHUB_TOKEN: "${{ secrets.VERSIONBUMP }}"
+        token: ${{ secrets.VERSIONBUMP }}
     - name: Set up Java
       uses: actions/setup-java@v4
       with:
