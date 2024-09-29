@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
@@ -23,6 +26,10 @@ class _PlayerState extends State<Player> {
   late final PlayerManager _playerManager;
   late Episode _currentEpisode;
 
+  final Connectivity _connectivity = Connectivity();
+  List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
+  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
+
   var logger = Logger();
 
   @override
@@ -31,12 +38,26 @@ class _PlayerState extends State<Player> {
     _playerManager = PlayerManager();
     _currentEpisode = widget.currentEpisode;
 
-    _setAudioSource();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen((result) {
+      logger.d('ConnectivityResult: $result');
+
+      setState(() {
+        _connectionStatus = result;
+      });
+
+      if (!result.contains(ConnectivityResult.none)) {
+        _setAudioSource();
+      } else {
+        _playerManager.stop();
+      }
+    });
   }
 
   @override
   void dispose() {
     _playerManager.dispose();
+    _connectivitySubscription.cancel();
     super.dispose();
   }
 
@@ -180,6 +201,13 @@ class _PlayerState extends State<Player> {
                         width: 64.0,
                         height: 64.0,
                         child: const CircularProgressIndicator(),
+                      );
+                    } else if (_connectionStatus
+                        .contains(ConnectivityResult.none)) {
+                      return IconButton(
+                        icon: const Icon(Icons.wifi_off),
+                        iconSize: 64.0,
+                        onPressed: () {},
                       );
                     } else if (playing != true) {
                       return IconButton(

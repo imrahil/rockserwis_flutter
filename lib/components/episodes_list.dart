@@ -23,6 +23,8 @@ class EpisodesList extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<List<Episode>> snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return const Center(child: Text('Error loading episodes...'));
         } else {
           return ListView.builder(
             itemCount: snapshot.data!.length,

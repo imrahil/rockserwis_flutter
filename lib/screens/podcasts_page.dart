@@ -8,9 +8,13 @@ import 'package:rockserwis_podcaster/screens/favorite_podcasts_page.dart';
 import 'package:rockserwis_podcaster/screens/login.dart';
 import 'package:rockserwis_podcaster/theme.dart';
 
-class PodcastsPage extends StatelessWidget {
+class PodcastsPage extends StatefulWidget {
   const PodcastsPage({super.key});
+  @override
+  State<PodcastsPage> createState() => _PodcastsPageState();
+}
 
+class _PodcastsPageState extends State<PodcastsPage> {
   Future<List<Podcast>> fetchPodcasts(context) {
     final apiProvider = Provider.of<API>(context);
 
@@ -42,6 +46,13 @@ class PodcastsPage extends StatelessWidget {
         title: const Text("Podcasts"),
         automaticallyImplyLeading: false,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () {
+              // This will rebuild the widget and fetch the podcasts again
+              setState(() {});
+            },
+          ),
           IconButton(
             icon: Icon(
               themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode,

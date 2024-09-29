@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logger/logger.dart';
 
@@ -13,7 +14,9 @@ class PlayerManager {
 
   void _init() async {
     _audioPlayer = AudioPlayer(
-        userAgent: "Rockserwis Podcaster", useProxyForRequestHeaders: false);
+      userAgent: "Rockserwis Podcaster",
+      useProxyForRequestHeaders: false,
+    );
 
     _audioPlayer.positionStream.listen((position) {
       final oldState = progressNotifier.value;
@@ -91,8 +94,12 @@ class PlayerManager {
   Future<void> setAudioSource(AudioSource source) async {
     try {
       await _audioPlayer.setAudioSource(source);
+    } on PlayerException catch (e) {
+      logger.d('PlayerException: ${e.message}');
+    } on PlayerInterruptedException catch (e) {
+      logger.d('PlayerInterruptedException: ${e.message}');
     } catch (e) {
-      logger.d("PlayerInterruptedException");
+      logger.d("All other errors...");
     }
   }
 }
