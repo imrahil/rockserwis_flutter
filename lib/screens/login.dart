@@ -1,9 +1,7 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/components/labeled_checkbox.dart';
-import 'package:rockserwis_podcaster/screens/podcasts_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

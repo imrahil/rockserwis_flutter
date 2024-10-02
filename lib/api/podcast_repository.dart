@@ -12,6 +12,10 @@ class PodcastRepository {
 
   final ApiRepository apiRepository;
 
+  /// Fetches and caches JSON data for all podcasts.
+  ///
+  /// @param forceRefresh Whether to force a refresh from the network, even if data is in the cache.
+  /// @return A list of all podcasts.
   Future<List<Podcast>> fetchPodcasts({bool forceRefresh = false}) async {
     return await apiRepository.fetchAndCacheJson(ApiRepository.broadCastUrl,
         (jsonData) {
