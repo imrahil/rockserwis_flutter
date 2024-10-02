@@ -1,45 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:rockserwis_podcaster/api/api.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rockserwis_podcaster/api/podcast_repository.dart';
 import 'package:rockserwis_podcaster/components/podcasts_list.dart';
-import 'package:rockserwis_podcaster/models/podcast.dart';
-import 'package:rockserwis_podcaster/screens/favorite_episodes_page.dart';
-import 'package:rockserwis_podcaster/screens/favorite_podcasts_page.dart';
-import 'package:rockserwis_podcaster/screens/login.dart';
-import 'package:rockserwis_podcaster/theme.dart';
+import 'package:rockserwis_podcaster/utils/app_theme_mode.dart';
 
-class PodcastsPage extends StatefulWidget {
+class PodcastsPage extends ConsumerStatefulWidget {
   const PodcastsPage({super.key});
+
   @override
-  State<PodcastsPage> createState() => _PodcastsPageState();
+  ConsumerState<PodcastsPage> createState() => _PodcastsPageState();
 }
 
-class _PodcastsPageState extends State<PodcastsPage> {
-  Future<List<Podcast>> fetchPodcasts(context) {
-    final apiProvider = Provider.of<API>(context);
-
-    return apiProvider.getPodcasts();
-  }
-
+class _PodcastsPageState extends ConsumerState<PodcastsPage> {
   void logout(context) async {
-    final apiProvider = Provider.of<API>(context, listen: false);
+    //   final apiProvider = Provider.of<API>(context, listen: false);
 
-    await apiProvider.logout();
+    //   await apiProvider.logout();
 
-    if (context.mounted) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const LoginPage(),
-        ),
-        (Route<dynamic> route) => false,
-      );
-    }
+    //   if (context.mounted) {
+    //     Navigator.pushAndRemoveUntil(
+    //       context,
+    //       MaterialPageRoute(
+    //         builder: (context) => const LoginPage(),
+    //       ),
+    //       (Route<dynamic> route) => false,
+    //     );
+    //   }
   }
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
+    final themeMode = ref.watch(appThemeModeNotifierProvider);
+    final podcastsAsync = ref.watch(fetchPodcastsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -50,35 +42,37 @@ class _PodcastsPageState extends State<PodcastsPage> {
             icon: const Icon(Icons.refresh),
             onPressed: () {
               // This will rebuild the widget and fetch the podcasts again
+              // FIXME
               setState(() {});
             },
           ),
           IconButton(
             icon: Icon(
-              themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+              themeMode.name == 'dark' ? Icons.dark_mode : Icons.light_mode,
             ),
-            onPressed: () => themeProvider.toggleTheme(),
+            onPressed: () =>
+                ref.read(appThemeModeNotifierProvider.notifier).toggleTheme(),
           ),
           IconButton(
             icon: const Icon(Icons.bookmarks),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const FavoritePodcastsPage(),
-                ),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => const FavoritePodcastsPage(),
+              //   ),
+              // );
             },
           ),
           IconButton(
             icon: const Icon(Icons.favorite),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const FavoritesEpisodesPage(),
-                ),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => const FavoritesEpisodesPage(),
+              //   ),
+              // );
             },
           ),
           IconButton(
@@ -87,8 +81,10 @@ class _PodcastsPageState extends State<PodcastsPage> {
           ),
         ],
       ),
-      body: PodcastsList(
-        podcastsFuture: fetchPodcasts(context),
+      body: podcastsAsync.when(
+        data: (podcasts) => PodcastsList(podcasts: podcasts),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, _) => const Center(child: Text('Error loading podcasts...')),
       ),
     );
   }

@@ -1,43 +1,32 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:rockserwis_podcaster/api/api.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rockserwis_podcaster/api/api_new.dart';
+import 'package:rockserwis_podcaster/app_routes.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
-import 'package:rockserwis_podcaster/screens/episodes_page.dart';
 
 class PodcastsList extends StatelessWidget {
-  final Future<List<Podcast>> podcastsFuture;
+  final List<Podcast> podcasts;
 
   const PodcastsList({
     super.key,
-    required this.podcastsFuture,
+    required this.podcasts,
   });
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Podcast>>(
-      future: podcastsFuture,
-      builder: (BuildContext context, AsyncSnapshot<List<Podcast>> snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return const Center(child: Text('Error loading podcasts...'));
-        } else {
-          return ListView.builder(
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              Podcast currentPodcast = snapshot.data![index];
+    return ListView.builder(
+      itemCount: podcasts.length,
+      itemBuilder: (context, index) {
+        Podcast currentPodcast = podcasts[index];
 
-              return PodcastListTile(currentPodcast: currentPodcast);
-            },
-          );
-        }
+        return PodcastListTile(currentPodcast: currentPodcast);
       },
     );
   }
 }
 
-class PodcastListTile extends StatelessWidget {
+class PodcastListTile extends ConsumerWidget {
   const PodcastListTile({
     super.key,
     required this.currentPodcast,
@@ -46,8 +35,8 @@ class PodcastListTile extends StatelessWidget {
   final Podcast currentPodcast;
 
   @override
-  Widget build(BuildContext context) {
-    final apiProvider = Provider.of<API>(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final apiProvider = ref.watch(apiRepositoryProvider);
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -57,8 +46,11 @@ class PodcastListTile extends StatelessWidget {
             ? CachedNetworkImage(
                 // Use CachedNetworkImage
                 imageUrl: apiProvider.getImagePath(currentPodcast.image),
-                placeholder: (context, url) =>
-                    const CircularProgressIndicator(),
+                placeholder: (context, url) => SizedBox(
+                  height: 56.0,
+                  width: 56.0,
+                  child: const Center(child: CircularProgressIndicator()),
+                ),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
                 fit: BoxFit.cover,
               )
@@ -69,15 +61,8 @@ class PodcastListTile extends StatelessWidget {
         ),
         subtitle: Text('Podcast ID: ${currentPodcast.podcastId}'),
         trailing: const Icon(Icons.arrow_forward),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  EpisodesPage(currentPodcast: currentPodcast),
-            ),
-          );
-        },
+        onTap: () => Navigator.of(context)
+            .pushNamed(AppRoutes.episodes, arguments: currentPodcast),
       ),
     );
   }

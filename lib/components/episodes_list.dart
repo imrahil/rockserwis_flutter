@@ -1,54 +1,41 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:rockserwis_podcaster/api/api.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rockserwis_podcaster/api/api_new.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
-import 'package:rockserwis_podcaster/screens/player.dart';
 
 class EpisodesList extends StatelessWidget {
-  final Future<List<Episode>> episodesFuture;
+  final List<Episode> episodes;
   final Podcast? currentPodcast;
 
   const EpisodesList({
     super.key,
-    required this.episodesFuture,
+    required this.episodes,
     this.currentPodcast,
   });
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Episode>>(
-      future: episodesFuture,
-      builder: (BuildContext context, AsyncSnapshot<List<Episode>> snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return const Center(child: Text('Error loading episodes...'));
-        } else {
-          return ListView.builder(
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              Episode currentEpisode = snapshot.data![index];
+    return ListView.builder(
+      itemCount: episodes.length,
+      itemBuilder: (context, index) {
+        Episode currentEpisode = episodes[index];
 
-              /// Check if the episode has an image, if not, use the podcast image
-              if ((currentEpisode.imgPath == null ||
-                      currentEpisode.imgPath == "") &&
-                  currentPodcast != null &&
-                  ![null, ""].contains(currentPodcast?.image)) {
-                currentEpisode.imgPath = currentPodcast?.image;
-              }
-
-              return EpisodeListTile(currentEpisode: currentEpisode);
-            },
-          );
+        /// Check if the episode has an image, if not, use the podcast image
+        if ((currentEpisode.imgPath == null || currentEpisode.imgPath == "") &&
+            currentPodcast != null &&
+            ![null, ""].contains(currentPodcast?.image)) {
+          currentEpisode.imgPath = currentPodcast?.image;
         }
+
+        return EpisodeListTile(currentEpisode: currentEpisode);
       },
     );
   }
 }
 
-class EpisodeListTile extends StatelessWidget {
+class EpisodeListTile extends ConsumerWidget {
   const EpisodeListTile({
     super.key,
     required this.currentEpisode,
@@ -57,8 +44,8 @@ class EpisodeListTile extends StatelessWidget {
   final Episode currentEpisode;
 
   @override
-  Widget build(BuildContext context) {
-    final apiProvider = Provider.of<API>(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final apiProvider = ref.watch(apiRepositoryProvider);
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -68,8 +55,11 @@ class EpisodeListTile extends StatelessWidget {
             ? CachedNetworkImage(
                 // Use CachedNetworkImage
                 imageUrl: apiProvider.getImagePath(currentEpisode.imgPath),
-                placeholder: (context, url) =>
-                    const CircularProgressIndicator(),
+                placeholder: (context, url) => SizedBox(
+                  height: 56.0,
+                  width: 56.0,
+                  child: const Center(child: CircularProgressIndicator()),
+                ),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
               )
             : const Icon(Icons.podcasts),
@@ -81,14 +71,14 @@ class EpisodeListTile extends StatelessWidget {
             Text('Podcast duration: ${currentEpisode.getReadableDuration()}'),
         trailing: const Icon(Icons.arrow_forward),
         onTap: () {
-          if (currentEpisode.hasPodcast) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Player(currentEpisode: currentEpisode),
-              ),
-            );
-          }
+          // if (currentEpisode.hasPodcast) {
+          //   Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => Player(currentEpisode: currentEpisode),
+          //     ),
+          //   );
+          // }
         },
       ),
     );

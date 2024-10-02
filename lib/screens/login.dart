@@ -1,10 +1,7 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:provider/provider.dart';
-import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/components/labeled_checkbox.dart';
-import 'package:rockserwis_podcaster/screens/podcasts_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -22,22 +19,22 @@ class _LoginPageState extends State<LoginPage> {
   String _password = '';
   bool _rememberMe = false;
 
-  Future<void> _onLoginHandler(API apiProvider, BuildContext context) async {
+  Future<void> _onLoginHandler(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState?.save();
 
-      bool result = await apiProvider.login(_email, _password, _rememberMe);
+      // bool result = await apiProvider.login(_email, _password, _rememberMe);
 
-      if (result && context.mounted) {
-        logger.d('Login successful');
+      // if (result && context.mounted) {
+      //   logger.d('Login successful');
 
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const PodcastsPage()),
-        );
-      } else {
-        _showSnackbar('Unable to sign in.');
-      }
+      //   Navigator.push(
+      //     context,
+      //     MaterialPageRoute(builder: (context) => const PodcastsPage()),
+      //   );
+      // } else {
+      //   _showSnackbar('Unable to sign in.');
+      // }
     }
   }
 
@@ -56,8 +53,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final apiProvider = Provider.of<API>(context);
-
     return Scaffold(
       backgroundColor: Colors.black, // Dark background color
       body: Center(
@@ -128,10 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {
-                    final currentContext = context;
-                    _onLoginHandler(apiProvider, currentContext);
-                  },
+                  onPressed: () => _onLoginHandler(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
                     padding: const EdgeInsets.symmetric(
