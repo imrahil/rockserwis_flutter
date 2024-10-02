@@ -5,7 +5,10 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:rockserwis_podcaster/app_routes.dart';
 import 'package:rockserwis_podcaster/app_startup.dart';
+import 'package:rockserwis_podcaster/models/podcast.dart';
+import 'package:rockserwis_podcaster/screens/episodes_page.dart';
 import 'package:rockserwis_podcaster/screens/podcasts_page.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_data.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_mode.dart';
@@ -74,6 +77,8 @@ Future<void> main() async {
   );
 }
 
+final _rootNavigatorKey = GlobalKey<NavigatorState>();
+
 class MusicPlayer extends ConsumerWidget {
   const MusicPlayer({super.key});
 
@@ -87,7 +92,25 @@ class MusicPlayer extends ConsumerWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: themeMode,
-      home: const PodcastsPage(),
+      navigatorKey: _rootNavigatorKey,
+      onGenerateRoute: (settings) {
+        return switch (settings.name) {
+          AppRoutes.podcasts => MaterialPageRoute(
+              settings: settings,
+              builder: (_) => const PodcastsPage(),
+            ),
+          AppRoutes.episodes => MaterialPageRoute(
+              settings: settings,
+              builder: (_) {
+                final currentPodcast = settings.arguments as Podcast;
+                return EpisodesPage(currentPodcast: currentPodcast);
+              },
+            ),
+          _ =>
+            throw UnimplementedError('Route named ${settings.name} not found'),
+        };
+      },
+      initialRoute: AppRoutes.podcasts,
     );
   }
 }

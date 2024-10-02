@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rockserwis_podcaster/api/api_new.dart';
+import 'package:rockserwis_podcaster/app_routes.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 
 class PodcastsList extends StatelessWidget {
@@ -45,8 +46,11 @@ class PodcastListTile extends ConsumerWidget {
             ? CachedNetworkImage(
                 // Use CachedNetworkImage
                 imageUrl: apiProvider.getImagePath(currentPodcast.image),
-                placeholder: (context, url) =>
-                    const CircularProgressIndicator(),
+                placeholder: (context, url) => SizedBox(
+                  height: 56.0,
+                  width: 56.0,
+                  child: const Center(child: CircularProgressIndicator()),
+                ),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
                 fit: BoxFit.cover,
               )
@@ -57,15 +61,8 @@ class PodcastListTile extends ConsumerWidget {
         ),
         subtitle: Text('Podcast ID: ${currentPodcast.podcastId}'),
         trailing: const Icon(Icons.arrow_forward),
-        onTap: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) =>
-          //         EpisodesPage(currentPodcast: currentPodcast),
-          //   ),
-          // );
-        },
+        onTap: () => Navigator.of(context)
+            .pushNamed(AppRoutes.episodes, arguments: currentPodcast),
       ),
     );
   }

@@ -55,8 +55,11 @@ class EpisodeListTile extends ConsumerWidget {
             ? CachedNetworkImage(
                 // Use CachedNetworkImage
                 imageUrl: apiProvider.getImagePath(currentEpisode.imgPath),
-                placeholder: (context, url) =>
-                    const CircularProgressIndicator(),
+                placeholder: (context, url) => SizedBox(
+                  height: 56.0,
+                  width: 56.0,
+                  child: const Center(child: CircularProgressIndicator()),
+                ),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
               )
             : const Icon(Icons.podcasts),

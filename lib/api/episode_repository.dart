@@ -21,7 +21,8 @@ class EpisodeRepository {
   /// @return A list of episodes for the given podcast.
   Future<List<Episode>> fetchEpisodes(Podcast currentPodcast,
       {bool forceRefresh = false}) async {
-    String url = '$ApiRepository.scheduleUrl/${currentPodcast.podcastId}.json';
+    String url =
+        '${ApiRepository.scheduleUrl}/${currentPodcast.podcastId}.json';
 
     return await apiRepository.fetchAndCacheJson(url, (jsonData) {
       selectedPodcastEpisodes = (json.decode(jsonData) as List)
