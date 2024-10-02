@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rockserwis_podcaster/api/podcast_repository.dart';
+import 'package:rockserwis_podcaster/components/podcasts_list.dart';
+import 'package:rockserwis_podcaster/models/podcast.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_mode.dart';
 
 class PodcastsPage extends ConsumerStatefulWidget {
@@ -10,12 +13,6 @@ class PodcastsPage extends ConsumerStatefulWidget {
 }
 
 class _PodcastsPageState extends ConsumerState<PodcastsPage> {
-  // Future<List<Podcast>> fetchPodcasts(context) {
-  //   final apiProvider = Provider.of<API>(context);
-
-  //   return apiProvider.getPodcasts();
-  // }
-
   void logout(context) async {
     //   final apiProvider = Provider.of<API>(context, listen: false);
 
@@ -35,6 +32,7 @@ class _PodcastsPageState extends ConsumerState<PodcastsPage> {
   @override
   Widget build(BuildContext context) {
     final themeMode = ref.watch(appThemeModeNotifierProvider);
+    final podcastsAsync = ref.watch(fetchPodcastsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -45,6 +43,7 @@ class _PodcastsPageState extends ConsumerState<PodcastsPage> {
             icon: const Icon(Icons.refresh),
             onPressed: () {
               // This will rebuild the widget and fetch the podcasts again
+              // FIXME
               setState(() {});
             },
           ),
@@ -83,10 +82,11 @@ class _PodcastsPageState extends ConsumerState<PodcastsPage> {
           ),
         ],
       ),
-      // body: PodcastsList(
-      //   podcastsFuture: fetchPodcasts(context),
-      // ),
-      body: Container(),
+      body: podcastsAsync.when(
+        data: (podcasts) => PodcastsList(podcasts: podcasts),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, _) => const Center(child: Text('Error loading podcasts...')),
+      ),
     );
   }
 }
