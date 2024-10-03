@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:rockserwis_podcaster/api/api_new.dart';
+import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/api/data/missing_podcasts.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';

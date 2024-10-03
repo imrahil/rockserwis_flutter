@@ -5,7 +5,7 @@ import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-part 'api_new.g.dart';
+part 'api.g.dart';
 
 class ApiRepository {
   ApiRepository({required this.client, required this.sharedPreferences});

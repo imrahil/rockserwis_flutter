@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:logger/logger.dart';
-import 'package:rockserwis_podcaster/api/api_new.dart';
+import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/api/episode_repository.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/utils/player_manager.dart';
