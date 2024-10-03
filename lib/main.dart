@@ -9,6 +9,8 @@ import 'package:rockserwis_podcaster/app_routes.dart';
 import 'package:rockserwis_podcaster/app_startup.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 import 'package:rockserwis_podcaster/screens/episodes_page.dart';
+import 'package:rockserwis_podcaster/screens/favorite_episodes_page.dart';
+import 'package:rockserwis_podcaster/screens/favorite_podcasts_page.dart';
 import 'package:rockserwis_podcaster/screens/podcasts_page.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_data.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_mode.dart';
@@ -105,6 +107,14 @@ class MusicPlayer extends ConsumerWidget {
                 final currentPodcast = settings.arguments as Podcast;
                 return EpisodesPage(currentPodcast: currentPodcast);
               },
+            ),
+          AppRoutes.favoritedPodcasts => MaterialPageRoute(
+              settings: settings,
+              builder: (_) => const FavoritePodcastsPage(),
+            ),
+          AppRoutes.favoritedEpisodes => MaterialPageRoute(
+              settings: settings,
+              builder: (_) => const FavoritesEpisodesPage(),
             ),
           _ =>
             throw UnimplementedError('Route named ${settings.name} not found'),

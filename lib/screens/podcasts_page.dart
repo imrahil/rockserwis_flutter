@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rockserwis_podcaster/api/podcast_repository.dart';
+import 'package:rockserwis_podcaster/app_routes.dart';
 import 'package:rockserwis_podcaster/components/podcasts_list.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_mode.dart';
 
@@ -55,25 +56,13 @@ class _PodcastsPageState extends ConsumerState<PodcastsPage> {
           ),
           IconButton(
             icon: const Icon(Icons.bookmarks),
-            onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => const FavoritePodcastsPage(),
-              //   ),
-              // );
-            },
+            onPressed: () =>
+                Navigator.of(context).pushNamed(AppRoutes.favoritedPodcasts),
           ),
           IconButton(
             icon: const Icon(Icons.favorite),
-            onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => const FavoritesEpisodesPage(),
-              //   ),
-              // );
-            },
+            onPressed: () =>
+                Navigator.of(context).pushNamed(AppRoutes.favoritedEpisodes),
           ),
           IconButton(
             icon: const Icon(Icons.logout),

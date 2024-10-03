@@ -1,26 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:rockserwis_podcaster/api/api.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rockserwis_podcaster/api/podcast_repository.dart';
 import 'package:rockserwis_podcaster/components/podcasts_list.dart';
-import 'package:rockserwis_podcaster/models/podcast.dart';
 
-class FavoritePodcastsPage extends StatelessWidget {
+class FavoritePodcastsPage extends ConsumerWidget {
   const FavoritePodcastsPage({super.key});
 
-  Future<List<Podcast>> fetchPodcasts(context) {
-    final apiProvider = Provider.of<API>(context);
-
-    return apiProvider.getFavoritePodcasts();
-  }
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final podcastsAsync = ref.watch(fetchFavoritedPodcastsProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Favorite podcasts"),
       ),
-      body: PodcastsList(
-        podcastsFuture: fetchPodcasts(context),
+      body: podcastsAsync.when(
+        data: (podcasts) => PodcastsList(podcasts: podcasts),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, _) => const Center(child: Text('Error loading podcasts...')),
       ),
     );
   }

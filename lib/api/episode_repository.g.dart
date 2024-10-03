@@ -6,7 +6,7 @@ part of 'episode_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$episodeRepositoryHash() => r'74339ee057f2e2786f09aad03d1af498cdf8c225';
+String _$episodeRepositoryHash() => r'e825e4da4320facdd326dc241481c599f9510889';
 
 /// See also [episodeRepository].
 @ProviderFor(episodeRepository)
@@ -173,5 +173,23 @@ class _FetchEpisodesProviderElement
   Podcast get currentPodcast =>
       (origin as FetchEpisodesProvider).currentPodcast;
 }
+
+String _$fetchFavoritedEpisodesHash() =>
+    r'80e54c558698208846189b6b6f88e9a504a6adec';
+
+/// See also [fetchFavoritedEpisodes].
+@ProviderFor(fetchFavoritedEpisodes)
+final fetchFavoritedEpisodesProvider =
+    AutoDisposeFutureProvider<List<Episode>>.internal(
+  fetchFavoritedEpisodes,
+  name: r'fetchFavoritedEpisodesProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$fetchFavoritedEpisodesHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef FetchFavoritedEpisodesRef = AutoDisposeFutureProviderRef<List<Episode>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
