@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:rockserwis_podcaster/api/episode_repository.dart';
+import 'package:rockserwis_podcaster/api/podcast_repository.dart';
 import 'package:rockserwis_podcaster/components/episodes_list.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 
@@ -83,6 +84,8 @@ class _EpisodesPageState extends ConsumerState<EpisodesPage> {
   @override
   Widget build(BuildContext context) {
     final episodesAsync = ref.watch(fetchEpisodesProvider(_currentPodcast));
+    final isFavorite =
+        ref.read(podcastRepositoryProvider).isFavoritePodcast(_currentPodcast);
 
     return Scaffold(
       appBar: AppBar(
@@ -92,26 +95,17 @@ class _EpisodesPageState extends ConsumerState<EpisodesPage> {
             icon: const Icon(Icons.info_outline),
             onPressed: () => _showPodcastInfoDialog(context),
           ),
-          // FutureBuilder<bool>(
-          //   future: apiProvider.isFavoritePodcast(_currentPodcast),
-          //   builder: (BuildContext context, snapshot) {
-          //     bool isFavorite = false;
-
-          //     if (snapshot.hasData) {
-          //       isFavorite = snapshot.data ?? false;
-          //     }
-
-          //     return IconButton(
-          //       icon: Icon(
-          //         isFavorite ? Icons.bookmark_remove : Icons.bookmark_add,
-          //       ),
-          //       onPressed: () async {
-          //         await apiProvider.toggleFavoritePodcast(_currentPodcast);
-          //         setState(() {}); // Rebuild to update icon
-          //       },
-          //     );
-          //   },
-          // ),
+          IconButton(
+            icon: Icon(
+              isFavorite ? Icons.bookmark_remove : Icons.bookmark_add,
+            ),
+            onPressed: () async {
+              await ref
+                  .read(podcastRepositoryProvider)
+                  .toggleFavoritePodcast(_currentPodcast);
+              setState(() {}); // Rebuild to update icon
+            },
+          ),
         ],
       ),
       body: episodesAsync.when(
