@@ -51,6 +51,41 @@ class PodcastRepository {
       return Podcast.fromJson(podcastJson);
     }).toList();
   }
+
+  /// Toggles the favorite status of an podcast.
+  ///
+  /// @param podcast The episode to toggle the favorite status of.
+  Future<void> toggleFavoritePodcast(Podcast podcast) async {
+    // Get current favorites from SharedPreferences
+    List<String> favoritePodcasts =
+        sharedPreferences.getStringList(favoritePodcastsKey) ?? [];
+
+    final podcastString = jsonEncode(podcast);
+
+    // Toggle favorite status
+    if (favoritePodcasts.contains(podcastString)) {
+      favoritePodcasts.remove(podcastString);
+    } else {
+      favoritePodcasts.add(podcastString);
+    }
+
+    // Save updated favorites back to SharedPreferences
+    await sharedPreferences.setStringList(
+        favoritePodcastsKey, favoritePodcasts);
+  }
+
+  /// Checks if a podcast is a favorite.
+  ///
+  /// @param podcast The podcast to check.
+  /// @return True if the podcast is a favorite, false otherwise.
+  bool isFavoritePodcast(Podcast podcast) {
+    List<String> favoritePodcasts =
+        sharedPreferences.getStringList(favoritePodcastsKey) ?? [];
+
+    final podcastIdString = jsonEncode(podcast);
+
+    return favoritePodcasts.contains(podcastIdString);
+  }
 }
 
 @riverpod
