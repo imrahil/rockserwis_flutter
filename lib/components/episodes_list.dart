@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rockserwis_podcaster/api/api_new.dart';
+import 'package:rockserwis_podcaster/app_routes.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 
@@ -45,7 +46,7 @@ class EpisodeListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final apiProvider = ref.watch(apiRepositoryProvider);
+    final apiProvider = ref.read(apiRepositoryProvider);
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -70,15 +71,12 @@ class EpisodeListTile extends ConsumerWidget {
         subtitle:
             Text('Podcast duration: ${currentEpisode.getReadableDuration()}'),
         trailing: const Icon(Icons.arrow_forward),
-        onTap: () {
-          // if (currentEpisode.hasPodcast) {
-          //   Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //       builder: (context) => Player(currentEpisode: currentEpisode),
-          //     ),
-          //   );
-          // }
+        onTap: () => {
+          if (currentEpisode.hasPodcast)
+            {
+              Navigator.of(context)
+                  .pushNamed(AppRoutes.player, arguments: currentEpisode)
+            }
         },
       ),
     );

@@ -36,7 +36,7 @@ class PodcastListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final apiProvider = ref.watch(apiRepositoryProvider);
+    final apiProvider = ref.read(apiRepositoryProvider);
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),

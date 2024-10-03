@@ -1,16 +1,19 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:rockserwis_podcaster/api/api_new.dart';
+import 'package:rockserwis_podcaster/app_routes.dart';
 import 'package:rockserwis_podcaster/components/labeled_checkbox.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormState>();
 
   var logger = Logger();
@@ -23,18 +26,17 @@ class _LoginPageState extends State<LoginPage> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState?.save();
 
-      // bool result = await apiProvider.login(_email, _password, _rememberMe);
+      bool result = await ref
+          .read(apiRepositoryProvider)
+          .login(_email, _password, _rememberMe);
 
-      // if (result && context.mounted) {
-      //   logger.d('Login successful');
+      if (result && context.mounted) {
+        logger.d('Login successful');
 
-      //   Navigator.push(
-      //     context,
-      //     MaterialPageRoute(builder: (context) => const PodcastsPage()),
-      //   );
-      // } else {
-      //   _showSnackbar('Unable to sign in.');
-      // }
+        Navigator.of(context).pushNamed(AppRoutes.podcasts);
+      } else {
+        _showSnackbar('Unable to sign in.');
+      }
     }
   }
 

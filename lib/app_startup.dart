@@ -19,8 +19,6 @@ class AppStartupNotifier extends _$AppStartupNotifier {
   Future<void> _updateDatabaseFromNetwork() async {
     state = const AsyncValue.loading();
 
-    // TODO - load JSON data from the network and store it into objectbox db
-
     // simulation of loading async stuff on startup ;)
     await Future.delayed(Duration(seconds: 2));
     // throw FormatException();

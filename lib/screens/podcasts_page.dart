@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rockserwis_podcaster/api/api_new.dart';
 import 'package:rockserwis_podcaster/api/podcast_repository.dart';
 import 'package:rockserwis_podcaster/app_routes.dart';
 import 'package:rockserwis_podcaster/components/podcasts_list.dart';
@@ -14,19 +15,9 @@ class PodcastsPage extends ConsumerStatefulWidget {
 
 class _PodcastsPageState extends ConsumerState<PodcastsPage> {
   void logout(context) async {
-    //   final apiProvider = Provider.of<API>(context, listen: false);
+    await ref.read(apiRepositoryProvider).logout();
 
-    //   await apiProvider.logout();
-
-    //   if (context.mounted) {
-    //     Navigator.pushAndRemoveUntil(
-    //       context,
-    //       MaterialPageRoute(
-    //         builder: (context) => const LoginPage(),
-    //       ),
-    //       (Route<dynamic> route) => false,
-    //     );
-    //   }
+    Navigator.of(context).popAndPushNamed(AppRoutes.login);
   }
 
   @override
@@ -39,14 +30,6 @@ class _PodcastsPageState extends ConsumerState<PodcastsPage> {
         title: const Text("Podcasts"),
         automaticallyImplyLeading: false,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () {
-              // This will rebuild the widget and fetch the podcasts again
-              // FIXME
-              setState(() {});
-            },
-          ),
           IconButton(
             icon: Icon(
               themeMode.name == 'dark' ? Icons.dark_mode : Icons.light_mode,

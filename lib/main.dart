@@ -5,12 +5,16 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:rockserwis_podcaster/api/api_new.dart';
 import 'package:rockserwis_podcaster/app_routes.dart';
 import 'package:rockserwis_podcaster/app_startup.dart';
+import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 import 'package:rockserwis_podcaster/screens/episodes_page.dart';
 import 'package:rockserwis_podcaster/screens/favorite_episodes_page.dart';
 import 'package:rockserwis_podcaster/screens/favorite_podcasts_page.dart';
+import 'package:rockserwis_podcaster/screens/login.dart';
+import 'package:rockserwis_podcaster/screens/player.dart';
 import 'package:rockserwis_podcaster/screens/podcasts_page.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_data.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_mode.dart';
@@ -36,26 +40,6 @@ Future<void> main() async {
     return true;
   };
   // -- Firebase
-
-  // final prefs = await SharedPreferences.getInstance();
-  // bool rememberMe = prefs.getBool('rememberMe') ?? false;
-
-  // Provider provider = Provider<API>(create: (_) => API(client: http.Client()));
-
-  // if (rememberMe) {
-  //   String masterCookie = prefs.getString('masterCookie') ?? "";
-  //   String sessionCookie = prefs.getString('sessionCookie') ?? "";
-
-  //   if (masterCookie != "" && sessionCookie != "") {
-  //     provider = Provider<API>(
-  //         create: (_) => API(
-  //             client: http.Client(),
-  //             masterCookie: masterCookie,
-  //             sessionCookie: sessionCookie));
-  //   }
-  // }
-
-  // Widget homeComp = !rememberMe ? const LoginPage() : const PodcastsPage();
 
   final container = ProviderContainer();
 
@@ -87,6 +71,7 @@ class MusicPlayer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(appThemeModeNotifierProvider);
+    final isLogged = ref.read(apiRepositoryProvider).isLogged();
 
     return MaterialApp(
       title: 'Rockserwis.fm Podcast Player',
@@ -97,6 +82,10 @@ class MusicPlayer extends ConsumerWidget {
       navigatorKey: _rootNavigatorKey,
       onGenerateRoute: (settings) {
         return switch (settings.name) {
+          AppRoutes.login => MaterialPageRoute(
+              settings: settings,
+              builder: (_) => const LoginPage(),
+            ),
           AppRoutes.podcasts => MaterialPageRoute(
               settings: settings,
               builder: (_) => const PodcastsPage(),
@@ -116,11 +105,18 @@ class MusicPlayer extends ConsumerWidget {
               settings: settings,
               builder: (_) => const FavoritesEpisodesPage(),
             ),
+          AppRoutes.player => MaterialPageRoute(
+              settings: settings,
+              builder: (_) {
+                final currentEpisode = settings.arguments as Episode;
+                return Player(currentEpisode: currentEpisode);
+              },
+            ),
           _ =>
             throw UnimplementedError('Route named ${settings.name} not found'),
         };
       },
-      initialRoute: AppRoutes.podcasts,
+      initialRoute: isLogged ? AppRoutes.podcasts : AppRoutes.login,
     );
   }
 }

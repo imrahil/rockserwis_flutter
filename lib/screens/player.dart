@@ -4,25 +4,26 @@ import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:logger/logger.dart';
-import 'package:provider/provider.dart';
-import 'package:rockserwis_podcaster/api/api.dart';
+import 'package:rockserwis_podcaster/api/api_new.dart';
+import 'package:rockserwis_podcaster/api/episode_repository.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
-import 'package:rockserwis_podcaster/screens/player_manager.dart';
+import 'package:rockserwis_podcaster/utils/player_manager.dart';
 
-class Player extends StatefulWidget {
+class Player extends ConsumerStatefulWidget {
   final Episode currentEpisode;
 
   const Player({super.key, required this.currentEpisode});
 
   @override
-  State<Player> createState() => _PlayerState();
+  ConsumerState<Player> createState() => _PlayerState();
 }
 
-class _PlayerState extends State<Player> {
+class _PlayerState extends ConsumerState<Player> {
   late final PlayerManager _playerManager;
   late Episode _currentEpisode;
 
@@ -62,7 +63,7 @@ class _PlayerState extends State<Player> {
   }
 
   void _setAudioSource() async {
-    final apiProvider = Provider.of<API>(context, listen: false);
+    final apiProvider = ref.read(apiRepositoryProvider);
 
     AudioSource source = AudioSource.uri(
       Uri.parse(apiProvider.getEpisodeUrl(_currentEpisode.episodeId)),
@@ -86,10 +87,9 @@ class _PlayerState extends State<Player> {
   void _skipToPrevious() async {
     await _playerManager.stop();
 
-    final apiProvider = Provider.of<API>(context, listen: false);
-
-    Episode? previousEpisode =
-        apiProvider.getPreviousEpisode(_currentEpisode.episodeId);
+    Episode? previousEpisode = ref
+        .read(episodeRepositoryProvider)
+        .getPreviousEpisode(_currentEpisode.episodeId);
 
     if (previousEpisode != null) {
       setState(() {
@@ -103,10 +103,9 @@ class _PlayerState extends State<Player> {
   void _skipToNext() async {
     await _playerManager.stop();
 
-    final apiProvider = Provider.of<API>(context, listen: false);
-
-    Episode? nextEpisode =
-        apiProvider.getNextEpisode(_currentEpisode.episodeId);
+    Episode? nextEpisode = ref
+        .read(episodeRepositoryProvider)
+        .getNextEpisode(_currentEpisode.episodeId);
 
     if (nextEpisode != null) {
       setState(() {
@@ -119,7 +118,9 @@ class _PlayerState extends State<Player> {
 
   @override
   Widget build(BuildContext context) {
-    final apiProvider = Provider.of<API>(context);
+    final apiProvider = ref.watch(apiRepositoryProvider);
+    final isFavorite =
+        ref.read(episodeRepositoryProvider).isFavoriteEpisode(_currentEpisode);
 
     return Scaffold(
       appBar: AppBar(
@@ -143,24 +144,15 @@ class _PlayerState extends State<Player> {
             const Spacer(),
             Align(
               alignment: Alignment.topRight,
-              child: FutureBuilder<bool>(
-                future: apiProvider.isFavoriteEpisode(_currentEpisode),
-                builder: (BuildContext context, snapshot) {
-                  bool isFavorite = false;
-
-                  if (snapshot.hasData) {
-                    isFavorite = snapshot.data ?? false;
-                  }
-
-                  return IconButton(
-                    icon: Icon(
-                      isFavorite ? Icons.favorite : Icons.favorite_border,
-                    ),
-                    onPressed: () async {
-                      await apiProvider.toggleFavoriteEpisode(_currentEpisode);
-                      setState(() {}); // Rebuild to update icon
-                    },
-                  );
+              child: IconButton(
+                icon: Icon(
+                  isFavorite ? Icons.favorite : Icons.favorite_border,
+                ),
+                onPressed: () async {
+                  await ref
+                      .read(episodeRepositoryProvider)
+                      .toggleFavoriteEpisode(_currentEpisode);
+                  setState(() {}); // Rebuild to update icon
                 },
               ),
             ),

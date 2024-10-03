@@ -43,6 +43,9 @@ Favorited episodes list
 
 ## TODO
 
-- search
-- offline playback
+- loading JSON data from the network and storing it into objectbox DB
+- history of listened episodes
+- tracking the progress of the listened episode
+- search (?)
+- offline playback - downloading the episode locally before playing
 - ...
