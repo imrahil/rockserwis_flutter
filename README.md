@@ -46,6 +46,7 @@ Favorited episodes list
 - loading JSON data from the network and storing it into objectbox DB
 - history of listened episodes
 - tracking the progress of the listened episode
+- sorting episodes based on date field
+- filtering episodes by e.g.: last month, last year, custom range
 - search (?)
 - offline playback - downloading the episode locally before playing
-- ...
