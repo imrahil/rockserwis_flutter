@@ -23,8 +23,6 @@ class ApiRepository {
   http.Client client;
   final SharedPreferences sharedPreferences;
 
-  List<Episode> selectedPodcastEpisodes = [];
-
   final Map<String, String> _jsonCache = {};
   final Map<String, DateTime> _cacheLastUpdated = {};
 
