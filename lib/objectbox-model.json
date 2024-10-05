@@ -1,0 +1,130 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "2:6217248595519736827",
+      "lastPropertyId": "6:7683314106615094904",
+      "name": "PodcastDB",
+      "properties": [
+        {
+          "id": "1:701805690188399603",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5309749079339568730",
+          "name": "podcastName",
+          "type": 9
+        },
+        {
+          "id": "3:1776169484091158962",
+          "name": "onlyMusic",
+          "type": 1
+        },
+        {
+          "id": "4:3345392090542985279",
+          "name": "isActive",
+          "type": 1
+        },
+        {
+          "id": "5:7417973334998021765",
+          "name": "hasEpisodes",
+          "type": 1
+        },
+        {
+          "id": "6:7683314106615094904",
+          "name": "image",
+          "type": 9
+        }
+      ],
+      "relations": [
+        {
+          "id": "3:4170593813564474541",
+          "name": "schedules",
+          "targetId": "4:1847342292373639521"
+        },
+        {
+          "id": "4:88839429434379249",
+          "name": "authors",
+          "targetId": "3:598295649207872808"
+        }
+      ]
+    },
+    {
+      "id": "3:598295649207872808",
+      "lastPropertyId": "3:1520533850589353794",
+      "name": "AuthorDB",
+      "properties": [
+        {
+          "id": "1:2017490932517286518",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1904812446304158006",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:1520533850589353794",
+          "name": "isGuest",
+          "type": 1
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:1847342292373639521",
+      "lastPropertyId": "4:7394865029731165766",
+      "name": "ScheduleDB",
+      "properties": [
+        {
+          "id": "1:7162624023361975606",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:879603288355287610",
+          "name": "weekday",
+          "type": 6
+        },
+        {
+          "id": "3:3031314473181113401",
+          "name": "start",
+          "type": 9
+        },
+        {
+          "id": "4:7394865029731165766",
+          "name": "end",
+          "type": 9
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "4:1847342292373639521",
+  "lastIndexId": "0:0",
+  "lastRelationId": "4:88839429434379249",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [
+    7018342820532340542
+  ],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [
+    1598863114242869578,
+    281332924376562555,
+    7847201808243043888
+  ],
+  "retiredRelationUids": [
+    559890034703527719,
+    3085588869725977564
+  ],
+  "version": 1
+}

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/components/error_prompt.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_mode.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_data.dart';
 
 part 'app_startup.g.dart';
+
+var logger = Logger();
 
 @riverpod
 class AppStartupNotifier extends _$AppStartupNotifier {
@@ -43,6 +46,8 @@ class AppStartupWidget extends ConsumerWidget {
       loading: () => const AppStartupLoadingWidget(),
       // 3. error state
       error: (e, st) {
+        logger.d(e);
+
         return AppStartupErrorWidget(
           message:
               'Could not load or sync data.\nCheck your Internet connection.',
