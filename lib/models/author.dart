@@ -11,8 +11,7 @@ class Author {
 
   Author({required this.name, required this.isGuest});
 
-  factory Author.fromJson(Map<String, dynamic> json) =>
-      _$AuthorFromJson(json);
+  factory Author.fromJson(Map<String, dynamic> json) => _$AuthorFromJson(json);
 
   Map<String, dynamic> toJson() => _$AuthorToJson(this);
 }
