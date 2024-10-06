@@ -15,8 +15,6 @@ class EpisodeRepository {
   final http.Client client;
   final SharedPreferences sharedPreferences;
 
-  static const String favoriteEpisodesKey = 'favoriteEpisodes';
-
   List<Episode> _selectedPodcastEpisodes = [];
 
   /// Fetches and caches JSON data for episodes of a specific podcast.
@@ -45,7 +43,7 @@ class EpisodeRepository {
   /// @return A list of favorite episodes.
   Future<List<Episode>> fetchFavoritedEpisodes() async {
     List<String> favoriteEpisodes =
-        sharedPreferences.getStringList(favoriteEpisodesKey) ?? [];
+        sharedPreferences.getStringList(Const.favoriteEpisodesKey) ?? [];
 
     _selectedPodcastEpisodes = favoriteEpisodes.map((episodeString) {
       final episodeJson = jsonDecode(episodeString);
@@ -61,7 +59,7 @@ class EpisodeRepository {
   Future<void> toggleFavoriteEpisode(Episode episode) async {
     // Get current favorites from SharedPreferences
     List<String> favoriteEpisodes =
-        sharedPreferences.getStringList(favoriteEpisodesKey) ?? [];
+        sharedPreferences.getStringList(Const.favoriteEpisodesKey) ?? [];
 
     final episodeString = jsonEncode(episode);
 
@@ -74,7 +72,7 @@ class EpisodeRepository {
 
     // Save updated favorites back to SharedPreferences
     await sharedPreferences.setStringList(
-        favoriteEpisodesKey, favoriteEpisodes);
+        Const.favoriteEpisodesKey, favoriteEpisodes);
   }
 
   /// Checks if an episode is a favorite.
@@ -83,7 +81,7 @@ class EpisodeRepository {
   /// @return True if the episode is a favorite, false otherwise.
   bool isFavoriteEpisode(Episode episode) {
     List<String> favoriteEpisodes =
-        sharedPreferences.getStringList(favoriteEpisodesKey) ?? [];
+        sharedPreferences.getStringList(Const.favoriteEpisodesKey) ?? [];
 
     final episodeIdString = jsonEncode(episode);
 

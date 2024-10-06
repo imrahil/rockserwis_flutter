@@ -21,11 +21,11 @@ class ApiRepository {
   String _sessionCookie = "";
 
   bool isLogged() {
-    bool rememberMe = sharedPreferences.getBool('rememberMe') ?? false;
+    bool rememberMe = sharedPreferences.getBool(Const.rememberMeKey) ?? false;
 
     if (rememberMe) {
-      _masterCookie = sharedPreferences.getString('masterCookie') ?? "";
-      _sessionCookie = sharedPreferences.getString('sessionCookie') ?? "";
+      _masterCookie = sharedPreferences.getString(Const.masterCookieKey) ?? "";
+      _sessionCookie = sharedPreferences.getString(Const.sessionCookieKey) ?? "";
 
       return _masterCookie != "" && _sessionCookie != "";
     }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:rockserwis_podcaster/api/const.dart';
 import 'package:rockserwis_podcaster/api/objectbox_repository.dart';
 import 'package:rockserwis_podcaster/api/podcast_sync_helper.dart';
 import 'package:rockserwis_podcaster/components/error_prompt.dart';
@@ -13,9 +14,6 @@ import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';
 part 'app_startup.g.dart';
 
 var logger = Logger();
-
-const _versionKey = 'current_version';
-const _lastUpdated = 'last_updated';
 
 const _forceRefresh = false;
 
@@ -36,7 +34,7 @@ class AppStartupNotifier extends _$AppStartupNotifier {
     final sharedPreferences = ref.watch(sharedPreferencesProvider).requireValue;
     final packageInfo = ref.watch(packageInfoProvider).requireValue;
 
-    final lastVersion = sharedPreferences.getString(_versionKey);
+    final lastVersion = sharedPreferences.getString(Const.versionKey);
     final currentVersion = '${packageInfo.version}+${packageInfo.buildNumber}';
 
     if (lastVersion != currentVersion || _forceRefresh) {
@@ -53,12 +51,12 @@ class AppStartupNotifier extends _$AppStartupNotifier {
           .episodeBox
           .removeAllAsync();
 
-      await sharedPreferences.setString(_versionKey, currentVersion);
+      await sharedPreferences.setString(Const.versionKey, currentVersion);
     }
 
     const cacheDuration = Duration(days: 1);
     final now = DateTime.now();
-    final lastUpdatedString = sharedPreferences.getString(_lastUpdated);
+    final lastUpdatedString = sharedPreferences.getString(Const.lastUpdatedKey);
     final lastUpdated =
         lastUpdatedString != null ? DateTime.parse(lastUpdatedString) : null;
 
@@ -67,7 +65,7 @@ class AppStartupNotifier extends _$AppStartupNotifier {
       logger.d('Syncing podcasts and episodes');
       await ref.read(podcastSyncHelperProvider).syncAll();
 
-      await sharedPreferences.setString(_lastUpdated, now.toString());
+      await sharedPreferences.setString(Const.lastUpdatedKey, now.toString());
     } else {
       logger.d('Cache is still valid');
     }
