@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:rockserwis_podcaster/api/api.dart';
+import 'package:rockserwis_podcaster/api/const.dart';
 import 'package:rockserwis_podcaster/api/data/missing_podcasts.dart';
 import 'package:rockserwis_podcaster/api/podcast_repository.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
@@ -19,28 +19,24 @@ void main() {
   group('PodcastRepository', () {
     late PodcastRepository podcastRepository;
     late MockClient mockClient;
-    late ApiRepository apiRepository;
 
     setUp(() async {
       mockClient = MockClient();
       SharedPreferences.setMockInitialValues({});
 
       final sharedPreferences = await SharedPreferences.getInstance();
-      apiRepository = ApiRepository(
-          client: mockClient, sharedPreferences: sharedPreferences);
 
       podcastRepository = PodcastRepository(
-          apiRepository: apiRepository, sharedPreferences: sharedPreferences);
+          client: mockClient, sharedPreferences: sharedPreferences);
     });
 
     group('fetchPodcasts', () {
       test('returns a list of podcasts when successful', () async {
-        when(mockClient.get(Uri.parse(ApiRepository.broadCastUrl))).thenAnswer(
+        when(mockClient.get(Uri.parse(Const.broadCastUrl))).thenAnswer(
             (_) async => http.Response(json.encode(mockPodcasts), 200,
                 headers: {'content-type': 'application/json; charset=utf-8'}));
 
-        final podcasts =
-            await podcastRepository.fetchPodcasts(forceRefresh: true);
+        final podcasts = await podcastRepository.fetchPodcasts();
 
         expect(podcasts, isA<List<Podcast>>());
         expect(podcasts.length, mockPodcasts.length + missingPodcasts.length);
@@ -63,28 +59,10 @@ void main() {
       });
 
       test('throws an exception when unsuccessful', () async {
-        when(mockClient.get(Uri.parse(ApiRepository.broadCastUrl)))
+        when(mockClient.get(Uri.parse(Const.broadCastUrl)))
             .thenAnswer((_) async => http.Response('Not Found', 404));
 
-        expect(() => podcastRepository.fetchPodcasts(forceRefresh: true),
-            throwsException);
-      });
-
-      test('uses cached data when forceRefresh is false', () async {
-        // Fetch once to cache the data
-        when(mockClient.get(Uri.parse(ApiRepository.broadCastUrl))).thenAnswer(
-            (_) async => http.Response(json.encode(mockPodcasts), 200,
-                headers: {'content-type': 'application/json; charset=utf-8'}));
-        await podcastRepository.fetchPodcasts();
-
-        // Mock a different response for the next call
-        when(mockClient.get(Uri.parse(ApiRepository.broadCastUrl)))
-            .thenAnswer((_) async => http.Response('Not Found', 404));
-
-        // Should still return the cached data
-        final podcasts = await podcastRepository.fetchPodcasts();
-        expect(podcasts, isA<List<Podcast>>());
-        expect(podcasts.length, mockPodcasts.length + missingPodcasts.length);
+        expect(() => podcastRepository.fetchPodcasts(), throwsException);
       });
     });
 

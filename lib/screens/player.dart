@@ -64,9 +64,10 @@ class _PlayerState extends ConsumerState<Player> {
 
   void _setAudioSource() async {
     final apiProvider = ref.read(apiRepositoryProvider);
+    final episodeProvider = ref.read(episodeRepositoryProvider);
 
     AudioSource source = AudioSource.uri(
-      Uri.parse(apiProvider.getEpisodeUrl(_currentEpisode.episodeId)),
+      Uri.parse(episodeProvider.getEpisodeUrl(_currentEpisode.episodeId)),
       headers: apiProvider.getHeaders(),
       tag: MediaItem(
         // Specify a unique ID for each media item

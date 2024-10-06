@@ -6,7 +6,7 @@ part of 'episode_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$episodeRepositoryHash() => r'e825e4da4320facdd326dc241481c599f9510889';
+String _$episodeRepositoryHash() => r'17a1f4f5dc9e1d7ffe760b71c80bfb5ad27341ec';
 
 /// See also [episodeRepository].
 @ProviderFor(episodeRepository)
@@ -22,7 +22,7 @@ final episodeRepositoryProvider =
 );
 
 typedef EpisodeRepositoryRef = AutoDisposeProviderRef<EpisodeRepository>;
-String _$fetchEpisodesHash() => r'0bb566155f9793fd07e47e16744eb89b54959a73';
+String _$fetchEpisodesHash() => r'767fe513f2fd6772634dce0b098d85a4a05da845';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -56,10 +56,10 @@ class FetchEpisodesFamily extends Family<AsyncValue<List<Episode>>> {
 
   /// See also [fetchEpisodes].
   FetchEpisodesProvider call(
-    Podcast currentPodcast,
+    int podcastId,
   ) {
     return FetchEpisodesProvider(
-      currentPodcast,
+      podcastId,
     );
   }
 
@@ -68,7 +68,7 @@ class FetchEpisodesFamily extends Family<AsyncValue<List<Episode>>> {
     covariant FetchEpisodesProvider provider,
   ) {
     return call(
-      provider.currentPodcast,
+      provider.podcastId,
     );
   }
 
@@ -91,11 +91,11 @@ class FetchEpisodesFamily extends Family<AsyncValue<List<Episode>>> {
 class FetchEpisodesProvider extends AutoDisposeFutureProvider<List<Episode>> {
   /// See also [fetchEpisodes].
   FetchEpisodesProvider(
-    Podcast currentPodcast,
+    int podcastId,
   ) : this._internal(
           (ref) => fetchEpisodes(
             ref as FetchEpisodesRef,
-            currentPodcast,
+            podcastId,
           ),
           from: fetchEpisodesProvider,
           name: r'fetchEpisodesProvider',
@@ -106,7 +106,7 @@ class FetchEpisodesProvider extends AutoDisposeFutureProvider<List<Episode>> {
           dependencies: FetchEpisodesFamily._dependencies,
           allTransitiveDependencies:
               FetchEpisodesFamily._allTransitiveDependencies,
-          currentPodcast: currentPodcast,
+          podcastId: podcastId,
         );
 
   FetchEpisodesProvider._internal(
@@ -116,10 +116,10 @@ class FetchEpisodesProvider extends AutoDisposeFutureProvider<List<Episode>> {
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.currentPodcast,
+    required this.podcastId,
   }) : super.internal();
 
-  final Podcast currentPodcast;
+  final int podcastId;
 
   @override
   Override overrideWith(
@@ -134,7 +134,7 @@ class FetchEpisodesProvider extends AutoDisposeFutureProvider<List<Episode>> {
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        currentPodcast: currentPodcast,
+        podcastId: podcastId,
       ),
     );
   }
@@ -146,22 +146,21 @@ class FetchEpisodesProvider extends AutoDisposeFutureProvider<List<Episode>> {
 
   @override
   bool operator ==(Object other) {
-    return other is FetchEpisodesProvider &&
-        other.currentPodcast == currentPodcast;
+    return other is FetchEpisodesProvider && other.podcastId == podcastId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, currentPodcast.hashCode);
+    hash = _SystemHash.combine(hash, podcastId.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
 mixin FetchEpisodesRef on AutoDisposeFutureProviderRef<List<Episode>> {
-  /// The parameter `currentPodcast` of this provider.
-  Podcast get currentPodcast;
+  /// The parameter `podcastId` of this provider.
+  int get podcastId;
 }
 
 class _FetchEpisodesProviderElement
@@ -170,8 +169,7 @@ class _FetchEpisodesProviderElement
   _FetchEpisodesProviderElement(super.provider);
 
   @override
-  Podcast get currentPodcast =>
-      (origin as FetchEpisodesProvider).currentPodcast;
+  int get podcastId => (origin as FetchEpisodesProvider).podcastId;
 }
 
 String _$fetchFavoritedEpisodesHash() =>
