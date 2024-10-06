@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "2:6217248595519736827",
-      "lastPropertyId": "6:7683314106615094904",
+      "lastPropertyId": "7:5123398083403746296",
       "name": "PodcastDB",
       "properties": [
         {
@@ -38,6 +38,11 @@
           "id": "6:7683314106615094904",
           "name": "image",
           "type": 9
+        },
+        {
+          "id": "7:5123398083403746296",
+          "name": "podcastId",
+          "type": 6
         }
       ],
       "relations": [
@@ -105,9 +110,58 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "5:6617065807813839953",
+      "lastPropertyId": "8:6149495895523292099",
+      "name": "EpisodeDB",
+      "properties": [
+        {
+          "id": "1:1066757186899219979",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1554327976715795163",
+          "name": "episodeId",
+          "type": 6
+        },
+        {
+          "id": "3:4802138597239927106",
+          "name": "date",
+          "type": 12
+        },
+        {
+          "id": "4:1087412274143091775",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "5:8652247316615162625",
+          "name": "imgPath",
+          "type": 9
+        },
+        {
+          "id": "6:1218643663322711513",
+          "name": "episodeDuration",
+          "type": 8
+        },
+        {
+          "id": "7:7994117848910663628",
+          "name": "hasPodcast",
+          "type": 1
+        },
+        {
+          "id": "8:6149495895523292099",
+          "name": "podcastId",
+          "type": 6
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "4:1847342292373639521",
+  "lastEntityId": "5:6617065807813839953",
   "lastIndexId": "0:0",
   "lastRelationId": "4:88839429434379249",
   "lastSequenceId": "0:0",

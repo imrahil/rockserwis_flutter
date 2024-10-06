@@ -15,6 +15,7 @@ import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
 import 'models/db/author_db.dart';
+import 'models/db/episode_db.dart';
 import 'models/db/podcast_db.dart';
 import 'models/db/schedule_db.dart';
 
@@ -24,7 +25,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(2, 6217248595519736827),
       name: 'PodcastDB',
-      lastPropertyId: const obx_int.IdUid(6, 7683314106615094904),
+      lastPropertyId: const obx_int.IdUid(7, 5123398083403746296),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -56,6 +57,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(6, 7683314106615094904),
             name: 'image',
             type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 5123398083403746296),
+            name: 'podcastId',
+            type: 6,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[
@@ -121,6 +127,55 @@ final _entities = <obx_int.ModelEntity>[
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(5, 6617065807813839953),
+      name: 'EpisodeDB',
+      lastPropertyId: const obx_int.IdUid(8, 6149495895523292099),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 1066757186899219979),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 1554327976715795163),
+            name: 'episodeId',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 4802138597239927106),
+            name: 'date',
+            type: 12,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 1087412274143091775),
+            name: 'name',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 8652247316615162625),
+            name: 'imgPath',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 1218643663322711513),
+            name: 'episodeDuration',
+            type: 8,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 7994117848910663628),
+            name: 'hasPodcast',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(8, 6149495895523292099),
+            name: 'podcastId',
+            type: 6,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[])
 ];
 
@@ -159,7 +214,7 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(4, 1847342292373639521),
+      lastEntityId: const obx_int.IdUid(5, 6617065807813839953),
       lastIndexId: const obx_int.IdUid(0, 0),
       lastRelationId: const obx_int.IdUid(4, 88839429434379249),
       lastSequenceId: const obx_int.IdUid(0, 0),
@@ -193,13 +248,14 @@ obx_int.ModelDefinition getObjectBoxModel() {
               : fbb.writeString(object.podcastName!);
           final imageOffset =
               object.image == null ? null : fbb.writeString(object.image!);
-          fbb.startTable(7);
+          fbb.startTable(8);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, podcastNameOffset);
           fbb.addBool(2, object.onlyMusic);
           fbb.addBool(3, object.isActive);
           fbb.addBool(4, object.hasEpisodes);
           fbb.addOffset(5, imageOffset);
+          fbb.addInt64(6, object.podcastId);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -218,7 +274,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
             ..hasEpisodes =
                 const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 12)
             ..image = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 14);
+                .vTableGetNullable(buffer, rootOffset, 14)
+            ..podcastId = const fb.Int64Reader()
+                .vTableGetNullable(buffer, rootOffset, 16);
           obx_int.InternalToManyAccess.setRelInfo<PodcastDB>(object.schedules,
               store, obx_int.RelInfo<PodcastDB>.toMany(3, object.id));
           obx_int.InternalToManyAccess.setRelInfo<PodcastDB>(object.authors,
@@ -291,6 +349,61 @@ obx_int.ModelDefinition getObjectBoxModel() {
                 .vTableGetNullable(buffer, rootOffset, 10);
 
           return object;
+        }),
+    EpisodeDB: obx_int.EntityDefinition<EpisodeDB>(
+        model: _entities[3],
+        toOneRelations: (EpisodeDB object) => [],
+        toManyRelations: (EpisodeDB object) => {},
+        getId: (EpisodeDB object) => object.id,
+        setId: (EpisodeDB object, int id) {
+          object.id = id;
+        },
+        objectToFB: (EpisodeDB object, fb.Builder fbb) {
+          final nameOffset =
+              object.name == null ? null : fbb.writeString(object.name!);
+          final imgPathOffset =
+              object.imgPath == null ? null : fbb.writeString(object.imgPath!);
+          fbb.startTable(9);
+          fbb.addInt64(0, object.id);
+          fbb.addInt64(1, object.episodeId);
+          fbb.addInt64(
+              2,
+              object.date == null
+                  ? null
+                  : object.date!.microsecondsSinceEpoch * 1000);
+          fbb.addOffset(3, nameOffset);
+          fbb.addOffset(4, imgPathOffset);
+          fbb.addFloat64(5, object.episodeDuration);
+          fbb.addBool(6, object.hasPodcast);
+          fbb.addInt64(7, object.podcastId);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final dateValue =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 8);
+          final object = EpisodeDB()
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
+            ..episodeId =
+                const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 6)
+            ..date = dateValue == null
+                ? null
+                : DateTime.fromMicrosecondsSinceEpoch(
+                    (dateValue / 1000).round())
+            ..name = const fb.StringReader(asciiOptimization: true)
+                .vTableGetNullable(buffer, rootOffset, 10)
+            ..imgPath = const fb.StringReader(asciiOptimization: true)
+                .vTableGetNullable(buffer, rootOffset, 12)
+            ..episodeDuration = const fb.Float64Reader()
+                .vTableGetNullable(buffer, rootOffset, 14)
+            ..hasPodcast =
+                const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 16)
+            ..podcastId = const fb.Int64Reader()
+                .vTableGetNullable(buffer, rootOffset, 18);
+
+          return object;
         })
   };
 
@@ -322,6 +435,10 @@ class PodcastDB_ {
   /// See [PodcastDB.image].
   static final image =
       obx.QueryStringProperty<PodcastDB>(_entities[0].properties[5]);
+
+  /// See [PodcastDB.podcastId].
+  static final podcastId =
+      obx.QueryIntegerProperty<PodcastDB>(_entities[0].properties[6]);
 
   /// see [PodcastDB.schedules]
   static final schedules =
@@ -364,4 +481,39 @@ class ScheduleDB_ {
   /// See [ScheduleDB.end].
   static final end =
       obx.QueryStringProperty<ScheduleDB>(_entities[2].properties[3]);
+}
+
+/// [EpisodeDB] entity fields to define ObjectBox queries.
+class EpisodeDB_ {
+  /// See [EpisodeDB.id].
+  static final id =
+      obx.QueryIntegerProperty<EpisodeDB>(_entities[3].properties[0]);
+
+  /// See [EpisodeDB.episodeId].
+  static final episodeId =
+      obx.QueryIntegerProperty<EpisodeDB>(_entities[3].properties[1]);
+
+  /// See [EpisodeDB.date].
+  static final date =
+      obx.QueryDateNanoProperty<EpisodeDB>(_entities[3].properties[2]);
+
+  /// See [EpisodeDB.name].
+  static final name =
+      obx.QueryStringProperty<EpisodeDB>(_entities[3].properties[3]);
+
+  /// See [EpisodeDB.imgPath].
+  static final imgPath =
+      obx.QueryStringProperty<EpisodeDB>(_entities[3].properties[4]);
+
+  /// See [EpisodeDB.episodeDuration].
+  static final episodeDuration =
+      obx.QueryDoubleProperty<EpisodeDB>(_entities[3].properties[5]);
+
+  /// See [EpisodeDB.hasPodcast].
+  static final hasPodcast =
+      obx.QueryBooleanProperty<EpisodeDB>(_entities[3].properties[6]);
+
+  /// See [EpisodeDB.podcastId].
+  static final podcastId =
+      obx.QueryIntegerProperty<EpisodeDB>(_entities[3].properties[7]);
 }
