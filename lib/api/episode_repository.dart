@@ -1,19 +1,18 @@
 import 'dart:convert';
 
+import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:rockserwis_podcaster/api/api.dart';
+import 'package:rockserwis_podcaster/api/const.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
-import 'package:rockserwis_podcaster/models/podcast.dart';
 import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'episode_repository.g.dart';
 
 class EpisodeRepository {
-  EpisodeRepository(
-      {required this.apiRepository, required this.sharedPreferences});
+  EpisodeRepository({required this.client, required this.sharedPreferences});
 
-  final ApiRepository apiRepository;
+  final http.Client client;
   final SharedPreferences sharedPreferences;
 
   static const String favoriteEpisodesKey = 'favoriteEpisodes';
@@ -22,22 +21,23 @@ class EpisodeRepository {
 
   /// Fetches and caches JSON data for episodes of a specific podcast.
   ///
-  /// @param currentPodcast The podcast to fetch episodes for.
-  /// @param forceRefresh Whether to force a refresh from the network, even if data is in the cache.
+  /// @param podcastId The id of the podcast to fetch episodes for.
   /// @return A list of episodes for the given podcast.
-  Future<List<Episode>> fetchEpisodes(Podcast currentPodcast,
-      {bool forceRefresh = false}) async {
-    String url =
-        '${ApiRepository.scheduleUrl}/${currentPodcast.podcastId}.json';
+  Future<List<Episode>> fetchEpisodes(int podcastId) async {
+    String url = '${Const.scheduleUrl}/$podcastId.json';
 
-    return await apiRepository.fetchAndCacheJson(url, (jsonData) {
-      _selectedPodcastEpisodes = (json.decode(jsonData) as List)
+    final response = await client.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      _selectedPodcastEpisodes = (json.decode(response.body) as List)
           .map((i) => Episode.fromJson(i))
           .where((episode) => episode.hasPodcast)
           .toList();
 
       return _selectedPodcastEpisodes;
-    }, forceRefresh: forceRefresh);
+    } else {
+      throw Exception('Failed to load data from: $url');
+    }
   }
 
   /// Gets the list of favorite episodes from SharedPreferences.
@@ -114,20 +114,25 @@ class EpisodeRepository {
       return null;
     }
   }
+
+  /// Gets the URL for a specific episode.
+  ///
+  /// @param episodeId The ID of the episode.
+  /// @return The URL for the episode.
+  String getEpisodeUrl(int episodeId) => '${Const.mainUrl}/podcast/$episodeId';
 }
 
 @riverpod
 EpisodeRepository episodeRepository(EpisodeRepositoryRef ref) {
   return EpisodeRepository(
-    apiRepository: ref.watch(apiRepositoryProvider),
+    client: http.Client(),
     sharedPreferences: ref.watch(sharedPreferencesProvider).requireValue,
   );
 }
 
 @riverpod
-Future<List<Episode>> fetchEpisodes(
-    FetchEpisodesRef ref, Podcast currentPodcast) {
-  return ref.watch(episodeRepositoryProvider).fetchEpisodes(currentPodcast);
+Future<List<Episode>> fetchEpisodes(FetchEpisodesRef ref, int podcastId) {
+  return ref.watch(episodeRepositoryProvider).fetchEpisodes(podcastId);
 }
 
 @riverpod

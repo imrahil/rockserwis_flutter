@@ -1,7 +1,8 @@
 import 'dart:convert';
 
+import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:rockserwis_podcaster/api/api.dart';
+import 'package:rockserwis_podcaster/api/const.dart';
 import 'package:rockserwis_podcaster/api/data/missing_podcasts.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';
@@ -10,22 +11,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 part 'podcast_repository.g.dart';
 
 class PodcastRepository {
-  PodcastRepository(
-      {required this.apiRepository, required this.sharedPreferences});
+  PodcastRepository({required this.client, required this.sharedPreferences});
 
-  final ApiRepository apiRepository;
+  final http.Client client;
   final SharedPreferences sharedPreferences;
 
   static const String favoritePodcastsKey = 'favoritePodcasts';
 
   /// Fetches and caches JSON data for all podcasts.
   ///
-  /// @param forceRefresh Whether to force a refresh from the network, even if data is in the cache.
   /// @return A list of all podcasts.
-  Future<List<Podcast>> fetchPodcasts({bool forceRefresh = false}) async {
-    return await apiRepository.fetchAndCacheJson(ApiRepository.broadCastUrl,
-        (jsonData) {
-      List<Podcast> podcasts = (json.decode(jsonData) as List)
+  Future<List<Podcast>> fetchPodcasts() async {
+    final response = await client.get(Uri.parse(Const.broadCastUrl));
+
+    if (response.statusCode == 200) {
+      List<Podcast> podcasts = (json.decode(response.body) as List)
           .map((i) => Podcast.fromJson(i))
           .toList();
 
@@ -36,7 +36,9 @@ class PodcastRepository {
       output.sort((a, b) => a.podcastName.compareTo(b.podcastName));
 
       return output;
-    }, forceRefresh: forceRefresh);
+    } else {
+      throw Exception('Failed to load podcasts!');
+    }
   }
 
   /// Gets the list of favorite podcasts from SharedPreferences.
@@ -91,7 +93,7 @@ class PodcastRepository {
 @riverpod
 PodcastRepository podcastRepository(PodcastRepositoryRef ref) {
   return PodcastRepository(
-    apiRepository: ref.watch(apiRepositoryProvider),
+    client: http.Client(),
     sharedPreferences: ref.watch(sharedPreferencesProvider).requireValue,
   );
 }

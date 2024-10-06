@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:rockserwis_podcaster/api/api.dart';
+import 'package:rockserwis_podcaster/api/const.dart';
 import 'package:rockserwis_podcaster/api/episode_repository.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,30 +18,27 @@ void main() {
   group('EpisodeRepository', () {
     late EpisodeRepository episodeRepository;
     late MockClient mockClient;
-    late ApiRepository apiRepository;
 
     setUp(() async {
       mockClient = MockClient();
       SharedPreferences.setMockInitialValues({});
 
       final sharedPreferences = await SharedPreferences.getInstance();
-      apiRepository = ApiRepository(
-          client: mockClient, sharedPreferences: sharedPreferences);
 
       episodeRepository = EpisodeRepository(
-          apiRepository: apiRepository, sharedPreferences: sharedPreferences);
+          client: mockClient, sharedPreferences: sharedPreferences);
     });
 
     group('fetchEpisodes', () {
       test('returns a list of episodes when successful', () async {
         when(mockClient.get(Uri.parse(
-                '${ApiRepository.scheduleUrl}/${parsedMockPodcasts[0].podcastId}.json')))
+                '${Const.scheduleUrl}/${parsedMockPodcasts[0].podcastId}.json')))
             .thenAnswer((_) async => http.Response(
                 json.encode(mockEpisodes), 200,
                 headers: {'content-type': 'application/json; charset=utf-8'}));
 
         final episodes = await episodeRepository
-            .fetchEpisodes(parsedMockPodcasts[0], forceRefresh: true);
+            .fetchEpisodes(parsedMockPodcasts[0].podcastId);
 
         expect(episodes, isA<List<Episode>>());
         expect(episodes.length, parsedMockEpisodes.length);
@@ -51,12 +48,12 @@ void main() {
 
       test('throws an exception when unsuccessful', () async {
         when(mockClient.get(Uri.parse(
-                '${ApiRepository.scheduleUrl}/${parsedMockPodcasts[0].podcastId}.json')))
+                '${Const.scheduleUrl}/${parsedMockPodcasts[0].podcastId}.json')))
             .thenAnswer((_) async => http.Response('Not Found', 404));
 
         expect(
-            () => episodeRepository.fetchEpisodes(parsedMockPodcasts[0],
-                forceRefresh: true),
+            () => episodeRepository
+                .fetchEpisodes(parsedMockPodcasts[0].podcastId),
             throwsException);
       });
     });
@@ -64,15 +61,14 @@ void main() {
     group('get Next/Previous Episode', () {
       setUp(() async {
         when(mockClient.get(Uri.parse(
-                '${ApiRepository.scheduleUrl}/${parsedMockPodcasts[0].podcastId}.json')))
+                '${Const.scheduleUrl}/${parsedMockPodcasts[0].podcastId}.json')))
             .thenAnswer((_) async => http.Response(
                 json.encode(mockEpisodes), 200,
                 headers: {'content-type': 'application/json; charset=utf-8'}));
       });
 
       test('returns the previous episode in the list', () async {
-        await episodeRepository.fetchEpisodes(parsedMockPodcasts[0],
-            forceRefresh: true);
+        await episodeRepository.fetchEpisodes(parsedMockPodcasts[0].podcastId);
 
         final previousEpisode = episodeRepository.getPreviousEpisode(21284);
         expect(previousEpisode?.episodeId, 21359);
@@ -82,8 +78,7 @@ void main() {
       });
 
       test('returns the next episode in the list', () async {
-        await episodeRepository.fetchEpisodes(parsedMockPodcasts[0],
-            forceRefresh: true);
+        await episodeRepository.fetchEpisodes(parsedMockPodcasts[0].podcastId);
         final nextEpisode = episodeRepository.getNextEpisode(21359);
         expect(nextEpisode?.episodeId, 21284);
 
@@ -121,6 +116,14 @@ void main() {
         await episodeRepository.toggleFavoriteEpisode(episode);
 
         expect(episodeRepository.isFavoriteEpisode(episode), true);
+      });
+    });
+
+    group('getEpisodeUrl', () {
+      test('returns the correct episode URL', () {
+        const episodeId = 123;
+        const expectedUrl = '${Const.mainUrl}/podcast/$episodeId';
+        expect(episodeRepository.getEpisodeUrl(episodeId), expectedUrl);
       });
     });
   });

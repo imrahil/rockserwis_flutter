@@ -83,7 +83,8 @@ class _EpisodesPageState extends ConsumerState<EpisodesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final episodesAsync = ref.watch(fetchEpisodesProvider(_currentPodcast));
+    final episodesAsync =
+        ref.watch(fetchEpisodesProvider(_currentPodcast.podcastId));
     final isFavorite =
         ref.read(podcastRepositoryProvider).isFavoritePodcast(_currentPodcast);
 

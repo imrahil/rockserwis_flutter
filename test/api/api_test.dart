@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
+import 'package:rockserwis_podcaster/api/const.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'api_test.mocks.dart';
@@ -41,14 +42,14 @@ void main() {
 
     group('login', () {
       test('returns true when login is successful', () async {
-        when(mockClient.get(Uri.parse(ApiRepository.loginCsrfUrl))).thenAnswer(
+        when(mockClient.get(Uri.parse(Const.loginCsrfUrl))).thenAnswer(
             (_) async => http.Response('test_csrf_token', 200, headers: {
                   'content-type': 'application/json; charset=utf-8',
                   'set-cookie':
                       'csrftoken=test_csrf_cookie;session=test_session_cookie'
                 }));
 
-        when(mockClient.post(Uri.parse(ApiRepository.loginPostUrl),
+        when(mockClient.post(Uri.parse(Const.loginPostUrl),
                 body: anyNamed('body'), headers: anyNamed('headers')))
             .thenAnswer((_) async => http.Response('', 200, headers: {
                   'content-type': 'application/json; charset=utf-8',
@@ -70,7 +71,7 @@ void main() {
       });
 
       test('returns false when login is unsuccessful', () async {
-        when(mockClient.get(Uri.parse(ApiRepository.loginCsrfUrl)))
+        when(mockClient.get(Uri.parse(Const.loginCsrfUrl)))
             .thenAnswer((_) async => http.Response('Not Found', 404));
 
         final result = await api.login('test@email.com', 'password', false);
@@ -79,14 +80,14 @@ void main() {
       });
 
       test('returns true when login is with rememberMe', () async {
-        when(mockClient.get(Uri.parse(ApiRepository.loginCsrfUrl))).thenAnswer(
+        when(mockClient.get(Uri.parse(Const.loginCsrfUrl))).thenAnswer(
             (_) async => http.Response('test_csrf_token', 200, headers: {
                   'content-type': 'application/json; charset=utf-8',
                   'set-cookie':
                       'csrftoken=test_csrf_cookie;session=test_session_cookie'
                 }));
 
-        when(mockClient.post(Uri.parse(ApiRepository.loginPostUrl),
+        when(mockClient.post(Uri.parse(Const.loginPostUrl),
                 body: anyNamed('body'), headers: anyNamed('headers')))
             .thenAnswer((_) async => http.Response('', 200, headers: {
                   'content-type': 'application/json; charset=utf-8',
@@ -121,18 +122,10 @@ void main() {
       });
     });
 
-    group('getEpisodeUrl', () {
-      test('returns the correct episode URL', () {
-        const episodeId = 123;
-        const expectedUrl = '${ApiRepository.mainUrl}/podcast/$episodeId';
-        expect(api.getEpisodeUrl(episodeId), expectedUrl);
-      });
-    });
-
     group('getImagePath', () {
       test('returns the correct image path', () {
         const imageUrl = 'images/test.jpg';
-        const expectedPath = '${ApiRepository.mainUrl}/$imageUrl';
+        const expectedPath = '${Const.mainUrl}/$imageUrl';
         expect(api.getImagePath(imageUrl), expectedPath);
       });
     });
