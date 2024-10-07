@@ -1,17 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:rockserwis_podcaster/api/const.dart';
+import 'package:rockserwis_podcaster/api/objectbox_repository.dart';
+import 'package:rockserwis_podcaster/api/podcast_sync_helper.dart';
 import 'package:rockserwis_podcaster/components/error_prompt.dart';
-import 'package:rockserwis_podcaster/utils/app_theme_mode.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_data.dart';
+import 'package:rockserwis_podcaster/utils/app_theme_mode.dart';
+import 'package:rockserwis_podcaster/utils/package_info_provider.dart';
+import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';
 
 part 'app_startup.g.dart';
+
+var logger = Logger();
+
+const _forceRefresh = false;
 
 @riverpod
 class AppStartupNotifier extends _$AppStartupNotifier {
   @override
   Future<void> build() async {
     // Preload any other FutureProviders what will be used with requireValue later
+    await ref.watch(objectBoxProvider.future);
+    await ref.watch(packageInfoProvider.future);
 
     await _updateDatabaseFromNetwork();
   }
@@ -19,9 +31,44 @@ class AppStartupNotifier extends _$AppStartupNotifier {
   Future<void> _updateDatabaseFromNetwork() async {
     state = const AsyncValue.loading();
 
-    // simulation of loading async stuff on startup ;)
-    await Future.delayed(Duration(seconds: 2));
-    // throw FormatException();
+    final sharedPreferences = ref.watch(sharedPreferencesProvider).requireValue;
+    final packageInfo = ref.watch(packageInfoProvider).requireValue;
+
+    final lastVersion = sharedPreferences.getString(Const.versionKey);
+    final currentVersion = '${packageInfo.version}+${packageInfo.buildNumber}';
+
+    if (lastVersion != currentVersion || _forceRefresh) {
+      logger.d('Current version: $currentVersion, last version: $lastVersion');
+
+      await ref
+          .read(objectBoxProvider)
+          .requireValue
+          .podcastBox
+          .removeAllAsync();
+      await ref
+          .read(objectBoxProvider)
+          .requireValue
+          .episodeBox
+          .removeAllAsync();
+
+      await sharedPreferences.setString(Const.versionKey, currentVersion);
+    }
+
+    const cacheDuration = Duration(days: 1);
+    final now = DateTime.now();
+    final lastUpdatedString = sharedPreferences.getString(Const.lastUpdatedKey);
+    final lastUpdated =
+        lastUpdatedString != null ? DateTime.parse(lastUpdatedString) : null;
+
+    if ((lastUpdated != null && now.difference(lastUpdated) > cacheDuration) ||
+        _forceRefresh) {
+      logger.d('Syncing podcasts and episodes');
+      await ref.read(podcastSyncHelperProvider).syncAll();
+
+      await sharedPreferences.setString(Const.lastUpdatedKey, now.toString());
+    } else {
+      logger.d('Cache is still valid');
+    }
   }
 
   Future<void> retry() async {
@@ -43,6 +90,8 @@ class AppStartupWidget extends ConsumerWidget {
       loading: () => const AppStartupLoadingWidget(),
       // 3. error state
       error: (e, st) {
+        logger.d(e);
+
         return AppStartupErrorWidget(
           message:
               'Could not load or sync data.\nCheck your Internet connection.',
