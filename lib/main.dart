@@ -8,8 +8,8 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/app_routes.dart';
 import 'package:rockserwis_podcaster/app_startup.dart';
-import 'package:rockserwis_podcaster/models/episode.dart';
-import 'package:rockserwis_podcaster/models/podcast.dart';
+import 'package:rockserwis_podcaster/models/db/episode_db.dart';
+import 'package:rockserwis_podcaster/models/db/podcast_db.dart';
 import 'package:rockserwis_podcaster/screens/episodes_page.dart';
 import 'package:rockserwis_podcaster/screens/favorite_episodes_page.dart';
 import 'package:rockserwis_podcaster/screens/favorite_podcasts_page.dart';
@@ -93,7 +93,7 @@ class MusicPlayer extends ConsumerWidget {
           AppRoutes.episodes => MaterialPageRoute(
               settings: settings,
               builder: (_) {
-                final currentPodcast = settings.arguments as Podcast;
+                final currentPodcast = settings.arguments as PodcastDB;
                 return EpisodesPage(currentPodcast: currentPodcast);
               },
             ),
@@ -108,7 +108,7 @@ class MusicPlayer extends ConsumerWidget {
           AppRoutes.player => MaterialPageRoute(
               settings: settings,
               builder: (_) {
-                final currentEpisode = settings.arguments as Episode;
+                final currentEpisode = settings.arguments as EpisodeDB;
                 return Player(currentEpisode: currentEpisode);
               },
             ),

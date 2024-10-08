@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:rockserwis_podcaster/api/episode_repository.dart';
-import 'package:rockserwis_podcaster/api/podcast_repository.dart';
+import 'package:rockserwis_podcaster/api/episode_db_repository.dart';
+import 'package:rockserwis_podcaster/api/podcast_db_repository.dart';
 import 'package:rockserwis_podcaster/components/episodes_list.dart';
-import 'package:rockserwis_podcaster/models/podcast.dart';
+import 'package:rockserwis_podcaster/models/db/podcast_db.dart';
 
 class EpisodesPage extends ConsumerStatefulWidget {
-  final Podcast currentPodcast;
+  final PodcastDB currentPodcast;
 
   const EpisodesPage({super.key, required this.currentPodcast});
 
@@ -16,13 +16,15 @@ class EpisodesPage extends ConsumerStatefulWidget {
 }
 
 class _EpisodesPageState extends ConsumerState<EpisodesPage> {
-  late Podcast _currentPodcast;
+  late PodcastDB _currentPodcast;
+  late bool _isFavorited;
 
   @override
   void initState() {
     super.initState();
 
     _currentPodcast = widget.currentPodcast;
+    _isFavorited = widget.currentPodcast.isFavorited ?? false;
   }
 
   void _showPodcastInfoDialog(BuildContext context) {
@@ -55,12 +57,12 @@ class _EpisodesPageState extends ConsumerState<EpisodesPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: _currentPodcast.schedules.map((schedule) {
                     final startTime = DateFormat('HH:mm')
-                        .format(DateFormat('HH:mm:ss').parse(schedule.start));
+                        .format(DateFormat('HH:mm:ss').parse(schedule.start!));
                     final endTime = DateFormat('HH:mm')
-                        .format(DateFormat('HH:mm:ss').parse(schedule.end));
+                        .format(DateFormat('HH:mm:ss').parse(schedule.end!));
                     final dayName = DateFormat('EEEE').format(DateTime.now()
                         .subtract(Duration(
-                            days: DateTime.now().weekday - schedule.weekday)));
+                            days: DateTime.now().weekday - schedule.weekday!)));
 
                     return Text('• $dayName, $startTime - $endTime');
                   }).toList(),
@@ -84,13 +86,11 @@ class _EpisodesPageState extends ConsumerState<EpisodesPage> {
   @override
   Widget build(BuildContext context) {
     final episodesAsync =
-        ref.watch(fetchEpisodesProvider(_currentPodcast.podcastId));
-    final isFavorite =
-        ref.read(podcastRepositoryProvider).isFavoritePodcast(_currentPodcast);
+        ref.watch(episodeListProvider(_currentPodcast.podcastId!));
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_currentPodcast.podcastName),
+        title: Text(_currentPodcast.podcastName!),
         actions: [
           IconButton(
             icon: const Icon(Icons.info_outline),
@@ -98,13 +98,15 @@ class _EpisodesPageState extends ConsumerState<EpisodesPage> {
           ),
           IconButton(
             icon: Icon(
-              isFavorite ? Icons.bookmark_remove : Icons.bookmark_add,
+              _isFavorited ? Icons.bookmark_remove : Icons.bookmark_add,
             ),
             onPressed: () async {
               await ref
-                  .read(podcastRepositoryProvider)
+                  .read(favoritedPodcastsProvider.notifier)
                   .toggleFavoritePodcast(_currentPodcast);
-              setState(() {}); // Rebuild to update icon
+              setState(() {
+                _isFavorited = !_isFavorited;
+              }); // Rebuild to update icon
             },
           ),
         ],

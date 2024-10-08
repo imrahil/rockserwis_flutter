@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'episode.g.dart';
@@ -27,21 +26,4 @@ class Episode {
       _$EpisodeFromJson(json);
 
   Map<String, dynamic> toJson() => _$EpisodeToJson(this);
-
-  String getEpisodeTitle() {
-    String episodeTitle = "$name - ${DateFormat("yyyy-MM-dd").format(date)}";
-
-    return episodeTitle;
-  }
-
-  String getReadableDuration() {
-    if (episodeDuration == null) {
-      return "Unknown duration";
-    }
-
-    int totalSeconds = episodeDuration!.toInt();
-    int minutes = (totalSeconds / 60).round();
-
-    return "$minutes min";
-  }
 }

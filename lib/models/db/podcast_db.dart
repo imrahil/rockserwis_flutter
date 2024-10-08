@@ -9,18 +9,18 @@ class PodcastDB {
 
   int? podcastId;
   String? podcastName;
-
   final authors = ToMany<AuthorDB>();
-
   final schedules = ToMany<ScheduleDB>();
-
   bool? onlyMusic;
   bool? isActive;
   bool? hasEpisodes;
   String? image;
 
+  bool? isFavorited;
+
   // Static factory method
   static PodcastDB createItem({
+    int? id,
     int? podcastId,
     String? podcastName,
     List<AuthorDB>? authors,
@@ -32,6 +32,7 @@ class PodcastDB {
   }) {
     final podcast = PodcastDB();
 
+    podcast.id = id!;
     podcast.podcastId = podcastId;
     podcast.podcastName = podcastName;
     if (authors != null) {
@@ -51,6 +52,7 @@ class PodcastDB {
   // Method to convert Podcast to PodcastDB
   static PodcastDB fromPodcast(Podcast podcast) {
     return PodcastDB.createItem(
+      id: 0,
       podcastId: podcast.podcastId,
       podcastName: podcast.podcastName,
       authors:
@@ -63,5 +65,19 @@ class PodcastDB {
       hasEpisodes: podcast.hasEpisodes,
       image: podcast.image,
     );
+  }
+
+  copyWith({required bool isFavorited}) {
+    return PodcastDB.createItem(
+      id: id,
+      podcastId: podcastId,
+      podcastName: podcastName,
+      authors: authors.toList(),
+      schedules: schedules.toList(),
+      onlyMusic: onlyMusic,
+      isActive: isActive,
+      hasEpisodes: hasEpisodes,
+      image: image,
+    )..isFavorited = isFavorited;
   }
 }

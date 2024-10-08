@@ -10,12 +10,13 @@ import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:logger/logger.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
+import 'package:rockserwis_podcaster/api/episode_db_repository.dart';
 import 'package:rockserwis_podcaster/api/episode_repository.dart';
-import 'package:rockserwis_podcaster/models/episode.dart';
+import 'package:rockserwis_podcaster/models/db/episode_db.dart';
 import 'package:rockserwis_podcaster/utils/player_manager.dart';
 
 class Player extends ConsumerStatefulWidget {
-  final Episode currentEpisode;
+  final EpisodeDB currentEpisode;
 
   const Player({super.key, required this.currentEpisode});
 
@@ -25,7 +26,8 @@ class Player extends ConsumerStatefulWidget {
 
 class _PlayerState extends ConsumerState<Player> {
   late final PlayerManager _playerManager;
-  late Episode _currentEpisode;
+  late EpisodeDB _currentEpisode;
+  late bool _isFavorited;
 
   final Connectivity _connectivity = Connectivity();
   List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
@@ -38,6 +40,7 @@ class _PlayerState extends ConsumerState<Player> {
     super.initState();
     _playerManager = PlayerManager();
     _currentEpisode = widget.currentEpisode;
+    _isFavorited = widget.currentEpisode.isFavorited ?? false;
 
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen((result) {
@@ -67,14 +70,14 @@ class _PlayerState extends ConsumerState<Player> {
     final episodeProvider = ref.read(episodeRepositoryProvider);
 
     AudioSource source = AudioSource.uri(
-      Uri.parse(episodeProvider.getEpisodeUrl(_currentEpisode.episodeId)),
+      Uri.parse(episodeProvider.getEpisodeUrl(_currentEpisode.episodeId!)),
       headers: apiProvider.getHeaders(),
       tag: MediaItem(
         // Specify a unique ID for each media item
         id: _currentEpisode.episodeId.toString(),
         // Metadata to display in the notification
-        album: DateFormat("yyyy-MM-dd").format(_currentEpisode.date),
-        title: _currentEpisode.name,
+        album: DateFormat("yyyy-MM-dd").format(_currentEpisode.date!),
+        title: _currentEpisode.name!,
         artUri: _currentEpisode.imgPath != null
             ? Uri.parse(apiProvider.getImagePath(_currentEpisode.imgPath))
             : null,
@@ -88,40 +91,40 @@ class _PlayerState extends ConsumerState<Player> {
   void _skipToPrevious() async {
     await _playerManager.stop();
 
-    Episode? previousEpisode = ref
-        .read(episodeRepositoryProvider)
-        .getPreviousEpisode(_currentEpisode.episodeId);
+    // FIXME
+    // EpisodeDB? previousEpisode = ref
+    //     .read(episodeRepositoryProvider)
+    //     .getPreviousEpisode(_currentEpisode.episodeId!);
 
-    if (previousEpisode != null) {
-      setState(() {
-        _currentEpisode = previousEpisode;
-      });
+    // if (previousEpisode != null) {
+    //   setState(() {
+    //     _currentEpisode = previousEpisode;
+    //   });
 
-      _setAudioSource();
-    }
+    //   _setAudioSource();
+    // }
   }
 
   void _skipToNext() async {
     await _playerManager.stop();
 
-    Episode? nextEpisode = ref
-        .read(episodeRepositoryProvider)
-        .getNextEpisode(_currentEpisode.episodeId);
+    // FIXME
+    // EpisodeDB? nextEpisode = ref
+    //     .read(episodeRepositoryProvider)
+    //     .getNextEpisode(_currentEpisode.episodeId);
 
-    if (nextEpisode != null) {
-      setState(() {
-        _currentEpisode = nextEpisode;
-      });
+    // if (nextEpisode != null) {
+    //   setState(() {
+    //     _currentEpisode = nextEpisode;
+    //   });
 
-      _setAudioSource();
-    }
+    //   _setAudioSource();
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
     final apiProvider = ref.watch(apiRepositoryProvider);
-    final isFavorite =
-        ref.read(episodeRepositoryProvider).isFavoriteEpisode(_currentEpisode);
 
     return Scaffold(
       appBar: AppBar(
@@ -147,13 +150,15 @@ class _PlayerState extends ConsumerState<Player> {
               alignment: Alignment.topRight,
               child: IconButton(
                 icon: Icon(
-                  isFavorite ? Icons.favorite : Icons.favorite_border,
+                  _isFavorited ? Icons.favorite : Icons.favorite_border,
                 ),
                 onPressed: () async {
                   await ref
-                      .read(episodeRepositoryProvider)
+                      .read(favoritedEpisodesProvider.notifier)
                       .toggleFavoriteEpisode(_currentEpisode);
-                  setState(() {}); // Rebuild to update icon
+                  setState(() {
+                    _isFavorited = !_isFavorited;
+                  }); // Rebuild to update icon
                 },
               ),
             ),
