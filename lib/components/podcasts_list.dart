@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/app_routes.dart';
-import 'package:rockserwis_podcaster/models/podcast.dart';
+import 'package:rockserwis_podcaster/models/db/podcast_db.dart';
 
 class PodcastsList extends StatelessWidget {
-  final List<Podcast> podcasts;
+  final List<PodcastDB> podcasts;
 
   const PodcastsList({
     super.key,
@@ -18,7 +18,7 @@ class PodcastsList extends StatelessWidget {
     return ListView.builder(
       itemCount: podcasts.length,
       itemBuilder: (context, index) {
-        Podcast currentPodcast = podcasts[index];
+        PodcastDB currentPodcast = podcasts[index];
 
         return PodcastListTile(currentPodcast: currentPodcast);
       },
@@ -32,7 +32,7 @@ class PodcastListTile extends ConsumerWidget {
     required this.currentPodcast,
   });
 
-  final Podcast currentPodcast;
+  final PodcastDB currentPodcast;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -54,9 +54,9 @@ class PodcastListTile extends ConsumerWidget {
                 errorWidget: (context, url, error) => const Icon(Icons.error),
                 fit: BoxFit.cover,
               )
-            : const Icon(Icons.podcasts),
+            : const Icon(Icons.podcasts, size: 56),
         title: Text(
-          currentPodcast.podcastName,
+          currentPodcast.podcastName!,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Text('Podcast ID: ${currentPodcast.podcastId}'),

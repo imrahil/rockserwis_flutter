@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
-import 'package:rockserwis_podcaster/api/podcast_repository.dart';
+import 'package:rockserwis_podcaster/api/podcast_db_repository.dart';
 import 'package:rockserwis_podcaster/app_routes.dart';
 import 'package:rockserwis_podcaster/components/podcasts_list.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_mode.dart';
@@ -23,7 +23,7 @@ class _PodcastsPageState extends ConsumerState<PodcastsPage> {
   @override
   Widget build(BuildContext context) {
     final themeMode = ref.watch(appThemeModeNotifierProvider);
-    final podcastsAsync = ref.watch(fetchPodcastsProvider);
+    final podcastsAsync = ref.watch(podcastListProvider);
 
     return Scaffold(
       appBar: AppBar(

@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/app_routes.dart';
-import 'package:rockserwis_podcaster/models/episode.dart';
-import 'package:rockserwis_podcaster/models/podcast.dart';
+import 'package:rockserwis_podcaster/models/db/episode_db.dart';
+import 'package:rockserwis_podcaster/models/db/podcast_db.dart';
 
 class EpisodesList extends StatelessWidget {
-  final List<Episode> episodes;
-  final Podcast? currentPodcast;
+  final List<EpisodeDB> episodes;
+  final PodcastDB? currentPodcast;
 
   const EpisodesList({
     super.key,
@@ -21,7 +21,7 @@ class EpisodesList extends StatelessWidget {
     return ListView.builder(
       itemCount: episodes.length,
       itemBuilder: (context, index) {
-        Episode currentEpisode = episodes[index];
+        EpisodeDB currentEpisode = episodes[index];
 
         /// Check if the episode has an image, if not, use the podcast image
         if ((currentEpisode.imgPath == null || currentEpisode.imgPath == "") &&
@@ -42,7 +42,7 @@ class EpisodeListTile extends ConsumerWidget {
     required this.currentEpisode,
   });
 
-  final Episode currentEpisode;
+  final EpisodeDB currentEpisode;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -63,7 +63,7 @@ class EpisodeListTile extends ConsumerWidget {
                 ),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
               )
-            : const Icon(Icons.podcasts),
+            : const Icon(Icons.podcasts, size: 56),
         title: Text(
           currentEpisode.getEpisodeTitle(),
           style: const TextStyle(fontWeight: FontWeight.bold),
@@ -72,7 +72,7 @@ class EpisodeListTile extends ConsumerWidget {
             Text('Podcast duration: ${currentEpisode.getReadableDuration()}'),
         trailing: const Icon(Icons.arrow_forward),
         onTap: () => {
-          if (currentEpisode.hasPodcast)
+          if (currentEpisode.hasPodcast!)
             {
               Navigator.of(context)
                   .pushNamed(AppRoutes.player, arguments: currentEpisode)

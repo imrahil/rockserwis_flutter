@@ -1,7 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/api/episode_repository.dart';
 import 'package:rockserwis_podcaster/api/objectbox_repository.dart';
-import 'package:rockserwis_podcaster/api/podcast_repository.dart';
+import 'package:rockserwis_podcaster/api/podcast_json_repository.dart';
+import 'package:rockserwis_podcaster/app_startup.dart';
 import 'package:rockserwis_podcaster/models/db/episode_db.dart';
 import 'package:rockserwis_podcaster/models/db/podcast_db.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
@@ -11,7 +12,7 @@ import 'package:rockserwis_podcaster/objectbox.g.dart';
 part 'podcast_sync_helper.g.dart';
 
 class PodcastSyncHelper {
-  final PodcastRepository podcastRepository;
+  final PodcastJsonRepository podcastRepository;
   final EpisodeRepository episodeRepository;
   final ObjectBox dbProvider;
 
@@ -45,6 +46,8 @@ class PodcastSyncHelper {
     }
 
     if (newPodcasts.isNotEmpty) {
+      logger.d('Adding ${newPodcasts.length} new podcasts');
+
       await dbProvider.podcastBox.putManyAsync(newPodcasts);
     }
   }
@@ -72,6 +75,9 @@ class PodcastSyncHelper {
           }
         }
         if (newEpisodes.isNotEmpty) {
+          logger.d(
+              'Adding ${newEpisodes.length} new episodes to podcast: ${podcast.podcastName}');
+
           await dbProvider.episodeBox.putManyAsync(newEpisodes);
         }
       }
