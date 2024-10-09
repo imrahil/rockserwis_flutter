@@ -6,7 +6,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:rockserwis_podcaster/api/const.dart';
 import 'package:rockserwis_podcaster/api/data/missing_podcasts.dart';
-import 'package:rockserwis_podcaster/api/podcast_json_repository.dart';
+import 'package:rockserwis_podcaster/api/podcast_repository.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

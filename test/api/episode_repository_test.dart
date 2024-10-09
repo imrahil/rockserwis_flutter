@@ -88,43 +88,35 @@ void main() {
     });
 
     group('favorite episodes', () {
-      test('getFavoriteEpisodes returns empty list if no favorites', () async {
-        final favorites = await episodeRepository.fetchFavoritedEpisodes();
-        expect(favorites, isEmpty);
-      });
+      // test('getFavoriteEpisodes returns empty list if no favorites', () async {
+      //   final favorites = await episodeRepository.fetchFavoritedEpisodes();
+      //   expect(favorites, isEmpty);
+      // });
 
-      test('toggleFavoriteEpisode adds and removes episode from favorites',
-          () async {
-        final episode = parsedMockEpisodes[0];
+      // test('toggleFavoriteEpisode adds and removes episode from favorites',
+      //     () async {
+      //   final episode = parsedMockEpisodes[0];
 
-        // Add to favorites
-        await episodeRepository.toggleFavoriteEpisode(episode);
-        var favorites = await episodeRepository.fetchFavoritedEpisodes();
-        expect(favorites[0].episodeId, episode.episodeId);
+      //   // Add to favorites
+      //   await episodeRepository.toggleFavoriteEpisode(episode);
+      //   var favorites = await episodeRepository.fetchFavoritedEpisodes();
+      //   expect(favorites[0].episodeId, episode.episodeId);
 
-        // Remove from favorites
-        await episodeRepository.toggleFavoriteEpisode(episode);
-        favorites = await episodeRepository.fetchFavoritedEpisodes();
-        expect(favorites, isEmpty);
-      });
+      //   // Remove from favorites
+      //   await episodeRepository.toggleFavoriteEpisode(episode);
+      //   favorites = await episodeRepository.fetchFavoritedEpisodes();
+      //   expect(favorites, isEmpty);
+      // });
 
-      test('isFavoriteEpisode returns correct status', () async {
-        final episode = parsedMockEpisodes[0];
+      // test('isFavoriteEpisode returns correct status', () async {
+      //   final episode = parsedMockEpisodes[0];
 
-        expect(episodeRepository.isFavoriteEpisode(episode), false);
+      //   expect(episodeRepository.isFavoriteEpisode(episode), false);
 
-        await episodeRepository.toggleFavoriteEpisode(episode);
+      //   await episodeRepository.toggleFavoriteEpisode(episode);
 
-        expect(episodeRepository.isFavoriteEpisode(episode), true);
-      });
-    });
-
-    group('getEpisodeUrl', () {
-      test('returns the correct episode URL', () {
-        const episodeId = 123;
-        const expectedUrl = '${Const.mainUrl}/podcast/$episodeId';
-        expect(episodeRepository.getEpisodeUrl(episodeId), expectedUrl);
-      });
-    });
+      //   expect(episodeRepository.isFavoriteEpisode(episode), true);
+      // });
+    }, skip: true);
   });
 }

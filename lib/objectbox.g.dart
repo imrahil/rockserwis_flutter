@@ -134,53 +134,53 @@ final _entities = <obx_int.ModelEntity>[
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(22, 3702104701358215069),
+      id: const obx_int.IdUid(23, 6275609622422043273),
       name: 'Episode',
-      lastPropertyId: const obx_int.IdUid(9, 7792613891986561765),
+      lastPropertyId: const obx_int.IdUid(9, 5919337261224320992),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 658863467905878004),
+            id: const obx_int.IdUid(1, 3702427829382900205),
             name: 'id',
             type: 6,
             flags: 1),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 7239929551941146135),
+            id: const obx_int.IdUid(2, 5119032133954733929),
             name: 'episodeId',
             type: 6,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 1832193523955873590),
+            id: const obx_int.IdUid(3, 2762916143028193134),
             name: 'podcastId',
             type: 6,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 6640321004458434955),
+            id: const obx_int.IdUid(4, 7448834828010321823),
             name: 'date',
             type: 12,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 3368492684756941769),
+            id: const obx_int.IdUid(5, 4427746636840137948),
             name: 'name',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(6, 5340609205633805495),
+            id: const obx_int.IdUid(6, 5885258237381127843),
             name: 'imgPath',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(7, 6098306736936310243),
+            id: const obx_int.IdUid(7, 4285690815082203531),
             name: 'episodeDuration',
             type: 8,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(8, 3421089361332048868),
+            id: const obx_int.IdUid(8, 7262289789702358582),
             name: 'hasPodcast',
             type: 1,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(9, 7792613891986561765),
+            id: const obx_int.IdUid(9, 5919337261224320992),
             name: 'isFavorited',
             type: 1,
             flags: 0)
@@ -224,7 +224,7 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(22, 3702104701358215069),
+      lastEntityId: const obx_int.IdUid(23, 6275609622422043273),
       lastIndexId: const obx_int.IdUid(0, 0),
       lastRelationId: const obx_int.IdUid(6, 7419335105193171846),
       lastSequenceId: const obx_int.IdUid(0, 0),
@@ -246,7 +246,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
         1847342292373639521,
         1850460572925164179,
         4960475103318907402,
-        2909480661795046150
+        2909480661795046150,
+        3702104701358215069
       ],
       retiredIndexUids: const [],
       retiredPropertyUids: const [
@@ -377,7 +378,16 @@ obx_int.ModelDefinition getObjectBoxModel() {
         6778071727569109750,
         5089020486691478610,
         1008393106709575467,
-        2459819958957260207
+        2459819958957260207,
+        658863467905878004,
+        7239929551941146135,
+        1832193523955873590,
+        6640321004458434955,
+        3368492684756941769,
+        5340609205633805495,
+        6098306736936310243,
+        3421089361332048868,
+        7792613891986561765
       ],
       retiredRelationUids: const [559890034703527719, 3085588869725977564],
       modelVersion: 5,

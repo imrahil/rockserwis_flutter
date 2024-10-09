@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/api/const.dart';
+import 'package:rockserwis_podcaster/api/objectbox_repository.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
+import 'package:rockserwis_podcaster/objectbox.g.dart';
 import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,56 +40,6 @@ class EpisodeRepository {
     }
   }
 
-  /// Gets the list of favorite episodes from SharedPreferences.
-  ///
-  /// @return A list of favorite episodes.
-  Future<List<Episode>> fetchFavoritedEpisodes() async {
-    List<String> favoriteEpisodes =
-        sharedPreferences.getStringList(Const.favoriteEpisodesKey) ?? [];
-
-    _selectedPodcastEpisodes = favoriteEpisodes.map((episodeString) {
-      final episodeJson = jsonDecode(episodeString);
-      return Episode.fromJson(episodeJson);
-    }).toList();
-
-    return _selectedPodcastEpisodes;
-  }
-
-  /// Toggles the favorite status of an episode.
-  ///
-  /// @param episode The episode to toggle the favorite status of.
-  Future<void> toggleFavoriteEpisode(Episode episode) async {
-    // Get current favorites from SharedPreferences
-    List<String> favoriteEpisodes =
-        sharedPreferences.getStringList(Const.favoriteEpisodesKey) ?? [];
-
-    final episodeString = jsonEncode(episode);
-
-    // Toggle favorite status
-    if (favoriteEpisodes.contains(episodeString)) {
-      favoriteEpisodes.remove(episodeString);
-    } else {
-      favoriteEpisodes.add(episodeString);
-    }
-
-    // Save updated favorites back to SharedPreferences
-    await sharedPreferences.setStringList(
-        Const.favoriteEpisodesKey, favoriteEpisodes);
-  }
-
-  /// Checks if an episode is a favorite.
-  ///
-  /// @param episode The episode to check.
-  /// @return True if the episode is a favorite, false otherwise.
-  bool isFavoriteEpisode(Episode episode) {
-    List<String> favoriteEpisodes =
-        sharedPreferences.getStringList(Const.favoriteEpisodesKey) ?? [];
-
-    final episodeIdString = jsonEncode(episode);
-
-    return favoriteEpisodes.contains(episodeIdString);
-  }
-
   /// Helper function to get the previous episode in the list
   Episode? getPreviousEpisode(int currentEpisodeId) {
     final currentIndex = _selectedPodcastEpisodes
@@ -112,12 +64,6 @@ class EpisodeRepository {
       return null;
     }
   }
-
-  /// Gets the URL for a specific episode.
-  ///
-  /// @param episodeId The ID of the episode.
-  /// @return The URL for the episode.
-  String getEpisodeUrl(int episodeId) => '${Const.mainUrl}/podcast/$episodeId';
 }
 
 @riverpod
@@ -134,6 +80,41 @@ Future<List<Episode>> fetchEpisodes(FetchEpisodesRef ref, int podcastId) {
 }
 
 @riverpod
-Future<List<Episode>> fetchFavoritedEpisodes(FetchFavoritedEpisodesRef ref) {
-  return ref.watch(episodeRepositoryProvider).fetchFavoritedEpisodes();
+class EpisodeList extends _$EpisodeList {
+  @override
+  Future<List<Episode>> build(int podcastId) async {
+    final objectBox = await ref.watch(objectBoxProvider.future);
+
+    return objectBox.episodeBox
+        .query(Episode_.podcastId.equals(podcastId))
+        .build()
+        .findAsync();
+  }
+}
+
+/// Fetches all favorited episodes from the database.
+@riverpod
+class FavoritedEpisodes extends _$FavoritedEpisodes {
+  @override
+  Future<List<Episode>> build() async {
+    final objectBox = await ref.watch(objectBoxProvider.future);
+
+    return objectBox.episodeBox
+        .query(Episode_.isFavorited.equals(true))
+        .build()
+        .findAsync();
+  }
+
+  /// Toggles the favorite status of an episode.
+  ///
+  /// @param episode The episode to toggle the favorite status of.
+  Future<void> toggleFavoriteEpisode(Episode episode) async {
+    final objectBox = await ref.watch(objectBoxProvider.future);
+
+    final updatedEpisode = episode.copyWith(isFavorited: !episode.isFavorited);
+    await objectBox.episodeBox.putAsync(updatedEpisode);
+
+    ref.invalidateSelf();
+    await future;
+  }
 }

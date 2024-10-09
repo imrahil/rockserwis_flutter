@@ -10,7 +10,6 @@ import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:logger/logger.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
-import 'package:rockserwis_podcaster/api/episode_db_repository.dart';
 import 'package:rockserwis_podcaster/api/episode_repository.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/utils/player_manager.dart';
@@ -67,10 +66,9 @@ class _PlayerState extends ConsumerState<Player> {
 
   void _setAudioSource() async {
     final apiProvider = ref.read(apiRepositoryProvider);
-    final episodeProvider = ref.read(episodeRepositoryProvider);
 
     AudioSource source = AudioSource.uri(
-      Uri.parse(episodeProvider.getEpisodeUrl(_currentEpisode.episodeId)),
+      Uri.parse(_currentEpisode.getEpisodeUrl),
       headers: apiProvider.getHeaders(),
       tag: MediaItem(
         // Specify a unique ID for each media item

@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import 'package:objectbox/objectbox.dart';
+import 'package:rockserwis_podcaster/api/const.dart';
 
 part 'episode.freezed.dart';
 part 'episode.g.dart';
@@ -25,12 +26,14 @@ class Episode with _$Episode {
   factory Episode.fromJson(Map<String, Object?> json) =>
       _$EpisodeFromJson(json);
 
+  /// Gets the title of the episode.
   String get getEpisodeTitle {
     String episodeTitle = "$name - ${DateFormat("yyyy-MM-dd").format(date)}";
 
     return episodeTitle;
   }
 
+  /// Gets the readable duration of the episode.
   String get getReadableDuration {
     if (episodeDuration == 0.0) {
       return "Unknown duration";
@@ -41,4 +44,7 @@ class Episode with _$Episode {
 
     return "$minutes min";
   }
+
+  /// Gets the URL for a specific episode.
+  String get getEpisodeUrl => '${Const.mainUrl}/podcast/$episodeId';
 }
