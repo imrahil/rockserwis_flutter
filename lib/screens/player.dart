@@ -78,7 +78,7 @@ class _PlayerState extends ConsumerState<Player> {
         // Metadata to display in the notification
         album: DateFormat("yyyy-MM-dd").format(_currentEpisode.date),
         title: _currentEpisode.name,
-        artUri: _currentEpisode.imgPath != null
+        artUri: _currentEpisode.imgPath != ""
             ? Uri.parse(apiProvider.getImagePath(_currentEpisode.imgPath))
             : null,
       ),
@@ -135,7 +135,7 @@ class _PlayerState extends ConsumerState<Player> {
         child: Column(
           children: [
             const Spacer(),
-            _currentEpisode.imgPath != null && _currentEpisode.imgPath != ""
+            _currentEpisode.imgPath != ""
                 ? CachedNetworkImage(
                     // Use CachedNetworkImage
                     imageUrl: apiProvider.getImagePath(_currentEpisode.imgPath),

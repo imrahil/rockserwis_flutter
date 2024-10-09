@@ -16,6 +16,6 @@ _$PodcastImpl _$$PodcastImplFromJson(Map<String, dynamic> json) =>
       onlyMusic: json['music_only'] as bool,
       isActive: json['podcasts_active'] as bool,
       hasEpisodes: json['has_podcasts'] as bool,
-      image: json['image'] as String?,
+      image: json['image'] as String? ?? "",
       isFavorited: json['isFavorited'] as bool? ?? false,
     );

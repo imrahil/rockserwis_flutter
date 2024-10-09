@@ -49,7 +49,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(14, 3142224122661868782),
       name: 'Podcast',
-      lastPropertyId: const obx_int.IdUid(8, 4727659054825687222),
+      lastPropertyId: const obx_int.IdUid(10, 7925460019805255390),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -83,14 +83,14 @@ final _entities = <obx_int.ModelEntity>[
             type: 1,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(7, 4439471109419617729),
-            name: 'image',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
             id: const obx_int.IdUid(8, 4727659054825687222),
             name: 'isFavorited',
             type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(10, 7925460019805255390),
+            name: 'image',
+            type: 9,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[
@@ -134,53 +134,53 @@ final _entities = <obx_int.ModelEntity>[
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(20, 4960475103318907402),
+      id: const obx_int.IdUid(22, 3702104701358215069),
       name: 'Episode',
-      lastPropertyId: const obx_int.IdUid(9, 3335877965820829924),
+      lastPropertyId: const obx_int.IdUid(9, 7792613891986561765),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 5042054856506858374),
+            id: const obx_int.IdUid(1, 658863467905878004),
             name: 'id',
             type: 6,
             flags: 1),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 511204630468078087),
+            id: const obx_int.IdUid(2, 7239929551941146135),
             name: 'episodeId',
             type: 6,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 1536166243963478250),
+            id: const obx_int.IdUid(3, 1832193523955873590),
             name: 'podcastId',
             type: 6,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 3934929415554545221),
+            id: const obx_int.IdUid(4, 6640321004458434955),
             name: 'date',
             type: 12,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 4073053512368220135),
+            id: const obx_int.IdUid(5, 3368492684756941769),
             name: 'name',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(6, 915326186029784664),
+            id: const obx_int.IdUid(6, 5340609205633805495),
             name: 'imgPath',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(7, 6011258683304841222),
+            id: const obx_int.IdUid(7, 6098306736936310243),
             name: 'episodeDuration',
             type: 8,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(8, 663083286074984295),
+            id: const obx_int.IdUid(8, 3421089361332048868),
             name: 'hasPodcast',
             type: 1,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(9, 3335877965820829924),
+            id: const obx_int.IdUid(9, 7792613891986561765),
             name: 'isFavorited',
             type: 1,
             flags: 0)
@@ -224,7 +224,7 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(20, 4960475103318907402),
+      lastEntityId: const obx_int.IdUid(22, 3702104701358215069),
       lastIndexId: const obx_int.IdUid(0, 0),
       lastRelationId: const obx_int.IdUid(6, 7419335105193171846),
       lastSequenceId: const obx_int.IdUid(0, 0),
@@ -244,7 +244,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
         6217248595519736827,
         598295649207872808,
         1847342292373639521,
-        1850460572925164179
+        1850460572925164179,
+        4960475103318907402,
+        2909480661795046150
       ],
       retiredIndexUids: const [],
       retiredPropertyUids: const [
@@ -353,7 +355,29 @@ obx_int.ModelDefinition getObjectBoxModel() {
         5039011711131039381,
         2832955969049071344,
         4382351010281716637,
-        8066699207810227823
+        8066699207810227823,
+        5042054856506858374,
+        511204630468078087,
+        1536166243963478250,
+        3934929415554545221,
+        4073053512368220135,
+        915326186029784664,
+        6011258683304841222,
+        663083286074984295,
+        3335877965820829924,
+        4799382126873659590,
+        5547615802441315477,
+        4439471109419617729,
+        7409928459813240008,
+        3964423143510826197,
+        1147708726181546496,
+        1385420569884712666,
+        1184958517239239559,
+        2489786520354821335,
+        6778071727569109750,
+        5089020486691478610,
+        1008393106709575467,
+        2459819958957260207
       ],
       retiredRelationUids: const [559890034703527719, 3085588869725977564],
       modelVersion: 5,
@@ -405,17 +429,16 @@ obx_int.ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (Podcast object, fb.Builder fbb) {
           final podcastNameOffset = fbb.writeString(object.podcastName);
-          final imageOffset =
-              object.image == null ? null : fbb.writeString(object.image!);
-          fbb.startTable(9);
+          final imageOffset = fbb.writeString(object.image);
+          fbb.startTable(11);
           fbb.addInt64(0, object.id);
           fbb.addInt64(1, object.podcastId);
           fbb.addOffset(2, podcastNameOffset);
           fbb.addBool(3, object.onlyMusic);
           fbb.addBool(4, object.isActive);
           fbb.addBool(5, object.hasEpisodes);
-          fbb.addOffset(6, imageOffset);
           fbb.addBool(7, object.isFavorited);
+          fbb.addOffset(9, imageOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -438,7 +461,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final hasEpisodesParam =
               const fb.BoolReader().vTableGet(buffer, rootOffset, 14, false);
           final imageParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGetNullable(buffer, rootOffset, 16);
+              .vTableGet(buffer, rootOffset, 22, '');
           final isFavoritedParam =
               const fb.BoolReader().vTableGet(buffer, rootOffset, 18, false);
           final object = Podcast(
@@ -506,8 +529,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (Episode object, fb.Builder fbb) {
           final nameOffset = fbb.writeString(object.name);
-          final imgPathOffset =
-              object.imgPath == null ? null : fbb.writeString(object.imgPath!);
+          final imgPathOffset = fbb.writeString(object.imgPath);
           fbb.startTable(10);
           fbb.addInt64(0, object.id);
           fbb.addInt64(1, object.episodeId);
@@ -537,9 +559,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final nameParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 12, '');
           final imgPathParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGetNullable(buffer, rootOffset, 14);
-          final episodeDurationParam = const fb.Float64Reader()
-              .vTableGetNullable(buffer, rootOffset, 16);
+              .vTableGet(buffer, rootOffset, 14, '');
+          final episodeDurationParam =
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 16, 0);
           final hasPodcastParam =
               const fb.BoolReader().vTableGet(buffer, rootOffset, 18, false);
           final isFavoritedParam =
@@ -603,13 +625,13 @@ class Podcast_ {
   static final hasEpisodes =
       obx.QueryBooleanProperty<Podcast>(_entities[1].properties[5]);
 
-  /// See [Podcast.image].
-  static final image =
-      obx.QueryStringProperty<Podcast>(_entities[1].properties[6]);
-
   /// See [Podcast.isFavorited].
   static final isFavorited =
-      obx.QueryBooleanProperty<Podcast>(_entities[1].properties[7]);
+      obx.QueryBooleanProperty<Podcast>(_entities[1].properties[6]);
+
+  /// See [Podcast.image].
+  static final image =
+      obx.QueryStringProperty<Podcast>(_entities[1].properties[7]);
 
   /// see [Podcast.authors]
   static final authors =

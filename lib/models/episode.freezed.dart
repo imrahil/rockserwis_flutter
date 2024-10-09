@@ -37,13 +37,13 @@ mixin _$Episode {
   String get name => throw _privateConstructorUsedError;
   set name(String value) => throw _privateConstructorUsedError;
   @JsonKey(name: 'img_path')
-  String? get imgPath => throw _privateConstructorUsedError;
+  String get imgPath => throw _privateConstructorUsedError;
   @JsonKey(name: 'img_path')
-  set imgPath(String? value) => throw _privateConstructorUsedError;
+  set imgPath(String value) => throw _privateConstructorUsedError;
   @JsonKey(name: 'podcast_duration')
-  double? get episodeDuration => throw _privateConstructorUsedError;
+  double get episodeDuration => throw _privateConstructorUsedError;
   @JsonKey(name: 'podcast_duration')
-  set episodeDuration(double? value) => throw _privateConstructorUsedError;
+  set episodeDuration(double value) => throw _privateConstructorUsedError;
   @JsonKey(name: 'has_podcast')
   bool get hasPodcast => throw _privateConstructorUsedError;
   @JsonKey(name: 'has_podcast')
@@ -71,8 +71,8 @@ abstract class $EpisodeCopyWith<$Res> {
       int? podcastId,
       @Property(type: PropertyType.dateNano) DateTime date,
       String name,
-      @JsonKey(name: 'img_path') String? imgPath,
-      @JsonKey(name: 'podcast_duration') double? episodeDuration,
+      @JsonKey(name: 'img_path') String imgPath,
+      @JsonKey(name: 'podcast_duration') double episodeDuration,
       @JsonKey(name: 'has_podcast') bool hasPodcast,
       bool isFavorited});
 }
@@ -97,8 +97,8 @@ class _$EpisodeCopyWithImpl<$Res, $Val extends Episode>
     Object? podcastId = freezed,
     Object? date = null,
     Object? name = null,
-    Object? imgPath = freezed,
-    Object? episodeDuration = freezed,
+    Object? imgPath = null,
+    Object? episodeDuration = null,
     Object? hasPodcast = null,
     Object? isFavorited = null,
   }) {
@@ -123,14 +123,14 @@ class _$EpisodeCopyWithImpl<$Res, $Val extends Episode>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      imgPath: freezed == imgPath
+      imgPath: null == imgPath
           ? _value.imgPath
           : imgPath // ignore: cast_nullable_to_non_nullable
-              as String?,
-      episodeDuration: freezed == episodeDuration
+              as String,
+      episodeDuration: null == episodeDuration
           ? _value.episodeDuration
           : episodeDuration // ignore: cast_nullable_to_non_nullable
-              as double?,
+              as double,
       hasPodcast: null == hasPodcast
           ? _value.hasPodcast
           : hasPodcast // ignore: cast_nullable_to_non_nullable
@@ -156,8 +156,8 @@ abstract class _$$EpisodeImplCopyWith<$Res> implements $EpisodeCopyWith<$Res> {
       int? podcastId,
       @Property(type: PropertyType.dateNano) DateTime date,
       String name,
-      @JsonKey(name: 'img_path') String? imgPath,
-      @JsonKey(name: 'podcast_duration') double? episodeDuration,
+      @JsonKey(name: 'img_path') String imgPath,
+      @JsonKey(name: 'podcast_duration') double episodeDuration,
       @JsonKey(name: 'has_podcast') bool hasPodcast,
       bool isFavorited});
 }
@@ -180,8 +180,8 @@ class __$$EpisodeImplCopyWithImpl<$Res>
     Object? podcastId = freezed,
     Object? date = null,
     Object? name = null,
-    Object? imgPath = freezed,
-    Object? episodeDuration = freezed,
+    Object? imgPath = null,
+    Object? episodeDuration = null,
     Object? hasPodcast = null,
     Object? isFavorited = null,
   }) {
@@ -206,14 +206,14 @@ class __$$EpisodeImplCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      imgPath: freezed == imgPath
+      imgPath: null == imgPath
           ? _value.imgPath
           : imgPath // ignore: cast_nullable_to_non_nullable
-              as String?,
-      episodeDuration: freezed == episodeDuration
+              as String,
+      episodeDuration: null == episodeDuration
           ? _value.episodeDuration
           : episodeDuration // ignore: cast_nullable_to_non_nullable
-              as double?,
+              as double,
       hasPodcast: null == hasPodcast
           ? _value.hasPodcast
           : hasPodcast // ignore: cast_nullable_to_non_nullable
@@ -236,8 +236,8 @@ class _$EpisodeImpl extends _Episode {
       this.podcastId,
       @Property(type: PropertyType.dateNano) required this.date,
       required this.name,
-      @JsonKey(name: 'img_path') required this.imgPath,
-      @JsonKey(name: 'podcast_duration') required this.episodeDuration,
+      @JsonKey(name: 'img_path') this.imgPath = "",
+      @JsonKey(name: 'podcast_duration') this.episodeDuration = 0.0,
       @JsonKey(name: 'has_podcast') required this.hasPodcast,
       this.isFavorited = false})
       : super._();
@@ -261,10 +261,10 @@ class _$EpisodeImpl extends _Episode {
   String name;
   @override
   @JsonKey(name: 'img_path')
-  String? imgPath;
+  String imgPath;
   @override
   @JsonKey(name: 'podcast_duration')
-  double? episodeDuration;
+  double episodeDuration;
   @override
   @JsonKey(name: 'has_podcast')
   bool hasPodcast;
@@ -326,8 +326,8 @@ abstract class _Episode extends Episode {
       int? podcastId,
       @Property(type: PropertyType.dateNano) required DateTime date,
       required String name,
-      @JsonKey(name: 'img_path') required String? imgPath,
-      @JsonKey(name: 'podcast_duration') required double? episodeDuration,
+      @JsonKey(name: 'img_path') String imgPath,
+      @JsonKey(name: 'podcast_duration') double episodeDuration,
       @JsonKey(name: 'has_podcast') required bool hasPodcast,
       bool isFavorited}) = _$EpisodeImpl;
   _Episode._() : super._();
@@ -357,14 +357,14 @@ abstract class _Episode extends Episode {
   set name(String value);
   @override
   @JsonKey(name: 'img_path')
-  String? get imgPath;
+  String get imgPath;
   @JsonKey(name: 'img_path')
-  set imgPath(String? value);
+  set imgPath(String value);
   @override
   @JsonKey(name: 'podcast_duration')
-  double? get episodeDuration;
+  double get episodeDuration;
   @JsonKey(name: 'podcast_duration')
-  set episodeDuration(double? value);
+  set episodeDuration(double value);
   @override
   @JsonKey(name: 'has_podcast')
   bool get hasPodcast;

@@ -16,8 +16,8 @@ class Episode with _$Episode {
     int? podcastId,
     @Property(type: PropertyType.dateNano) required DateTime date,
     required String name,
-    @JsonKey(name: 'img_path') required String? imgPath,
-    @JsonKey(name: 'podcast_duration') required double? episodeDuration,
+    @JsonKey(name: 'img_path') @Default("") String imgPath,
+    @JsonKey(name: 'podcast_duration') @Default(0.0) double episodeDuration,
     @JsonKey(name: 'has_podcast') required bool hasPodcast,
     @Default(false) bool isFavorited,
   }) = _Episode;
@@ -32,7 +32,7 @@ class Episode with _$Episode {
   }
 
   String get getReadableDuration {
-    if (episodeDuration == null) {
+    if (episodeDuration == 0.0) {
       return "Unknown duration";
     }
 

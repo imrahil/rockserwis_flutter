@@ -25,11 +25,9 @@ class EpisodesList extends StatelessWidget {
 
         // Check if the episode has an image, if not, use the podcast image
         // side-effect: the image property will be saved to the database
-        if ((currentEpisode.imgPath == null || currentEpisode.imgPath == "") &&
-            currentPodcast != null &&
-            ![null, ""].contains(currentPodcast?.image)) {
+        if (currentEpisode.imgPath == "" && currentPodcast?.image != "") {
           currentEpisode =
-              currentEpisode.copyWith(imgPath: currentPodcast?.image);
+              currentEpisode.copyWith(imgPath: currentPodcast!.image);
         }
 
         return EpisodeListTile(currentEpisode: currentEpisode);
@@ -54,7 +52,7 @@ class EpisodeListTile extends ConsumerWidget {
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: ListTile(
         contentPadding: const EdgeInsets.all(16),
-        leading: currentEpisode.imgPath != null && currentEpisode.imgPath != ""
+        leading: currentEpisode.imgPath != ""
             ? CachedNetworkImage(
                 // Use CachedNetworkImage
                 imageUrl: apiProvider.getImagePath(currentEpisode.imgPath),

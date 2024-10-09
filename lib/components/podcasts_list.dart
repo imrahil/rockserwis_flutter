@@ -42,7 +42,7 @@ class PodcastListTile extends ConsumerWidget {
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: ListTile(
         contentPadding: const EdgeInsets.all(16),
-        leading: currentPodcast.image != null && currentPodcast.image != ""
+        leading: currentPodcast.image != ""
             ? CachedNetworkImage(
                 // Use CachedNetworkImage
                 imageUrl: apiProvider.getImagePath(currentPodcast.image),

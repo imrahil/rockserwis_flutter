@@ -21,7 +21,7 @@ class Podcast with _$Podcast {
     @JsonKey(name: 'music_only') required bool onlyMusic,
     @JsonKey(name: 'podcasts_active') required bool isActive,
     @JsonKey(name: 'has_podcasts') required bool hasEpisodes,
-    required String? image,
+    @Default("") String image,
     @Default(false) bool isFavorited,
   }) = _Podcast;
 

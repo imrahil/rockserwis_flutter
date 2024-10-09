@@ -52,8 +52,8 @@ mixin _$Podcast {
   bool get hasEpisodes => throw _privateConstructorUsedError;
   @JsonKey(name: 'has_podcasts')
   set hasEpisodes(bool value) => throw _privateConstructorUsedError;
-  String? get image => throw _privateConstructorUsedError;
-  set image(String? value) => throw _privateConstructorUsedError;
+  String get image => throw _privateConstructorUsedError;
+  set image(String value) => throw _privateConstructorUsedError;
   bool get isFavorited => throw _privateConstructorUsedError;
   set isFavorited(bool value) => throw _privateConstructorUsedError;
 
@@ -79,7 +79,7 @@ abstract class $PodcastCopyWith<$Res> {
       @JsonKey(name: 'music_only') bool onlyMusic,
       @JsonKey(name: 'podcasts_active') bool isActive,
       @JsonKey(name: 'has_podcasts') bool hasEpisodes,
-      String? image,
+      String image,
       bool isFavorited});
 }
 
@@ -106,7 +106,7 @@ class _$PodcastCopyWithImpl<$Res, $Val extends Podcast>
     Object? onlyMusic = null,
     Object? isActive = null,
     Object? hasEpisodes = null,
-    Object? image = freezed,
+    Object? image = null,
     Object? isFavorited = null,
   }) {
     return _then(_value.copyWith(
@@ -142,10 +142,10 @@ class _$PodcastCopyWithImpl<$Res, $Val extends Podcast>
           ? _value.hasEpisodes
           : hasEpisodes // ignore: cast_nullable_to_non_nullable
               as bool,
-      image: freezed == image
+      image: null == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       isFavorited: null == isFavorited
           ? _value.isFavorited
           : isFavorited // ignore: cast_nullable_to_non_nullable
@@ -172,7 +172,7 @@ abstract class _$$PodcastImplCopyWith<$Res> implements $PodcastCopyWith<$Res> {
       @JsonKey(name: 'music_only') bool onlyMusic,
       @JsonKey(name: 'podcasts_active') bool isActive,
       @JsonKey(name: 'has_podcasts') bool hasEpisodes,
-      String? image,
+      String image,
       bool isFavorited});
 }
 
@@ -197,7 +197,7 @@ class __$$PodcastImplCopyWithImpl<$Res>
     Object? onlyMusic = null,
     Object? isActive = null,
     Object? hasEpisodes = null,
-    Object? image = freezed,
+    Object? image = null,
     Object? isFavorited = null,
   }) {
     return _then(_$PodcastImpl(
@@ -233,10 +233,10 @@ class __$$PodcastImplCopyWithImpl<$Res>
           ? _value.hasEpisodes
           : hasEpisodes // ignore: cast_nullable_to_non_nullable
               as bool,
-      image: freezed == image
+      image: null == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       isFavorited: null == isFavorited
           ? _value.isFavorited
           : isFavorited // ignore: cast_nullable_to_non_nullable
@@ -261,7 +261,7 @@ class _$PodcastImpl implements _Podcast {
       @JsonKey(name: 'music_only') required this.onlyMusic,
       @JsonKey(name: 'podcasts_active') required this.isActive,
       @JsonKey(name: 'has_podcasts') required this.hasEpisodes,
-      required this.image,
+      this.image = "",
       this.isFavorited = false});
 
   factory _$PodcastImpl.fromJson(Map<String, dynamic> json) =>
@@ -293,7 +293,8 @@ class _$PodcastImpl implements _Podcast {
   @JsonKey(name: 'has_podcasts')
   bool hasEpisodes;
   @override
-  String? image;
+  @JsonKey()
+  String image;
   @override
   @JsonKey()
   bool isFavorited;
@@ -362,7 +363,7 @@ abstract class _Podcast implements Podcast {
       @JsonKey(name: 'music_only') required bool onlyMusic,
       @JsonKey(name: 'podcasts_active') required bool isActive,
       @JsonKey(name: 'has_podcasts') required bool hasEpisodes,
-      required String? image,
+      String image,
       bool isFavorited}) = _$PodcastImpl;
 
   factory _Podcast.fromJson(Map<String, dynamic> json) = _$PodcastImpl.fromJson;
@@ -408,8 +409,8 @@ abstract class _Podcast implements Podcast {
   @JsonKey(name: 'has_podcasts')
   set hasEpisodes(bool value);
   @override
-  String? get image;
-  set image(String? value);
+  String get image;
+  set image(String value);
   @override
   bool get isFavorited;
   set isFavorited(bool value);

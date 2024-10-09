@@ -13,8 +13,8 @@ _$EpisodeImpl _$$EpisodeImplFromJson(Map<String, dynamic> json) =>
       podcastId: (json['podcastId'] as num?)?.toInt(),
       date: DateTime.parse(json['date'] as String),
       name: json['name'] as String,
-      imgPath: json['img_path'] as String?,
-      episodeDuration: (json['podcast_duration'] as num?)?.toDouble(),
+      imgPath: json['img_path'] as String? ?? "",
+      episodeDuration: (json['podcast_duration'] as num?)?.toDouble() ?? 0.0,
       hasPodcast: json['has_podcast'] as bool,
       isFavorited: json['isFavorited'] as bool? ?? false,
     );
