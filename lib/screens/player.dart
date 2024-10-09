@@ -10,13 +10,12 @@ import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:logger/logger.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
-import 'package:rockserwis_podcaster/api/episode_db_repository.dart';
 import 'package:rockserwis_podcaster/api/episode_repository.dart';
-import 'package:rockserwis_podcaster/models/db/episode_db.dart';
+import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/utils/player_manager.dart';
 
 class Player extends ConsumerStatefulWidget {
-  final EpisodeDB currentEpisode;
+  final Episode currentEpisode;
 
   const Player({super.key, required this.currentEpisode});
 
@@ -26,7 +25,7 @@ class Player extends ConsumerStatefulWidget {
 
 class _PlayerState extends ConsumerState<Player> {
   late final PlayerManager _playerManager;
-  late EpisodeDB _currentEpisode;
+  late Episode _currentEpisode;
   late bool _isFavorited;
 
   final Connectivity _connectivity = Connectivity();
@@ -40,7 +39,7 @@ class _PlayerState extends ConsumerState<Player> {
     super.initState();
     _playerManager = PlayerManager();
     _currentEpisode = widget.currentEpisode;
-    _isFavorited = widget.currentEpisode.isFavorited ?? false;
+    _isFavorited = widget.currentEpisode.isFavorited;
 
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen((result) {
@@ -67,18 +66,17 @@ class _PlayerState extends ConsumerState<Player> {
 
   void _setAudioSource() async {
     final apiProvider = ref.read(apiRepositoryProvider);
-    final episodeProvider = ref.read(episodeRepositoryProvider);
 
     AudioSource source = AudioSource.uri(
-      Uri.parse(episodeProvider.getEpisodeUrl(_currentEpisode.episodeId!)),
+      Uri.parse(_currentEpisode.getEpisodeUrl),
       headers: apiProvider.getHeaders(),
       tag: MediaItem(
         // Specify a unique ID for each media item
         id: _currentEpisode.episodeId.toString(),
         // Metadata to display in the notification
-        album: DateFormat("yyyy-MM-dd").format(_currentEpisode.date!),
-        title: _currentEpisode.name!,
-        artUri: _currentEpisode.imgPath != null
+        album: DateFormat("yyyy-MM-dd").format(_currentEpisode.date),
+        title: _currentEpisode.name,
+        artUri: _currentEpisode.imgPath != ""
             ? Uri.parse(apiProvider.getImagePath(_currentEpisode.imgPath))
             : null,
       ),
@@ -92,7 +90,7 @@ class _PlayerState extends ConsumerState<Player> {
     await _playerManager.stop();
 
     // FIXME
-    // EpisodeDB? previousEpisode = ref
+    // Episode? previousEpisode = ref
     //     .read(episodeRepositoryProvider)
     //     .getPreviousEpisode(_currentEpisode.episodeId!);
 
@@ -109,7 +107,7 @@ class _PlayerState extends ConsumerState<Player> {
     await _playerManager.stop();
 
     // FIXME
-    // EpisodeDB? nextEpisode = ref
+    // Episode? nextEpisode = ref
     //     .read(episodeRepositoryProvider)
     //     .getNextEpisode(_currentEpisode.episodeId);
 
@@ -128,14 +126,14 @@ class _PlayerState extends ConsumerState<Player> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_currentEpisode.getEpisodeTitle()),
+        title: Text(_currentEpisode.getEpisodeTitle),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
         child: Column(
           children: [
             const Spacer(),
-            _currentEpisode.imgPath != null && _currentEpisode.imgPath != ""
+            _currentEpisode.imgPath != ""
                 ? CachedNetworkImage(
                     // Use CachedNetworkImage
                     imageUrl: apiProvider.getImagePath(_currentEpisode.imgPath),

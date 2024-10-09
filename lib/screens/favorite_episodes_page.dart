@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rockserwis_podcaster/api/episode_db_repository.dart';
+import 'package:rockserwis_podcaster/api/episode_repository.dart';
 import 'package:rockserwis_podcaster/components/episodes_list.dart';
 
 class FavoritesEpisodesPage extends ConsumerWidget {

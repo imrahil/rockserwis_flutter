@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/app_routes.dart';
-import 'package:rockserwis_podcaster/models/db/podcast_db.dart';
+import 'package:rockserwis_podcaster/models/podcast.dart';
 
 class PodcastsList extends StatelessWidget {
-  final List<PodcastDB> podcasts;
+  final List<Podcast> podcasts;
 
   const PodcastsList({
     super.key,
@@ -18,7 +18,7 @@ class PodcastsList extends StatelessWidget {
     return ListView.builder(
       itemCount: podcasts.length,
       itemBuilder: (context, index) {
-        PodcastDB currentPodcast = podcasts[index];
+        Podcast currentPodcast = podcasts[index];
 
         return PodcastListTile(currentPodcast: currentPodcast);
       },
@@ -32,7 +32,7 @@ class PodcastListTile extends ConsumerWidget {
     required this.currentPodcast,
   });
 
-  final PodcastDB currentPodcast;
+  final Podcast currentPodcast;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -42,7 +42,7 @@ class PodcastListTile extends ConsumerWidget {
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: ListTile(
         contentPadding: const EdgeInsets.all(16),
-        leading: currentPodcast.image != null && currentPodcast.image != ""
+        leading: currentPodcast.image != ""
             ? CachedNetworkImage(
                 // Use CachedNetworkImage
                 imageUrl: apiProvider.getImagePath(currentPodcast.image),
@@ -56,7 +56,7 @@ class PodcastListTile extends ConsumerWidget {
               )
             : const Icon(Icons.podcasts, size: 56),
         title: Text(
-          currentPodcast.podcastName!,
+          currentPodcast.podcastName,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Text('Podcast ID: ${currentPodcast.podcastId}'),
