@@ -1,17 +1,17 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:objectbox/objectbox.dart';
 
+part 'author.freezed.dart';
 part 'author.g.dart';
 
-@JsonSerializable()
-class Author {
-  final String name;
+@Freezed(addImplicitFinal: false)
+class Author with _$Author {
+  @Entity(realClass: Author)
+  factory Author({
+    @Id() @Default(0) int id,
+    required String name,
+    @JsonKey(name: 'is_guest') required bool isGuest,
+  }) = _Author;
 
-  @JsonKey(name: 'is_guest')
-  final bool isGuest;
-
-  Author({required this.name, required this.isGuest});
-
-  factory Author.fromJson(Map<String, dynamic> json) => _$AuthorFromJson(json);
-
-  Map<String, dynamic> toJson() => _$AuthorToJson(this);
+  factory Author.fromJson(Map<String, Object?> json) => _$AuthorFromJson(json);
 }

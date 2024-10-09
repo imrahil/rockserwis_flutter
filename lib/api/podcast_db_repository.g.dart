@@ -6,11 +6,11 @@ part of 'podcast_db_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$podcastListHash() => r'68b542b248be5d3661934111f6e0f95be9a136a0';
+String _$podcastListHash() => r'2c634708a01a45b0c087b0e824c562e977ce32ce';
 
 /// See also [podcastList].
 @ProviderFor(podcastList)
-final podcastListProvider = AutoDisposeFutureProvider<List<PodcastDB>>.internal(
+final podcastListProvider = AutoDisposeFutureProvider<List<Podcast>>.internal(
   podcastList,
   name: r'podcastListProvider',
   debugGetCreateSourceHash:
@@ -19,15 +19,15 @@ final podcastListProvider = AutoDisposeFutureProvider<List<PodcastDB>>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef PodcastListRef = AutoDisposeFutureProviderRef<List<PodcastDB>>;
-String _$favoritedPodcastsHash() => r'a020a9fb33022ce863f1e64e33a3ee892d9ce8f9';
+typedef PodcastListRef = AutoDisposeFutureProviderRef<List<Podcast>>;
+String _$favoritedPodcastsHash() => r'dfc2e0ba57329d07402fbd0aeb6bb3966c758c71';
 
 /// Fetches all favorited podcasts from the database.
 ///
 /// Copied from [FavoritedPodcasts].
 @ProviderFor(FavoritedPodcasts)
-final favoritedPodcastsProvider = AutoDisposeAsyncNotifierProvider<
-    FavoritedPodcasts, List<PodcastDB>>.internal(
+final favoritedPodcastsProvider =
+    AutoDisposeAsyncNotifierProvider<FavoritedPodcasts, List<Podcast>>.internal(
   FavoritedPodcasts.new,
   name: r'favoritedPodcastsProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -37,6 +37,6 @@ final favoritedPodcastsProvider = AutoDisposeAsyncNotifierProvider<
   allTransitiveDependencies: null,
 );
 
-typedef _$FavoritedPodcasts = AutoDisposeAsyncNotifier<List<PodcastDB>>;
+typedef _$FavoritedPodcasts = AutoDisposeAsyncNotifier<List<Podcast>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

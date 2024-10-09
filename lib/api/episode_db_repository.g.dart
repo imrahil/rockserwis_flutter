@@ -6,7 +6,7 @@ part of 'episode_db_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$episodeListHash() => r'de1c822fcec745e41ba6defe86cba11f044c9329';
+String _$episodeListHash() => r'8a1dcf17c7159513f30ed1893dcf802ff824e9e1';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,10 +30,10 @@ class _SystemHash {
 }
 
 abstract class _$EpisodeList
-    extends BuildlessAutoDisposeAsyncNotifier<List<EpisodeDB>> {
+    extends BuildlessAutoDisposeAsyncNotifier<List<Episode>> {
   late final int podcastId;
 
-  FutureOr<List<EpisodeDB>> build(
+  FutureOr<List<Episode>> build(
     int podcastId,
   );
 }
@@ -43,7 +43,7 @@ abstract class _$EpisodeList
 const episodeListProvider = EpisodeListFamily();
 
 /// See also [EpisodeList].
-class EpisodeListFamily extends Family<AsyncValue<List<EpisodeDB>>> {
+class EpisodeListFamily extends Family<AsyncValue<List<Episode>>> {
   /// See also [EpisodeList].
   const EpisodeListFamily();
 
@@ -82,7 +82,7 @@ class EpisodeListFamily extends Family<AsyncValue<List<EpisodeDB>>> {
 
 /// See also [EpisodeList].
 class EpisodeListProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<EpisodeList, List<EpisodeDB>> {
+    extends AutoDisposeAsyncNotifierProviderImpl<EpisodeList, List<Episode>> {
   /// See also [EpisodeList].
   EpisodeListProvider(
     int podcastId,
@@ -113,7 +113,7 @@ class EpisodeListProvider
   final int podcastId;
 
   @override
-  FutureOr<List<EpisodeDB>> runNotifierBuild(
+  FutureOr<List<Episode>> runNotifierBuild(
     covariant EpisodeList notifier,
   ) {
     return notifier.build(
@@ -138,7 +138,7 @@ class EpisodeListProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<EpisodeList, List<EpisodeDB>>
+  AutoDisposeAsyncNotifierProviderElement<EpisodeList, List<Episode>>
       createElement() {
     return _EpisodeListProviderElement(this);
   }
@@ -157,28 +157,28 @@ class EpisodeListProvider
   }
 }
 
-mixin EpisodeListRef on AutoDisposeAsyncNotifierProviderRef<List<EpisodeDB>> {
+mixin EpisodeListRef on AutoDisposeAsyncNotifierProviderRef<List<Episode>> {
   /// The parameter `podcastId` of this provider.
   int get podcastId;
 }
 
 class _EpisodeListProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<EpisodeList,
-        List<EpisodeDB>> with EpisodeListRef {
+    extends AutoDisposeAsyncNotifierProviderElement<EpisodeList, List<Episode>>
+    with EpisodeListRef {
   _EpisodeListProviderElement(super.provider);
 
   @override
   int get podcastId => (origin as EpisodeListProvider).podcastId;
 }
 
-String _$favoritedEpisodesHash() => r'26beca47f7ba2b06855e6bc263d73aca42b18f39';
+String _$favoritedEpisodesHash() => r'b019766cff16cb86d2fa5a612824e5cee7b617b3';
 
 /// Fetches all favorited episodes from the database.
 ///
 /// Copied from [FavoritedEpisodes].
 @ProviderFor(FavoritedEpisodes)
-final favoritedEpisodesProvider = AutoDisposeAsyncNotifierProvider<
-    FavoritedEpisodes, List<EpisodeDB>>.internal(
+final favoritedEpisodesProvider =
+    AutoDisposeAsyncNotifierProvider<FavoritedEpisodes, List<Episode>>.internal(
   FavoritedEpisodes.new,
   name: r'favoritedEpisodesProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -188,6 +188,6 @@ final favoritedEpisodesProvider = AutoDisposeAsyncNotifierProvider<
   allTransitiveDependencies: null,
 );
 
-typedef _$FavoritedEpisodes = AutoDisposeAsyncNotifier<List<EpisodeDB>>;
+typedef _$FavoritedEpisodes = AutoDisposeAsyncNotifier<List<Episode>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

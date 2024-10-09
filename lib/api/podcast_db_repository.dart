@@ -1,12 +1,12 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/api/objectbox_repository.dart';
-import 'package:rockserwis_podcaster/models/db/podcast_db.dart';
+import 'package:rockserwis_podcaster/models/podcast.dart';
 import 'package:rockserwis_podcaster/objectbox.g.dart';
 
 part 'podcast_db_repository.g.dart';
 
 @riverpod
-Future<List<PodcastDB>> podcastList(PodcastListRef ref) async {
+Future<List<Podcast>> podcastList(PodcastListRef ref) async {
   final objectBox = await ref.watch(objectBoxProvider.future);
 
   return objectBox.podcastBox.getAllAsync();
@@ -16,11 +16,11 @@ Future<List<PodcastDB>> podcastList(PodcastListRef ref) async {
 @riverpod
 class FavoritedPodcasts extends _$FavoritedPodcasts {
   @override
-  Future<List<PodcastDB>> build() async {
+  Future<List<Podcast>> build() async {
     final objectBox = await ref.watch(objectBoxProvider.future);
 
     return objectBox.podcastBox
-        .query(PodcastDB_.isFavorited.equals(true))
+        .query(Podcast_.isFavorited.equals(true))
         .build()
         .findAsync();
   }
@@ -28,16 +28,10 @@ class FavoritedPodcasts extends _$FavoritedPodcasts {
   /// Toggles the favorite status of an podcast.
   ///
   /// @param podcast The episode to toggle the favorite status of.
-  Future<void> toggleFavoritePodcast(PodcastDB podcast) async {
+  Future<void> toggleFavoritePodcast(Podcast podcast) async {
     final objectBox = await ref.watch(objectBoxProvider.future);
 
-    bool isFavorited = true;
-
-    if (podcast.isFavorited != null) {
-      isFavorited = !podcast.isFavorited!;
-    }
-
-    final updatedPodcast = podcast.copyWith(isFavorited: isFavorited);
+    final updatedPodcast = podcast.copyWith(isFavorited: !podcast.isFavorited);
     await objectBox.podcastBox.putAsync(updatedPodcast);
 
     ref.invalidateSelf();

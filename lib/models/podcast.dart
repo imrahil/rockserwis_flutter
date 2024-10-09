@@ -1,47 +1,43 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:objectbox/objectbox.dart';
 import 'package:rockserwis_podcaster/models/author.dart';
 import 'package:rockserwis_podcaster/models/schedule.dart';
 
+part 'podcast.freezed.dart';
 part 'podcast.g.dart';
 
-@JsonSerializable()
-class Podcast {
-  @JsonKey(name: 'broadcast_id')
-  final int podcastId;
+@Freezed(toJson: false, addImplicitFinal: false)
+class Podcast with _$Podcast {
+  @Entity(realClass: Podcast)
+  @JsonSerializable(createToJson: false)
+  factory Podcast({
+    @Id() @Default(0) int id,
+    @JsonKey(name: 'broadcast_id') required int podcastId,
+    @JsonKey(name: 'broadcast_name') required String podcastName,
+    @JsonKey(name: 'broadcast_broadcasters', fromJson: _authorsFromJson)
+    required ToMany<Author> authors,
+    @JsonKey(name: 'broadcast_times', fromJson: _schedulesFromJson)
+    required ToMany<Schedule> schedules,
+    @JsonKey(name: 'music_only') required bool onlyMusic,
+    @JsonKey(name: 'podcasts_active') required bool isActive,
+    @JsonKey(name: 'has_podcasts') required bool hasEpisodes,
+    required String? image,
+    @Default(false) bool isFavorited,
+  }) = _Podcast;
 
-  @JsonKey(name: 'broadcast_name')
-  final String podcastName;
-
-  @JsonKey(name: 'broadcast_broadcasters')
-  final List<Author> authors;
-
-  @JsonKey(name: 'broadcast_times')
-  final List<Schedule> schedules;
-
-  @JsonKey(name: 'music_only')
-  final bool onlyMusic;
-
-  @JsonKey(name: 'podcasts_active')
-  final bool isActive;
-
-  @JsonKey(name: 'has_podcasts')
-  final bool hasEpisodes;
-
-  final String? image;
-
-  Podcast({
-    required this.podcastId,
-    required this.podcastName,
-    required this.authors,
-    required this.schedules,
-    required this.onlyMusic,
-    required this.isActive,
-    required this.hasEpisodes,
-    this.image,
-  });
-
-  factory Podcast.fromJson(Map<String, dynamic> json) =>
+  factory Podcast.fromJson(Map<String, Object?> json) =>
       _$PodcastFromJson(json);
+}
 
-  Map<String, dynamic> toJson() => _$PodcastToJson(this);
+List<T> readJsonList<T>(List<dynamic> jsonList,
+    {required T Function(Map<String, dynamic>) mapper}) {
+  return [for (final json in jsonList) mapper(json)];
+}
+
+ToMany<Author> _authorsFromJson(List<dynamic> jsonList) {
+  return ToMany(items: readJsonList(jsonList, mapper: Author.fromJson));
+}
+
+ToMany<Schedule> _schedulesFromJson(List<dynamic> jsonList) {
+  return ToMany(items: readJsonList(jsonList, mapper: Schedule.fromJson));
 }

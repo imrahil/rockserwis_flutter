@@ -3,8 +3,6 @@ import 'package:rockserwis_podcaster/api/episode_repository.dart';
 import 'package:rockserwis_podcaster/api/objectbox_repository.dart';
 import 'package:rockserwis_podcaster/api/podcast_json_repository.dart';
 import 'package:rockserwis_podcaster/app_startup.dart';
-import 'package:rockserwis_podcaster/models/db/episode_db.dart';
-import 'package:rockserwis_podcaster/models/db/podcast_db.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 import 'package:rockserwis_podcaster/objectbox.g.dart';
@@ -31,17 +29,16 @@ class PodcastSyncHelper {
   // Method to compare and add new podcasts to the local database
   Future<void> syncPodcasts() async {
     List<Podcast> remotePodcasts = await podcastRepository.fetchPodcasts();
-    List<PodcastDB> localPodcasts = await fetchAllPodcastsFromDB();
+    List<Podcast> localPodcasts = await fetchAllPodcastsFromDB();
 
     /// Get the set of podcastIds from the local database
     Set<int?> localPodcastIds = localPodcasts.map((p) => p.podcastId).toSet();
-    List<PodcastDB> newPodcasts = [];
+    List<Podcast> newPodcasts = [];
 
     /// Add new podcasts to the local database
     for (Podcast remotePodcast in remotePodcasts) {
       if (!localPodcastIds.contains(remotePodcast.podcastId)) {
-        PodcastDB newPodcastDB = PodcastDB.fromPodcast(remotePodcast);
-        newPodcasts.add(newPodcastDB);
+        newPodcasts.add(remotePodcast);
       }
     }
 
@@ -54,45 +51,42 @@ class PodcastSyncHelper {
 
   // Method to compare and add new episodes to the local database
   Future<void> syncEpisodes() async {
-    List<PodcastDB> localPodcasts = await fetchAllPodcastsFromDB();
+    List<Podcast> localPodcasts = await fetchAllPodcastsFromDB();
 
-    for (PodcastDB podcast in localPodcasts) {
-      if (podcast.podcastId != null) {
-        List<Episode> remoteEpisodes =
-            await episodeRepository.fetchEpisodes(podcast.podcastId!);
-        List<EpisodeDB> localEpisodes =
-            await fetchEpisodesFromDB(podcast.podcastId!);
+    for (Podcast podcast in localPodcasts) {
+      List<Episode> remoteEpisodes =
+          await episodeRepository.fetchEpisodes(podcast.podcastId);
+      List<Episode> localEpisodes =
+          await fetchEpisodesFromDB(podcast.podcastId);
 
-        Set<int?> localEpisodeIds =
-            localEpisodes.map((e) => e.episodeId).toSet();
-        List<EpisodeDB> newEpisodes = [];
+      Set<int?> localEpisodeIds = localEpisodes.map((e) => e.episodeId).toSet();
+      List<Episode> newEpisodes = [];
 
-        for (Episode remoteEpisode in remoteEpisodes) {
-          if (!localEpisodeIds.contains(remoteEpisode.episodeId)) {
-            EpisodeDB newEpisodeDB =
-                EpisodeDB.fromEpisode(remoteEpisode, podcast.podcastId!);
-            newEpisodes.add(newEpisodeDB);
-          }
+      for (Episode remoteEpisode in remoteEpisodes) {
+        if (!localEpisodeIds.contains(remoteEpisode.episodeId)) {
+          Episode newEpisode =
+              remoteEpisode.copyWith(podcastId: podcast.podcastId);
+          newEpisodes.add(newEpisode);
         }
-        if (newEpisodes.isNotEmpty) {
-          logger.d(
-              'Adding ${newEpisodes.length} new episodes to podcast: ${podcast.podcastName}');
+      }
+      if (newEpisodes.isNotEmpty) {
+        logger.d(
+            'Adding ${newEpisodes.length} new episodes to podcast: ${podcast.podcastName}');
 
-          await dbProvider.episodeBox.putManyAsync(newEpisodes);
-        }
+        await dbProvider.episodeBox.putManyAsync(newEpisodes);
       }
     }
   }
 
   // Method to fetch all podcasts from the local database
-  Future<List<PodcastDB>> fetchAllPodcastsFromDB() {
+  Future<List<Podcast>> fetchAllPodcastsFromDB() {
     return dbProvider.podcastBox.getAllAsync();
   }
 
   // Method to fetch episodes from the local database for a podcast
-  Future<List<EpisodeDB>> fetchEpisodesFromDB(int podcastId) {
+  Future<List<Episode>> fetchEpisodesFromDB(int podcastId) {
     return dbProvider.episodeBox
-        .query(EpisodeDB_.podcastId.equals(podcastId))
+        .query(Episode_.podcastId.equals(podcastId))
         .build()
         .findAsync();
   }
