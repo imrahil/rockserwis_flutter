@@ -43,7 +43,6 @@ Favorited episodes list
 
 ## TODO
 
-- loading JSON data from the network and storing it into objectbox DB
 - history of listened episodes
 - tracking the progress of the listened episode
 - sorting episodes based on date field
