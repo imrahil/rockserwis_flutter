@@ -36,7 +36,7 @@ class Episode with _$Episode {
       return "Unknown duration";
     }
 
-    int totalSeconds = episodeDuration!.toInt();
+    int totalSeconds = episodeDuration.toInt();
     int minutes = (totalSeconds / 60).round();
 
     return "$minutes min";
