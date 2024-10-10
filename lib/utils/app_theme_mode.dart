@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/api/const.dart';
 import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';
@@ -14,21 +15,42 @@ class AppThemeModeNotifier extends _$AppThemeModeNotifier {
 
   @override
   ThemeMode build() {
-    final themeModeStr = _sharedPreferences.getString(Const.appThemeModeKey);
+    final sharedThemeModeStr =
+        _sharedPreferences.getString(Const.appThemeModeKey);
 
-    return switch (themeModeStr) {
-      'light' => ThemeMode.light,
-      'dark' => ThemeMode.dark,
-      'system' || _ => ThemeMode.system,
-    };
+    String themeMode;
+
+    if (sharedThemeModeStr != null) {
+      themeMode = sharedThemeModeStr;
+    } else {
+      themeMode = isDarkMode() ? 'dark' : 'light';
+    }
+
+    return themeMode == 'light' ? ThemeMode.light : ThemeMode.dark;
   }
 
   void toggleTheme() {
-    final themeModeStr = _sharedPreferences.getString(Const.appThemeModeKey);
+    final sharedThemeModeStr =
+        _sharedPreferences.getString(Const.appThemeModeKey);
 
-    String newTheme = themeModeStr == 'dark' ? 'light' : 'dark';
+    String newTheme;
+    if (sharedThemeModeStr != null) {
+      newTheme = sharedThemeModeStr == 'dark' ? 'light' : 'dark';
+    } else {
+      newTheme = isDarkMode() ? 'light' : 'dark';
+    }
+
     _sharedPreferences.setString(Const.appThemeModeKey, newTheme);
 
     ref.invalidateSelf();
+  }
+
+  /// Returns true if the platform is in dark mode - when "system" is used
+  bool isDarkMode() {
+    final brightness =
+        SchedulerBinding.instance.platformDispatcher.platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
+
+    return isDarkMode;
   }
 }

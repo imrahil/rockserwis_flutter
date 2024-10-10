@@ -56,7 +56,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black, // Dark background color
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -70,7 +69,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white, // Light text color
                   ),
                 ),
                 const SizedBox(height: 40),
@@ -80,10 +78,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     labelText: 'Email',
-                    prefixIcon: Icon(Icons.email, color: Colors.grey[400]),
+                    prefixIcon: Icon(Icons.email),
                   ),
-                  style:
-                      const TextStyle(color: Colors.white), // Input text color
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
@@ -99,10 +95,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'Password',
-                    prefixIcon: Icon(Icons.lock, color: Colors.grey[400]),
+                    prefixIcon: Icon(Icons.lock),
                   ),
-                  style:
-                      const TextStyle(color: Colors.white), // Input text color
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your password';

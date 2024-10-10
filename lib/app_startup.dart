@@ -37,8 +37,12 @@ class AppStartupNotifier extends _$AppStartupNotifier {
     final lastVersion = sharedPreferences.getString(Const.versionKey);
     final currentVersion = '${packageInfo.version}+${packageInfo.buildNumber}';
 
+    bool shouldUpdateForNewVersion = false;
+
     if (lastVersion != currentVersion || _forceRefresh) {
       logger.d('Current version: $currentVersion, last version: $lastVersion');
+
+      shouldUpdateForNewVersion = true;
 
       await ref
           .read(objectBoxProvider)
@@ -60,7 +64,9 @@ class AppStartupNotifier extends _$AppStartupNotifier {
     final lastUpdated =
         lastUpdatedString != null ? DateTime.parse(lastUpdatedString) : null;
 
-    if ((lastUpdated != null && now.difference(lastUpdated) > cacheDuration) ||
+    if (lastUpdated == null ||
+        now.difference(lastUpdated) > cacheDuration ||
+        shouldUpdateForNewVersion ||
         _forceRefresh) {
       logger.d('Syncing podcasts and episodes');
       await ref.read(podcastSyncHelperProvider).syncAll();
