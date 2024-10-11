@@ -7,7 +7,7 @@ part of 'app_theme_mode.dart';
 // **************************************************************************
 
 String _$appThemeModeNotifierHash() =>
-    r'0b3582953152833e281ceb5d2de99dffbf1ddfb7';
+    r'3659ab9f90d3ec52f81687f9decf31914b0fbe4a';
 
 /// A notifier used to read and write the themeMode to SharedPreferences
 ///

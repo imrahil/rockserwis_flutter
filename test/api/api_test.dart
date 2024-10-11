@@ -22,7 +22,9 @@ void main() {
       final sharedPreferences = await SharedPreferences.getInstance();
 
       api = ApiRepository(
-          client: mockClient, sharedPreferences: sharedPreferences);
+        client: mockClient,
+        sharedPreferences: sharedPreferences,
+      );
     });
 
     group('isLogged', () {
