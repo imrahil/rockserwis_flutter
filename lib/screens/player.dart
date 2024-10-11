@@ -16,8 +16,10 @@ import 'package:rockserwis_podcaster/utils/player_manager.dart';
 
 class Player extends ConsumerStatefulWidget {
   final Episode currentEpisode;
+  final List<Episode> episodes;
 
-  const Player({super.key, required this.currentEpisode});
+  const Player(
+      {super.key, required this.currentEpisode, required this.episodes});
 
   @override
   ConsumerState<Player> createState() => _PlayerState();
@@ -26,6 +28,7 @@ class Player extends ConsumerStatefulWidget {
 class _PlayerState extends ConsumerState<Player> {
   late final PlayerManager _playerManager;
   late Episode _currentEpisode;
+  late List<Episode> _episodes;
   late bool _isFavorited;
 
   final Connectivity _connectivity = Connectivity();
@@ -39,6 +42,7 @@ class _PlayerState extends ConsumerState<Player> {
     super.initState();
     _playerManager = PlayerManager();
     _currentEpisode = widget.currentEpisode;
+    _episodes = widget.episodes;
     _isFavorited = widget.currentEpisode.isFavorited;
 
     _connectivitySubscription =
@@ -89,35 +93,31 @@ class _PlayerState extends ConsumerState<Player> {
   void _skipToPrevious() async {
     await _playerManager.stop();
 
-    // FIXME
-    // Episode? previousEpisode = ref
-    //     .read(episodeRepositoryProvider)
-    //     .getPreviousEpisode(_currentEpisode.episodeId!);
+    final currentIndex = _episodes.indexWhere(
+        (episode) => episode.episodeId == _currentEpisode.episodeId);
 
-    // if (previousEpisode != null) {
-    //   setState(() {
-    //     _currentEpisode = previousEpisode;
-    //   });
+    if (currentIndex > 0 && currentIndex < _episodes.length) {
+      setState(() {
+        _currentEpisode = _episodes[currentIndex - 1];
+      });
 
-    //   _setAudioSource();
-    // }
+      _setAudioSource();
+    }
   }
 
   void _skipToNext() async {
     await _playerManager.stop();
 
-    // FIXME
-    // Episode? nextEpisode = ref
-    //     .read(episodeRepositoryProvider)
-    //     .getNextEpisode(_currentEpisode.episodeId);
+    final currentIndex = _episodes.indexWhere(
+        (episode) => episode.episodeId == _currentEpisode.episodeId);
 
-    // if (nextEpisode != null) {
-    //   setState(() {
-    //     _currentEpisode = nextEpisode;
-    //   });
+    if (currentIndex >= 0 && currentIndex < _episodes.length - 1) {
+      setState(() {
+        _currentEpisode = _episodes[currentIndex + 1];
+      });
 
-    //   _setAudioSource();
-    // }
+      _setAudioSource();
+    }
   }
 
   @override

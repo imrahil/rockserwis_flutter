@@ -39,31 +39,6 @@ class EpisodeRepository {
       throw Exception('Failed to load data from: $url');
     }
   }
-
-  /// Helper function to get the previous episode in the list
-  Episode? getPreviousEpisode(int currentEpisodeId) {
-    final currentIndex = _selectedPodcastEpisodes
-        .indexWhere((episode) => episode.episodeId == currentEpisodeId);
-
-    if (currentIndex > 0 && currentIndex < _selectedPodcastEpisodes.length) {
-      return _selectedPodcastEpisodes[currentIndex - 1];
-    } else {
-      return null;
-    }
-  }
-
-  /// Helper function to get the next episode in the list
-  Episode? getNextEpisode(int currentEpisodeId) {
-    final currentIndex = _selectedPodcastEpisodes
-        .indexWhere((episode) => episode.episodeId == currentEpisodeId);
-
-    if (currentIndex >= 0 &&
-        currentIndex < _selectedPodcastEpisodes.length - 1) {
-      return _selectedPodcastEpisodes[currentIndex + 1];
-    } else {
-      return null;
-    }
-  }
 }
 
 @riverpod

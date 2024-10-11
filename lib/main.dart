@@ -108,8 +108,8 @@ class MusicPlayer extends ConsumerWidget {
           AppRoutes.player => MaterialPageRoute(
               settings: settings,
               builder: (_) {
-                final currentEpisode = settings.arguments as Episode;
-                return Player(currentEpisode: currentEpisode);
+                final args = settings.arguments as ({Episode currentEpisode, List<Episode> episodes});
+                return Player(currentEpisode: args.currentEpisode, episodes: args.episodes);
               },
             ),
           _ =>

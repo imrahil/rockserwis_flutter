@@ -30,7 +30,10 @@ class EpisodesList extends StatelessWidget {
               currentEpisode.copyWith(imgPath: currentPodcast!.image);
         }
 
-        return EpisodeListTile(currentEpisode: currentEpisode);
+        return EpisodeListTile(
+          currentEpisode: currentEpisode,
+          episodes: episodes,
+        );
       },
     );
   }
@@ -39,9 +42,11 @@ class EpisodesList extends StatelessWidget {
 class EpisodeListTile extends ConsumerWidget {
   const EpisodeListTile({
     super.key,
+    required this.episodes,
     required this.currentEpisode,
   });
 
+  final List<Episode> episodes;
   final Episode currentEpisode;
 
   @override
@@ -74,8 +79,13 @@ class EpisodeListTile extends ConsumerWidget {
         onTap: () => {
           if (currentEpisode.hasPodcast)
             {
-              Navigator.of(context)
-                  .pushNamed(AppRoutes.player, arguments: currentEpisode)
+              Navigator.of(context).pushNamed(
+                AppRoutes.player,
+                arguments: (
+                  currentEpisode: currentEpisode,
+                  episodes: episodes,
+                ),
+              )
             }
         },
       ),
