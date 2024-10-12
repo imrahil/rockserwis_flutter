@@ -172,27 +172,18 @@ class _FetchEpisodesProviderElement
   int get podcastId => (origin as FetchEpisodesProvider).podcastId;
 }
 
-String _$episodeListHash() => r'8a1dcf17c7159513f30ed1893dcf802ff824e9e1';
+String _$episodeListHash() => r'4942d72b3bcc038eaff6cc72395d44c726065003';
 
-abstract class _$EpisodeList
-    extends BuildlessAutoDisposeAsyncNotifier<List<Episode>> {
-  late final int podcastId;
-
-  FutureOr<List<Episode>> build(
-    int podcastId,
-  );
-}
-
-/// See also [EpisodeList].
-@ProviderFor(EpisodeList)
+/// See also [episodeList].
+@ProviderFor(episodeList)
 const episodeListProvider = EpisodeListFamily();
 
-/// See also [EpisodeList].
+/// See also [episodeList].
 class EpisodeListFamily extends Family<AsyncValue<List<Episode>>> {
-  /// See also [EpisodeList].
+  /// See also [episodeList].
   const EpisodeListFamily();
 
-  /// See also [EpisodeList].
+  /// See also [episodeList].
   EpisodeListProvider call(
     int podcastId,
   ) {
@@ -225,14 +216,16 @@ class EpisodeListFamily extends Family<AsyncValue<List<Episode>>> {
   String? get name => r'episodeListProvider';
 }
 
-/// See also [EpisodeList].
-class EpisodeListProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<EpisodeList, List<Episode>> {
-  /// See also [EpisodeList].
+/// See also [episodeList].
+class EpisodeListProvider extends AutoDisposeFutureProvider<List<Episode>> {
+  /// See also [episodeList].
   EpisodeListProvider(
     int podcastId,
   ) : this._internal(
-          () => EpisodeList()..podcastId = podcastId,
+          (ref) => episodeList(
+            ref as EpisodeListRef,
+            podcastId,
+          ),
           from: episodeListProvider,
           name: r'episodeListProvider',
           debugGetCreateSourceHash:
@@ -258,20 +251,13 @@ class EpisodeListProvider
   final int podcastId;
 
   @override
-  FutureOr<List<Episode>> runNotifierBuild(
-    covariant EpisodeList notifier,
+  Override overrideWith(
+    FutureOr<List<Episode>> Function(EpisodeListRef provider) create,
   ) {
-    return notifier.build(
-      podcastId,
-    );
-  }
-
-  @override
-  Override overrideWith(EpisodeList Function() create) {
     return ProviderOverride(
       origin: this,
       override: EpisodeListProvider._internal(
-        () => create()..podcastId = podcastId,
+        (ref) => create(ref as EpisodeListRef),
         from: from,
         name: null,
         dependencies: null,
@@ -283,8 +269,7 @@ class EpisodeListProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<EpisodeList, List<Episode>>
-      createElement() {
+  AutoDisposeFutureProviderElement<List<Episode>> createElement() {
     return _EpisodeListProviderElement(this);
   }
 
@@ -302,13 +287,13 @@ class EpisodeListProvider
   }
 }
 
-mixin EpisodeListRef on AutoDisposeAsyncNotifierProviderRef<List<Episode>> {
+mixin EpisodeListRef on AutoDisposeFutureProviderRef<List<Episode>> {
   /// The parameter `podcastId` of this provider.
   int get podcastId;
 }
 
 class _EpisodeListProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<EpisodeList, List<Episode>>
+    extends AutoDisposeFutureProviderElement<List<Episode>>
     with EpisodeListRef {
   _EpisodeListProviderElement(super.provider);
 

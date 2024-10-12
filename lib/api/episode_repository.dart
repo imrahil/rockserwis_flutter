@@ -55,16 +55,13 @@ Future<List<Episode>> fetchEpisodes(FetchEpisodesRef ref, int podcastId) {
 }
 
 @riverpod
-class EpisodeList extends _$EpisodeList {
-  @override
-  Future<List<Episode>> build(int podcastId) async {
-    final objectBox = await ref.watch(objectBoxProvider.future);
+Future<List<Episode>> episodeList(EpisodeListRef ref, int podcastId) async {
+  final objectBox = await ref.watch(objectBoxProvider.future);
 
-    return objectBox.episodeBox
-        .query(Episode_.podcastId.equals(podcastId))
-        .build()
-        .findAsync();
-  }
+  return objectBox.episodeBox
+      .query(Episode_.podcastId.equals(podcastId))
+      .build()
+      .findAsync();
 }
 
 /// Fetches all favorited episodes from the database.
