@@ -91,12 +91,12 @@ class _PlayerState extends ConsumerState<Player> {
   }
 
   void _skipToPrevious() async {
-    await _playerManager.stop();
-
     final currentIndex = _episodes.indexWhere(
         (episode) => episode.episodeId == _currentEpisode.episodeId);
 
     if (currentIndex > 0 && currentIndex < _episodes.length) {
+      await _playerManager.stop();
+
       setState(() {
         _currentEpisode = _episodes[currentIndex - 1];
       });
@@ -106,12 +106,12 @@ class _PlayerState extends ConsumerState<Player> {
   }
 
   void _skipToNext() async {
-    await _playerManager.stop();
-
     final currentIndex = _episodes.indexWhere(
         (episode) => episode.episodeId == _currentEpisode.episodeId);
 
     if (currentIndex >= 0 && currentIndex < _episodes.length - 1) {
+      await _playerManager.stop();
+
       setState(() {
         _currentEpisode = _episodes[currentIndex + 1];
       });

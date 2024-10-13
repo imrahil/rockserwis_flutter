@@ -83,11 +83,9 @@ class MusicPlayer extends ConsumerWidget {
       onGenerateRoute: (settings) {
         return switch (settings.name) {
           AppRoutes.login => MaterialPageRoute(
-              settings: settings,
               builder: (_) => const LoginPage(),
             ),
           AppRoutes.podcasts => MaterialPageRoute(
-              settings: settings,
               builder: (_) => const PodcastsPage(),
             ),
           AppRoutes.episodes => MaterialPageRoute(
@@ -98,18 +96,21 @@ class MusicPlayer extends ConsumerWidget {
               },
             ),
           AppRoutes.favoritedPodcasts => MaterialPageRoute(
-              settings: settings,
               builder: (_) => const FavoritePodcastsPage(),
             ),
           AppRoutes.favoritedEpisodes => MaterialPageRoute(
-              settings: settings,
               builder: (_) => const FavoritesEpisodesPage(),
             ),
           AppRoutes.player => MaterialPageRoute(
-              settings: settings,
               builder: (_) {
-                final args = settings.arguments as ({Episode currentEpisode, List<Episode> episodes});
-                return Player(currentEpisode: args.currentEpisode, episodes: args.episodes);
+                final args = settings.arguments as ({
+                  Episode currentEpisode,
+                  List<Episode> episodes,
+                });
+                return Player(
+                  currentEpisode: args.currentEpisode,
+                  episodes: args.episodes,
+                );
               },
             ),
           _ =>
