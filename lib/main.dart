@@ -4,7 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/app_routes.dart';
 import 'package:rockserwis_podcaster/app_startup.dart';
@@ -46,12 +45,6 @@ Future<void> main() async {
   // * Preload SharedPreferences before calling runApp, as the AppStartupWidget
   // * depends on it in order to load the themeMode
   await container.read(sharedPreferencesProvider.future);
-
-  await JustAudioBackground.init(
-    androidNotificationChannelId: 'com.imrahil.rockserwis.podcaster',
-    androidNotificationChannelName: 'Rockserwis.fm Podcast Player',
-    androidNotificationOngoing: true,
-  );
 
   runApp(
     UncontrolledProviderScope(

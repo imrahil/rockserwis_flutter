@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logger/logger.dart';
 
@@ -12,40 +11,42 @@ class PlayerManager {
   }
 
   void _init() async {
-    _audioPlayer = AudioPlayer(
-      userAgent: "Rockserwis Podcaster",
-      useProxyForRequestHeaders: false,
-    );
+    // _audioPlayer = AudioPlayer(
+    //   userAgent: "Rockserwis Podcaster",
+    //   useProxyForRequestHeaders: false,
+    // );
 
-    _audioPlayer.positionStream.listen((position) {
-      final oldState = progressNotifier.value;
+    // _audioPlayer.positionStream.listen((position) {
+    //   final oldState = progressNotifier.value;
 
-      progressNotifier.value = ProgressBarState(
-        current: position,
-        buffered: oldState.buffered,
-        total: oldState.total,
-      );
-    });
+    //   progressNotifier.value = ProgressBarState(
+    //     progress: position,
+    //     buffered: oldState.buffered,
+    //     total: oldState.total,
+    //   );
+    // });
 
-    _audioPlayer.bufferedPositionStream.listen((bufferedPosition) {
-      final oldState = progressNotifier.value;
+    // _audioPlayer.bufferedPositionStream.listen((bufferedPosition) {
+    //   final oldState = progressNotifier.value;
 
-      progressNotifier.value = ProgressBarState(
-        current: oldState.current,
-        buffered: bufferedPosition,
-        total: oldState.total,
-      );
-    });
+    //   progressNotifier.value = ProgressBarState(
+    //     playing: false,
+    //     progress: oldState.current,
+    //     buffered: bufferedPosition,
+    //     total: oldState.total,
+    //   );
+    // });
 
-    _audioPlayer.durationStream.listen((totalDuration) {
-      final oldState = progressNotifier.value;
+    // _audioPlayer.durationStream.listen((totalDuration) {
+    //   final oldState = progressNotifier.value;
 
-      progressNotifier.value = ProgressBarState(
-        current: oldState.current,
-        buffered: oldState.buffered,
-        total: totalDuration ?? Duration.zero,
-      );
-    });
+    //   progressNotifier.value = ProgressBarState(
+    //     playing: false,
+    //     progress: oldState.current,
+    //     buffered: oldState.buffered,
+    //     total: totalDuration ?? Duration.zero,
+    //   );
+    // });
   }
 
   AudioPlayer getAudioPlayer() => _audioPlayer;
@@ -70,13 +71,14 @@ class PlayerManager {
     _audioPlayer.seek(position);
   }
 
-  final progressNotifier = ValueNotifier<ProgressBarState>(
-    ProgressBarState(
-      current: Duration.zero,
-      buffered: Duration.zero,
-      total: Duration.zero,
-    ),
-  );
+  // final progressNotifier = ValueNotifier<ProgressBarState>(
+  //   ProgressBarState(
+  //     playing: false,
+  //     progress: Duration.zero,
+  //     buffered: Duration.zero,
+  //     total: Duration.zero,
+  //   ),
+  // );
 
   void rewind() {
     final currentPosition = _audioPlayer.position;
@@ -102,17 +104,3 @@ class PlayerManager {
     }
   }
 }
-
-class ProgressBarState {
-  ProgressBarState({
-    required this.current,
-    required this.buffered,
-    required this.total,
-  });
-
-  final Duration current;
-  final Duration buffered;
-  final Duration total;
-}
-
-enum ButtonState { paused, playing, loading }

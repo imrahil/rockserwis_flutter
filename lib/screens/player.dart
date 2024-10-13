@@ -1,18 +1,16 @@
 import 'dart:async';
 
+import 'package:audio_service/audio_service.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:just_audio_background/just_audio_background.dart';
 import 'package:logger/logger.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/api/episode_repository.dart';
+import 'package:rockserwis_podcaster/api/player_repository.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
-import 'package:rockserwis_podcaster/utils/player_manager.dart';
 
 class Player extends ConsumerStatefulWidget {
   final Episode currentEpisode;
@@ -26,7 +24,6 @@ class Player extends ConsumerStatefulWidget {
 }
 
 class _PlayerState extends ConsumerState<Player> {
-  late final PlayerManager _playerManager;
   late Episode _currentEpisode;
   late List<Episode> _episodes;
   late bool _isFavorited;
@@ -38,15 +35,16 @@ class _PlayerState extends ConsumerState<Player> {
   var logger = Logger();
 
   @override
-  void initState() {
+  void initState() async {
     super.initState();
-    _playerManager = PlayerManager();
     _currentEpisode = widget.currentEpisode;
     _episodes = widget.episodes;
     _isFavorited = widget.currentEpisode.isFavorited;
 
+    final playerRepository = ref.read(playerRepositoryProvider.notifier);
+
     _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen((result) {
+        _connectivity.onConnectivityChanged.listen((result) async {
       logger.d('ConnectivityResult: $result');
 
       setState(() {
@@ -56,38 +54,21 @@ class _PlayerState extends ConsumerState<Player> {
       if (!result.contains(ConnectivityResult.none)) {
         _setAudioSource();
       } else {
-        _playerManager.stop();
+        await playerRepository.stop();
       }
     });
   }
 
   @override
   void dispose() {
-    _playerManager.dispose();
     _connectivitySubscription.cancel();
     super.dispose();
   }
 
   void _setAudioSource() async {
-    final apiProvider = ref.read(apiRepositoryProvider);
+    final playerRepository = ref.read(playerRepositoryProvider.notifier);
 
-    AudioSource source = AudioSource.uri(
-      Uri.parse(_currentEpisode.getEpisodeUrl),
-      headers: apiProvider.getHeaders(),
-      tag: MediaItem(
-        // Specify a unique ID for each media item
-        id: _currentEpisode.episodeId.toString(),
-        // Metadata to display in the notification
-        album: DateFormat("yyyy-MM-dd").format(_currentEpisode.date),
-        title: _currentEpisode.name,
-        artUri: _currentEpisode.imgPath != ""
-            ? Uri.parse(apiProvider.getImagePath(_currentEpisode.imgPath))
-            : null,
-      ),
-    );
-
-    await _playerManager.setAudioSource(source);
-    _playerManager.play();
+    playerRepository.setAudioSource(_currentEpisode);
   }
 
   void _skipToPrevious() async {
@@ -95,7 +76,8 @@ class _PlayerState extends ConsumerState<Player> {
         (episode) => episode.episodeId == _currentEpisode.episodeId);
 
     if (currentIndex > 0 && currentIndex < _episodes.length) {
-      await _playerManager.stop();
+      final playerRepository = ref.read(playerRepositoryProvider.notifier);
+      await playerRepository.stop();
 
       setState(() {
         _currentEpisode = _episodes[currentIndex - 1];
@@ -110,7 +92,8 @@ class _PlayerState extends ConsumerState<Player> {
         (episode) => episode.episodeId == _currentEpisode.episodeId);
 
     if (currentIndex >= 0 && currentIndex < _episodes.length - 1) {
-      await _playerManager.stop();
+      final playerRepository = ref.read(playerRepositoryProvider.notifier);
+      await playerRepository.stop();
 
       setState(() {
         _currentEpisode = _episodes[currentIndex + 1];
@@ -123,6 +106,12 @@ class _PlayerState extends ConsumerState<Player> {
   @override
   Widget build(BuildContext context) {
     final apiProvider = ref.watch(apiRepositoryProvider);
+    final playerRepositoryNotifier =
+        ref.read(playerRepositoryProvider.notifier);
+    final playerRepository = ref.watch(playerRepositoryProvider);
+
+    final processingState = playerRepository.processingState;
+    final playing = playerRepository.playing;
 
     return Scaffold(
       appBar: AppBar(
@@ -160,15 +149,11 @@ class _PlayerState extends ConsumerState<Player> {
                 },
               ),
             ),
-            ValueListenableBuilder<ProgressBarState>(
-              valueListenable: _playerManager.progressNotifier,
-              builder: (_, value, __) {
-                return ProgressBar(
-                    progress: value.current,
-                    buffered: value.buffered,
-                    total: value.total,
-                    onSeek: _playerManager.seek);
-              },
+            ProgressBar(
+              progress: playerRepository.progress,
+              buffered: playerRepository.buffered,
+              total: playerRepository.total,
+              onSeek: playerRepositoryNotifier.seek,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -181,55 +166,17 @@ class _PlayerState extends ConsumerState<Player> {
                 IconButton(
                   icon: const Icon(Icons.replay_30),
                   iconSize: 36.0,
-                  onPressed: _playerManager.rewind,
+                  onPressed: playerRepositoryNotifier.rewind,
                 ),
-                StreamBuilder<PlayerState>(
-                  stream: _playerManager.getAudioPlayer().playerStateStream,
-                  builder: (context, snapshot) {
-                    final playerState = snapshot.data;
-                    final processingState = playerState?.processingState;
-                    final playing = playerState?.playing;
-
-                    if (processingState == ProcessingState.loading ||
-                        processingState == ProcessingState.buffering) {
-                      return Container(
-                        margin: const EdgeInsets.all(8.0),
-                        width: 64.0,
-                        height: 64.0,
-                        child: const CircularProgressIndicator(),
-                      );
-                    } else if (_connectionStatus
-                        .contains(ConnectivityResult.none)) {
-                      return IconButton(
-                        icon: const Icon(Icons.wifi_off),
-                        iconSize: 64.0,
-                        onPressed: () {},
-                      );
-                    } else if (playing != true) {
-                      return IconButton(
-                        icon: const Icon(Icons.play_arrow),
-                        iconSize: 64.0,
-                        onPressed: _playerManager.play,
-                      );
-                    } else if (processingState != ProcessingState.completed) {
-                      return IconButton(
-                        icon: const Icon(Icons.pause),
-                        iconSize: 64.0,
-                        onPressed: _playerManager.pause,
-                      );
-                    } else {
-                      return IconButton(
-                        icon: const Icon(Icons.replay),
-                        iconSize: 64.0,
-                        onPressed: () => _playerManager.seek(Duration.zero),
-                      );
-                    }
-                  },
+                CentralButton(
+                  processingState: processingState,
+                  playing: playing,
+                  connectionStatus: _connectionStatus,
                 ),
                 IconButton(
                   icon: const Icon(Icons.forward_30),
                   iconSize: 36.0,
-                  onPressed: _playerManager.fastForward,
+                  onPressed: playerRepositoryNotifier.fastForward,
                 ),
                 IconButton(
                   icon: const Icon(Icons.skip_next),
@@ -242,5 +189,58 @@ class _PlayerState extends ConsumerState<Player> {
         ),
       ),
     );
+  }
+}
+
+class CentralButton extends ConsumerWidget {
+  final AudioProcessingState processingState;
+  final bool playing;
+  final List<ConnectivityResult> connectionStatus;
+
+  const CentralButton({
+    super.key,
+    required this.processingState,
+    required this.playing,
+    required this.connectionStatus,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final playerRepositoryNotifier =
+        ref.read(playerRepositoryProvider.notifier);
+
+    if (processingState == AudioProcessingState.loading ||
+        processingState == AudioProcessingState.buffering) {
+      return Container(
+        margin: const EdgeInsets.all(8.0),
+        width: 64.0,
+        height: 64.0,
+        child: const CircularProgressIndicator(),
+      );
+    } else if (connectionStatus.contains(ConnectivityResult.none)) {
+      return IconButton(
+        icon: const Icon(Icons.wifi_off),
+        iconSize: 64.0,
+        onPressed: () {},
+      );
+    } else if (playing != true) {
+      return IconButton(
+        icon: const Icon(Icons.play_arrow),
+        iconSize: 64.0,
+        onPressed: playerRepositoryNotifier.play,
+      );
+    } else if (processingState != AudioProcessingState.completed) {
+      return IconButton(
+        icon: const Icon(Icons.pause),
+        iconSize: 64.0,
+        onPressed: playerRepositoryNotifier.pause,
+      );
+    } else {
+      return IconButton(
+        icon: const Icon(Icons.replay),
+        iconSize: 64.0,
+        onPressed: () => playerRepositoryNotifier.seek(Duration.zero),
+      );
+    }
   }
 }
