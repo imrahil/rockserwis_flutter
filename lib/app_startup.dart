@@ -129,7 +129,16 @@ class AppStartupLoadingWidget extends ConsumerWidget {
         appBar: AppBar(),
         body: const Padding(
           padding: EdgeInsets.all(16),
-          child: Center(child: CircularProgressIndicator()),
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 16),
+                Text('Syncing data...'),
+              ],
+            ),
+          ),
         ),
       ),
     );
