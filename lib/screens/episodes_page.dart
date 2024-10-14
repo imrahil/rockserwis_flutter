@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:rockserwis_podcaster/api/episode_repository.dart';
 import 'package:rockserwis_podcaster/api/podcast_repository.dart';
+import 'package:rockserwis_podcaster/api/sort_order.dart';
 import 'package:rockserwis_podcaster/components/episodes_list.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 
@@ -95,6 +96,16 @@ class _EpisodesPageState extends ConsumerState<EpisodesPage> {
           IconButton(
             icon: const Icon(Icons.info_outline),
             onPressed: () => _showPodcastInfoDialog(context),
+          ),
+          IconButton(
+            icon: Icon(
+              ref.watch(sortOrderProvider) == SortOrderType.ascending
+                  ? Icons.arrow_upward
+                  : Icons.arrow_downward,
+            ),
+            onPressed: () {
+              ref.read(sortOrderProvider.notifier).change();
+            },
           ),
           IconButton(
             icon: Icon(

@@ -172,7 +172,7 @@ class _FetchEpisodesProviderElement
   int get podcastId => (origin as FetchEpisodesProvider).podcastId;
 }
 
-String _$episodeListHash() => r'4942d72b3bcc038eaff6cc72395d44c726065003';
+String _$episodeListHash() => r'd47359fdd363ef2a34f249783e37ba33f8662f62';
 
 /// See also [episodeList].
 @ProviderFor(episodeList)
