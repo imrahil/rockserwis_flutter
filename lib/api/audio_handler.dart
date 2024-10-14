@@ -7,6 +7,29 @@ class MyAudioHandler extends BaseAudioHandler {
 
   var logger = Logger();
 
+  MyAudioHandler() {
+    _player.playbackEventStream.listen((totalDuration) {
+      playbackState.add(
+        playbackState.value.copyWith(
+          playing: _player.playing,
+          updatePosition: _player.position,
+          bufferedPosition: _player.bufferedPosition,
+          processingState: const {
+            ProcessingState.idle: AudioProcessingState.idle,
+            ProcessingState.loading: AudioProcessingState.loading,
+            ProcessingState.buffering: AudioProcessingState.buffering,
+            ProcessingState.ready: AudioProcessingState.ready,
+            ProcessingState.completed: AudioProcessingState.completed,
+          }[_player.processingState]!,
+        ),
+      );
+    });
+
+    // FIXME - remove it
+    // _player.positionStream.listen((position) {});
+    // _player.bufferedPositionStream.listen((bufferedPosition) {});
+  }
+
   @override
   Future<void> play() => _player.play();
 

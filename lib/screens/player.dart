@@ -35,7 +35,7 @@ class _PlayerState extends ConsumerState<Player> {
   var logger = Logger();
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
     _currentEpisode = widget.currentEpisode;
     _episodes = widget.episodes;

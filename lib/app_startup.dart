@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:rockserwis_podcaster/api/audio_handler_provider.dart';
 import 'package:rockserwis_podcaster/api/const.dart';
 import 'package:rockserwis_podcaster/api/objectbox_repository.dart';
 import 'package:rockserwis_podcaster/api/podcast_sync_helper.dart';
@@ -24,6 +25,7 @@ class AppStartupNotifier extends _$AppStartupNotifier {
     // Preload any other FutureProviders what will be used with requireValue later
     await ref.watch(objectBoxProvider.future);
     await ref.watch(packageInfoProvider.future);
+    await ref.watch(audioHandlerProvider.future);
 
     await _updateDatabaseFromNetwork();
   }

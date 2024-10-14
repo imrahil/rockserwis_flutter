@@ -34,6 +34,10 @@ class PlayerRepository extends _$PlayerRepository {
       );
     });
 
+    AudioService.position.listen((Duration position) {
+      state = state.copyWith(progress: position);
+    });
+
     return ProgressBarState(
       playing: false,
       processingState: AudioProcessingState.idle,
