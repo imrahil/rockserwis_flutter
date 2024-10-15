@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
-import 'package:rockserwis_podcaster/api/audio_handler.dart';
+import 'package:rockserwis_podcaster/providers/audio_handler.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/models/progress_bar_state.dart';
 

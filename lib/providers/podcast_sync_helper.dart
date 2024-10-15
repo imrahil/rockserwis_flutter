@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:rockserwis_podcaster/api/episode_repository.dart';
-import 'package:rockserwis_podcaster/api/objectbox_repository.dart';
-import 'package:rockserwis_podcaster/api/podcast_repository.dart';
+import 'package:rockserwis_podcaster/providers/episode_repository.dart';
+import 'package:rockserwis_podcaster/providers/objectbox_repository.dart';
+import 'package:rockserwis_podcaster/providers/podcast_repository.dart';
 import 'package:rockserwis_podcaster/app_startup.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';

@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
-import 'package:rockserwis_podcaster/api/episode_repository.dart';
-import 'package:rockserwis_podcaster/api/player_repository.dart';
 import 'package:rockserwis_podcaster/components/progress_bar.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
+import 'package:rockserwis_podcaster/providers/episode_repository.dart';
+import 'package:rockserwis_podcaster/providers/player_repository.dart';
 
 class Player extends ConsumerStatefulWidget {
   final Episode currentEpisode;

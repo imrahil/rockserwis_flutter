@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/api/const.dart';
 import 'package:rockserwis_podcaster/api/data/missing_podcasts.dart';
-import 'package:rockserwis_podcaster/api/objectbox_repository.dart';
+import 'package:rockserwis_podcaster/providers/objectbox_repository.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 import 'package:rockserwis_podcaster/objectbox.g.dart';
 import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';

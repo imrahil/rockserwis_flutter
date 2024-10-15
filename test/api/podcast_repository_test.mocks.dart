@@ -10,10 +10,11 @@ import 'dart:typed_data' as _i7;
 import 'package:http/http.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i6;
-import 'package:rockserwis_podcaster/api/objectbox_repository.dart' as _i8;
 import 'package:rockserwis_podcaster/models/episode.dart' as _i10;
 import 'package:rockserwis_podcaster/models/podcast.dart' as _i9;
 import 'package:rockserwis_podcaster/objectbox.g.dart' as _i3;
+import 'package:rockserwis_podcaster/providers/objectbox_repository.dart'
+    as _i8;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values

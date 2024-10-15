@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:rockserwis_podcaster/api/episode_repository.dart';
-import 'package:rockserwis_podcaster/api/podcast_repository.dart';
-import 'package:rockserwis_podcaster/api/sort_order.dart';
 import 'package:rockserwis_podcaster/components/episodes_list.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
+import 'package:rockserwis_podcaster/providers/episode_repository.dart';
+import 'package:rockserwis_podcaster/providers/podcast_repository.dart';
+import 'package:rockserwis_podcaster/providers/sort_order.dart';
 
 class EpisodesPage extends ConsumerStatefulWidget {
   final Podcast currentPodcast;
