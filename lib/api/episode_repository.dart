@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/api/const.dart';
 import 'package:rockserwis_podcaster/api/objectbox_repository.dart';
+import 'package:rockserwis_podcaster/api/sort_order.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/objectbox.g.dart';
 import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';
@@ -58,10 +59,19 @@ Future<List<Episode>> fetchEpisodes(FetchEpisodesRef ref, int podcastId) {
 Future<List<Episode>> episodeList(EpisodeListRef ref, int podcastId) async {
   final objectBox = await ref.watch(objectBoxProvider.future);
 
-  return objectBox.episodeBox
+  final episodes = await objectBox.episodeBox
       .query(Episode_.podcastId.equals(podcastId))
       .build()
       .findAsync();
+
+  final sorted = switch (ref.watch(sortOrderProvider)) {
+    SortOrderType.ascending => episodes
+      ..sort((a, b) => a.date.compareTo(b.date)),
+    SortOrderType.descending => episodes
+      ..sort((a, b) => b.date.compareTo(a.date)),
+  };
+
+  return sorted;
 }
 
 /// Fetches all favorited episodes from the database.
