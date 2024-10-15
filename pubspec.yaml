@@ -33,6 +33,7 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
+  audio_service: ^0.18.15
   audio_video_progress_bar: ^2.0.3
   awesome_snackbar_content: ^0.1.4
   cached_network_image: ^3.4.1
@@ -46,7 +47,6 @@ dependencies:
   http: ^1.2.2
   intl: ^0.19.0
   json_annotation: ^4.9.0
-  just_audio_background: ^0.0.1-beta.13
   just_audio: ^0.9.40
   logger: ^2.4.0
   objectbox: ^4.0.2
