@@ -5,6 +5,7 @@ import 'package:rockserwis_podcaster/providers/player_repository.dart';
 
 class AudioProgressBar extends ConsumerWidget {
   const AudioProgressBar({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playerRepository = ref.watch(playerRepositoryProvider);
