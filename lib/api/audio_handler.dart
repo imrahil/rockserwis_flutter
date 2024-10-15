@@ -8,12 +8,10 @@ class MyAudioHandler extends BaseAudioHandler {
   var logger = Logger();
 
   MyAudioHandler() {
-    _player.playbackEventStream.listen((totalDuration) {
+    _player.playbackEventStream.listen((_) {
       playbackState.add(
         playbackState.value.copyWith(
           playing: _player.playing,
-          updatePosition: _player.position,
-          bufferedPosition: _player.bufferedPosition,
           processingState: const {
             ProcessingState.idle: AudioProcessingState.idle,
             ProcessingState.loading: AudioProcessingState.loading,
@@ -25,9 +23,21 @@ class MyAudioHandler extends BaseAudioHandler {
       );
     });
 
-    // FIXME - remove it
-    // _player.positionStream.listen((position) {});
-    // _player.bufferedPositionStream.listen((bufferedPosition) {});
+    _player.positionStream.listen((updatePosition) {
+      playbackState.add(
+        playbackState.value.copyWith(updatePosition: updatePosition),
+      );
+    });
+
+    _player.bufferedPositionStream.listen((bufferedPosition) {
+      playbackState.add(
+        playbackState.value.copyWith(bufferedPosition: bufferedPosition),
+      );
+    });
+
+    _player.durationStream.listen((total) {
+      customState.add(total);
+    });
   }
 
   @override

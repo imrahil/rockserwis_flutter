@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +9,7 @@ import 'package:logger/logger.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/api/episode_repository.dart';
 import 'package:rockserwis_podcaster/api/player_repository.dart';
+import 'package:rockserwis_podcaster/components/progress_bar.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 
 class Player extends ConsumerStatefulWidget {
@@ -26,7 +26,6 @@ class Player extends ConsumerStatefulWidget {
 class _PlayerState extends ConsumerState<Player> {
   late Episode _currentEpisode;
   late List<Episode> _episodes;
-  late bool _isFavorited;
 
   final Connectivity _connectivity = Connectivity();
   List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
@@ -39,9 +38,6 @@ class _PlayerState extends ConsumerState<Player> {
     super.initState();
     _currentEpisode = widget.currentEpisode;
     _episodes = widget.episodes;
-    _isFavorited = widget.currentEpisode.isFavorited;
-
-    final playerRepository = ref.read(playerRepositoryProvider.notifier);
 
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen((result) async {
@@ -52,9 +48,9 @@ class _PlayerState extends ConsumerState<Player> {
       });
 
       if (!result.contains(ConnectivityResult.none)) {
-        _setAudioSource();
+        _setAudioSource(_currentEpisode);
       } else {
-        await playerRepository.stop();
+        await ref.read(playerRepositoryProvider.notifier).stop();
       }
     });
   }
@@ -65,10 +61,12 @@ class _PlayerState extends ConsumerState<Player> {
     super.dispose();
   }
 
-  void _setAudioSource() async {
-    final playerRepository = ref.read(playerRepositoryProvider.notifier);
+  void _setAudioSource(Episode episode) async {
+    ref.read(playerRepositoryProvider.notifier).setAudioSource(episode);
 
-    playerRepository.setAudioSource(_currentEpisode);
+    setState(() {
+      _currentEpisode = episode;
+    });
   }
 
   void _skipToPrevious() async {
@@ -76,14 +74,9 @@ class _PlayerState extends ConsumerState<Player> {
         (episode) => episode.episodeId == _currentEpisode.episodeId);
 
     if (currentIndex > 0 && currentIndex < _episodes.length) {
-      final playerRepository = ref.read(playerRepositoryProvider.notifier);
-      await playerRepository.stop();
+      await ref.read(playerRepositoryProvider.notifier).stop();
 
-      setState(() {
-        _currentEpisode = _episodes[currentIndex - 1];
-      });
-
-      _setAudioSource();
+      _setAudioSource(_episodes[currentIndex - 1]);
     }
   }
 
@@ -92,14 +85,9 @@ class _PlayerState extends ConsumerState<Player> {
         (episode) => episode.episodeId == _currentEpisode.episodeId);
 
     if (currentIndex >= 0 && currentIndex < _episodes.length - 1) {
-      final playerRepository = ref.read(playerRepositoryProvider.notifier);
-      await playerRepository.stop();
+      await ref.read(playerRepositoryProvider.notifier).stop();
 
-      setState(() {
-        _currentEpisode = _episodes[currentIndex + 1];
-      });
-
-      _setAudioSource();
+      _setAudioSource(_episodes[currentIndex + 1]);
     }
   }
 
@@ -108,10 +96,6 @@ class _PlayerState extends ConsumerState<Player> {
     final apiProvider = ref.watch(apiRepositoryProvider);
     final playerRepositoryNotifier =
         ref.read(playerRepositoryProvider.notifier);
-    final playerRepository = ref.watch(playerRepositoryProvider);
-
-    final processingState = playerRepository.processingState;
-    final playing = playerRepository.playing;
 
     return Scaffold(
       appBar: AppBar(
@@ -137,24 +121,21 @@ class _PlayerState extends ConsumerState<Player> {
               alignment: Alignment.topRight,
               child: IconButton(
                 icon: Icon(
-                  _isFavorited ? Icons.favorite : Icons.favorite_border,
+                  _currentEpisode.isFavorited
+                      ? Icons.favorite
+                      : Icons.favorite_border,
                 ),
                 onPressed: () async {
                   await ref
                       .read(favoritedEpisodesProvider.notifier)
                       .toggleFavoriteEpisode(_currentEpisode);
                   setState(() {
-                    _isFavorited = !_isFavorited;
+                    _currentEpisode.isFavorited = !_currentEpisode.isFavorited;
                   }); // Rebuild to update icon
                 },
               ),
             ),
-            ProgressBar(
-              progress: playerRepository.progress,
-              buffered: playerRepository.buffered,
-              total: playerRepository.total,
-              onSeek: playerRepositoryNotifier.seek,
-            ),
+            AudioProgressBar(),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -168,11 +149,7 @@ class _PlayerState extends ConsumerState<Player> {
                   iconSize: 36.0,
                   onPressed: playerRepositoryNotifier.rewind,
                 ),
-                CentralButton(
-                  processingState: processingState,
-                  playing: playing,
-                  connectionStatus: _connectionStatus,
-                ),
+                CentralButton(connectionStatus: _connectionStatus),
                 IconButton(
                   icon: const Icon(Icons.forward_30),
                   iconSize: 36.0,
@@ -193,19 +170,20 @@ class _PlayerState extends ConsumerState<Player> {
 }
 
 class CentralButton extends ConsumerWidget {
-  final AudioProcessingState processingState;
-  final bool playing;
   final List<ConnectivityResult> connectionStatus;
 
   const CentralButton({
     super.key,
-    required this.processingState,
-    required this.playing,
     required this.connectionStatus,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final playerRepository = ref.watch(playerRepositoryProvider);
+
+    final processingState = playerRepository.processingState;
+    final playing = playerRepository.playing;
+
     final playerRepositoryNotifier =
         ref.read(playerRepositoryProvider.notifier);
 

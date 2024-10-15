@@ -6,7 +6,21 @@ part of 'player_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$playerRepositoryHash() => r'1af83b376372065fccdf3f19ae788dc1a11be372';
+String _$audioHandlerHash() => r'fb78767e4c98d1a25f03dd79bca642bda11b2df1';
+
+/// See also [audioHandler].
+@ProviderFor(audioHandler)
+final audioHandlerProvider = FutureProvider<MyAudioHandler>.internal(
+  audioHandler,
+  name: r'audioHandlerProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$audioHandlerHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef AudioHandlerRef = FutureProviderRef<MyAudioHandler>;
+String _$playerRepositoryHash() => r'b74f9da6fd5f0223899fafae3aa57a41b7b1d2f0';
 
 /// See also [PlayerRepository].
 @ProviderFor(PlayerRepository)

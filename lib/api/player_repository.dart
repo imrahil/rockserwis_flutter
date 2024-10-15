@@ -4,11 +4,23 @@ import 'package:just_audio/just_audio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/api/audio_handler.dart';
-import 'package:rockserwis_podcaster/api/audio_handler_provider.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/models/progress_bar_state.dart';
 
 part 'player_repository.g.dart';
+
+@Riverpod(keepAlive: true)
+Future<MyAudioHandler> audioHandler(AudioHandlerRef ref) async {
+  return await AudioService.init(
+    builder: () => MyAudioHandler(),
+    config: const AudioServiceConfig(
+      androidNotificationChannelId: 'com.imrahil.rockserwis.podcaster',
+      androidNotificationChannelName: 'Rockserwis.fm Podcast Player',
+      androidNotificationOngoing: true,
+      androidStopForegroundOnPause: true,
+    ),
+  );
+}
 
 @Riverpod(keepAlive: true)
 class PlayerRepository extends _$PlayerRepository {
@@ -20,22 +32,18 @@ class PlayerRepository extends _$PlayerRepository {
     _audioHandler.playbackState.listen(
       (PlaybackState playbackState) {
         state = state.copyWith(
-          processingState: playbackState.processingState,
           playing: playbackState.playing,
-          progress: playbackState.position,
+          processingState: playbackState.processingState,
+          progress: playbackState.updatePosition,
           buffered: playbackState.bufferedPosition,
         );
       },
     );
 
-    _audioHandler.mediaItem.listen((MediaItem? mediaItem) {
+    _audioHandler.customState.listen((total) {
       state = state.copyWith(
-        total: mediaItem?.duration ?? Duration.zero,
+        total: total ?? Duration.zero,
       );
-    });
-
-    AudioService.position.listen((Duration position) {
-      state = state.copyWith(progress: position);
     });
 
     return ProgressBarState(
