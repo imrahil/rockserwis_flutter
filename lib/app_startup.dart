@@ -4,7 +4,7 @@ import 'package:logger/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/api/const.dart';
 import 'package:rockserwis_podcaster/components/error_prompt.dart';
-import 'package:rockserwis_podcaster/providers/audio_handler_repository.dart';
+import 'package:rockserwis_podcaster/providers/audio_service.dart';
 import 'package:rockserwis_podcaster/providers/objectbox_repository.dart';
 import 'package:rockserwis_podcaster/providers/podcast_sync_helper.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_data.dart';
@@ -25,7 +25,7 @@ class AppStartupNotifier extends _$AppStartupNotifier {
     // Preload any other FutureProviders what will be used with requireValue later
     await ref.watch(objectBoxProvider.future);
     await ref.watch(packageInfoProvider.future);
-    await ref.watch(audioHandlerProvider.future);
+    await ref.watch(audioServiceProvider.future);
 
     await _updateDatabaseFromNetwork();
   }

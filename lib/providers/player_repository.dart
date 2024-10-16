@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/models/progress_bar_state.dart';
-import 'package:rockserwis_podcaster/providers/audio_handler_repository.dart';
+import 'package:rockserwis_podcaster/providers/audio_service.dart';
 import 'package:rockserwis_podcaster/utils/audio_handler.dart';
 
 part 'player_repository.g.dart';
@@ -13,7 +13,7 @@ part 'player_repository.g.dart';
 @Riverpod(keepAlive: true)
 class PlayerRepository extends _$PlayerRepository {
   MyAudioHandler get _audioHandler =>
-      ref.watch(audioHandlerProvider).requireValue;
+      ref.watch(audioServiceProvider).requireValue;
 
   @override
   ProgressBarState build() {

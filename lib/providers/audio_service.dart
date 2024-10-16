@@ -2,10 +2,10 @@ import 'package:audio_service/audio_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/utils/audio_handler.dart';
 
-part 'audio_handler_repository.g.dart';
+part 'audio_service.g.dart';
 
 @Riverpod(keepAlive: true)
-Future<MyAudioHandler> audioHandler(AudioHandlerRef ref) async {
+Future<MyAudioHandler> audioService(AudioServiceRef ref) async {
   return await AudioService.init(
     builder: () => MyAudioHandler(),
     config: const AudioServiceConfig(
