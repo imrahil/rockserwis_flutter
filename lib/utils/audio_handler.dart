@@ -2,25 +2,41 @@ import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logger/logger.dart';
 
-class MyAudioHandler extends BaseAudioHandler {
+class MyAudioHandler extends BaseAudioHandler with SeekHandler {
   final _player = AudioPlayer();
 
   var logger = Logger();
 
+  late MediaItem localMediaItem;
+
   MyAudioHandler() {
-    _player.playbackEventStream.listen((_) {
-      playbackState.add(
-        playbackState.value.copyWith(
-          playing: _player.playing,
-          processingState: const {
-            ProcessingState.idle: AudioProcessingState.idle,
-            ProcessingState.loading: AudioProcessingState.loading,
-            ProcessingState.buffering: AudioProcessingState.buffering,
-            ProcessingState.ready: AudioProcessingState.ready,
-            ProcessingState.completed: AudioProcessingState.completed,
-          }[_player.processingState]!,
-        ),
-      );
+    _player.playbackEventStream.listen((event) {
+      playbackState.add(playbackState.value.copyWith(
+        controls: [
+          MediaControl.rewind,
+          if (_player.playing) MediaControl.pause else MediaControl.play,
+          MediaControl.stop,
+          MediaControl.fastForward,
+        ],
+        systemActions: const {
+          MediaAction.seek,
+          MediaAction.seekForward,
+          MediaAction.seekBackward,
+        },
+        androidCompactActionIndices: const [0, 1, 3],
+        processingState: const {
+          ProcessingState.idle: AudioProcessingState.idle,
+          ProcessingState.loading: AudioProcessingState.loading,
+          ProcessingState.buffering: AudioProcessingState.buffering,
+          ProcessingState.ready: AudioProcessingState.ready,
+          ProcessingState.completed: AudioProcessingState.completed,
+        }[_player.processingState]!,
+        playing: _player.playing,
+        updatePosition: _player.position,
+        bufferedPosition: _player.bufferedPosition,
+        speed: _player.speed,
+        queueIndex: event.currentIndex,
+      ));
     });
 
     _player.positionStream.listen((updatePosition) {
@@ -35,8 +51,8 @@ class MyAudioHandler extends BaseAudioHandler {
       );
     });
 
-    _player.durationStream.listen((total) {
-      customState.add(total);
+    _player.durationStream.listen((duration) {
+      mediaItem.add(mediaItem.value?.copyWith(duration: duration));
     });
   }
 
@@ -66,7 +82,9 @@ class MyAudioHandler extends BaseAudioHandler {
     _player.seek(newPosition);
   }
 
-  Future<void> setAudioSource(AudioSource source) async {
+  Future<void> setAudioSource(AudioSource source, MediaItem item) async {
+    mediaItem.add(item);
+
     try {
       await _player.setAudioSource(source);
     } on PlayerException catch (e) {
