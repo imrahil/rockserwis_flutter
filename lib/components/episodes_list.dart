@@ -52,6 +52,8 @@ class EpisodeListTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final apiProvider = ref.read(apiRepositoryProvider);
+    final favoriteIcon =
+        currentEpisode.isFavorited ? Icons.favorite : Icons.favorite_border;
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -75,7 +77,10 @@ class EpisodeListTile extends ConsumerWidget {
         ),
         subtitle:
             Text('Podcast duration: ${currentEpisode.getReadableDuration}'),
-        trailing: const Icon(Icons.arrow_forward),
+        trailing: Wrap(spacing: 12, children: [
+          Icon(favoriteIcon),
+          const Icon(Icons.arrow_forward),
+        ]),
         onTap: () => {
           if (currentEpisode.hasPodcast)
             {
