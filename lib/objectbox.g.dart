@@ -16,6 +16,7 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
 import 'models/author.dart';
 import 'models/episode.dart';
+import 'models/history_item.dart';
 import 'models/podcast.dart';
 import 'models/schedule.dart';
 
@@ -134,56 +135,82 @@ final _entities = <obx_int.ModelEntity>[
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(23, 6275609622422043273),
+      id: const obx_int.IdUid(26, 5152463046543528017),
       name: 'Episode',
-      lastPropertyId: const obx_int.IdUid(9, 5919337261224320992),
+      lastPropertyId: const obx_int.IdUid(9, 8222434574255145992),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 3702427829382900205),
+            id: const obx_int.IdUid(1, 3370007404032409163),
             name: 'id',
             type: 6,
             flags: 1),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 5119032133954733929),
+            id: const obx_int.IdUid(2, 8506457959561259420),
             name: 'episodeId',
             type: 6,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 2762916143028193134),
+            id: const obx_int.IdUid(3, 5392793506629358629),
             name: 'podcastId',
             type: 6,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 7448834828010321823),
+            id: const obx_int.IdUid(4, 2060514056327211870),
             name: 'date',
             type: 12,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 4427746636840137948),
+            id: const obx_int.IdUid(5, 4982936592413500551),
             name: 'name',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(6, 5885258237381127843),
+            id: const obx_int.IdUid(6, 8916094431183428731),
             name: 'imgPath',
             type: 9,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(7, 4285690815082203531),
+            id: const obx_int.IdUid(7, 5302195662707552261),
             name: 'episodeDuration',
             type: 8,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(8, 7262289789702358582),
+            id: const obx_int.IdUid(8, 8047692785258331307),
             name: 'hasPodcast',
             type: 1,
             flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(9, 5919337261224320992),
+            id: const obx_int.IdUid(9, 8222434574255145992),
             name: 'isFavorited',
             type: 1,
             flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(33, 431433758997861258),
+      name: 'HistoryItem',
+      lastPropertyId: const obx_int.IdUid(3, 1920504629713085655),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 2691341324536417134),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 5153448247584343931),
+            name: 'date',
+            type: 12,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 1920504629713085655),
+            name: 'episodeId',
+            type: 11,
+            flags: 520,
+            indexId: const obx_int.IdUid(8, 4244650804985425259),
+            relationTarget: 'Episode')
       ],
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[])
@@ -224,8 +251,8 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(23, 6275609622422043273),
-      lastIndexId: const obx_int.IdUid(0, 0),
+      lastEntityId: const obx_int.IdUid(33, 431433758997861258),
+      lastIndexId: const obx_int.IdUid(8, 4244650804985425259),
       lastRelationId: const obx_int.IdUid(6, 7419335105193171846),
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [
@@ -247,7 +274,16 @@ obx_int.ModelDefinition getObjectBoxModel() {
         1850460572925164179,
         4960475103318907402,
         2909480661795046150,
-        3702104701358215069
+        3702104701358215069,
+        686778404991606262,
+        6275609622422043273,
+        157674044297935199,
+        8584565244885080745,
+        466658860776363096,
+        5110975088403602075,
+        4336785561592995760,
+        9111466945699906774,
+        1660500475389295279
       ],
       retiredIndexUids: const [],
       retiredPropertyUids: const [
@@ -387,7 +423,40 @@ obx_int.ModelDefinition getObjectBoxModel() {
         5340609205633805495,
         6098306736936310243,
         3421089361332048868,
-        7792613891986561765
+        7792613891986561765,
+        8198054036629078130,
+        5416088168105154286,
+        7348136757304807174,
+        6640011352764925486,
+        3702427829382900205,
+        5119032133954733929,
+        2762916143028193134,
+        7448834828010321823,
+        4427746636840137948,
+        5885258237381127843,
+        4285690815082203531,
+        7262289789702358582,
+        5919337261224320992,
+        8244538701373217941,
+        5301666506709806707,
+        3095807101891828165,
+        4704338535705261885,
+        2054495545006527043,
+        654787384023526827,
+        6451172658866739028,
+        3289103326228593198,
+        3217041058122541106,
+        8865423363343771418,
+        725533992369227960,
+        7345159083849049751,
+        8489474658043753054,
+        2005054531215622735,
+        6429760581112312050,
+        8256700680936669197,
+        3634270379433828695,
+        7961281825179721831,
+        4697311684380312626,
+        4598031670336787670
       ],
       retiredRelationUids: const [559890034703527719, 3085588869725977564],
       modelVersion: 5,
@@ -588,6 +657,37 @@ obx_int.ModelDefinition getObjectBoxModel() {
               isFavorited: isFavoritedParam);
 
           return object;
+        }),
+    HistoryItem: obx_int.EntityDefinition<HistoryItem>(
+        model: _entities[4],
+        toOneRelations: (HistoryItem object) => [object.episode],
+        toManyRelations: (HistoryItem object) => {},
+        getId: (HistoryItem object) => object.id,
+        setId: (HistoryItem object, int id) {
+          object.id = id;
+        },
+        objectToFB: (HistoryItem object, fb.Builder fbb) {
+          fbb.startTable(4);
+          fbb.addInt64(0, object.id);
+          fbb.addInt64(1, object.date.microsecondsSinceEpoch * 1000);
+          fbb.addInt64(2, object.episode.targetId);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final idParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          final dateParam = DateTime.fromMicrosecondsSinceEpoch(
+              (const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0) /
+                      1000)
+                  .round());
+          final object = HistoryItem(id: idParam, date: dateParam);
+          object.episode.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
+          object.episode.attach(store);
+          return object;
         })
   };
 
@@ -708,4 +808,19 @@ class Episode_ {
   /// See [Episode.isFavorited].
   static final isFavorited =
       obx.QueryBooleanProperty<Episode>(_entities[3].properties[8]);
+}
+
+/// [HistoryItem] entity fields to define ObjectBox queries.
+class HistoryItem_ {
+  /// See [HistoryItem.id].
+  static final id =
+      obx.QueryIntegerProperty<HistoryItem>(_entities[4].properties[0]);
+
+  /// See [HistoryItem.date].
+  static final date =
+      obx.QueryDateNanoProperty<HistoryItem>(_entities[4].properties[1]);
+
+  /// See [HistoryItem.episode].
+  static final episode =
+      obx.QueryRelationToOne<HistoryItem, Episode>(_entities[4].properties[2]);
 }
