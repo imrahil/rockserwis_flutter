@@ -1,6 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:objectbox/objectbox.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
@@ -92,8 +93,8 @@ class PlayerRepository extends _$PlayerRepository {
     _audioHandler.play();
 
     // push episode to the history database
-    final historyItem = HistoryItem();
-    historyItem.episode.target = currentEpisode;
+    final historyItem = HistoryItem(
+        date: DateTime.now(), episode: ToOne(target: currentEpisode));
 
     await ref
         .read(objectBoxProvider)

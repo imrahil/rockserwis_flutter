@@ -50,9 +50,12 @@ mixin _$Episode {
   set hasPodcast(bool value) => throw _privateConstructorUsedError;
   bool get isFavorited => throw _privateConstructorUsedError;
   set isFavorited(bool value) => throw _privateConstructorUsedError;
-
-  /// Serializes this Episode to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @Backlink('episode')
+  @JsonKey(fromJson: _historyItemFromJson)
+  ToMany<HistoryItem> get history => throw _privateConstructorUsedError;
+  @Backlink('episode')
+  @JsonKey(fromJson: _historyItemFromJson)
+  set history(ToMany<HistoryItem> value) => throw _privateConstructorUsedError;
 
   /// Create a copy of Episode
   /// with the given fields replaced by the non-null parameter values.
@@ -74,7 +77,10 @@ abstract class $EpisodeCopyWith<$Res> {
       @JsonKey(name: 'img_path') String imgPath,
       @JsonKey(name: 'podcast_duration') double episodeDuration,
       @JsonKey(name: 'has_podcast') bool hasPodcast,
-      bool isFavorited});
+      bool isFavorited,
+      @Backlink('episode')
+      @JsonKey(fromJson: _historyItemFromJson)
+      ToMany<HistoryItem> history});
 }
 
 /// @nodoc
@@ -101,6 +107,7 @@ class _$EpisodeCopyWithImpl<$Res, $Val extends Episode>
     Object? episodeDuration = null,
     Object? hasPodcast = null,
     Object? isFavorited = null,
+    Object? history = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -139,6 +146,10 @@ class _$EpisodeCopyWithImpl<$Res, $Val extends Episode>
           ? _value.isFavorited
           : isFavorited // ignore: cast_nullable_to_non_nullable
               as bool,
+      history: null == history
+          ? _value.history
+          : history // ignore: cast_nullable_to_non_nullable
+              as ToMany<HistoryItem>,
     ) as $Val);
   }
 }
@@ -159,7 +170,10 @@ abstract class _$$EpisodeImplCopyWith<$Res> implements $EpisodeCopyWith<$Res> {
       @JsonKey(name: 'img_path') String imgPath,
       @JsonKey(name: 'podcast_duration') double episodeDuration,
       @JsonKey(name: 'has_podcast') bool hasPodcast,
-      bool isFavorited});
+      bool isFavorited,
+      @Backlink('episode')
+      @JsonKey(fromJson: _historyItemFromJson)
+      ToMany<HistoryItem> history});
 }
 
 /// @nodoc
@@ -184,6 +198,7 @@ class __$$EpisodeImplCopyWithImpl<$Res>
     Object? episodeDuration = null,
     Object? hasPodcast = null,
     Object? isFavorited = null,
+    Object? history = null,
   }) {
     return _then(_$EpisodeImpl(
       id: null == id
@@ -222,12 +237,16 @@ class __$$EpisodeImplCopyWithImpl<$Res>
           ? _value.isFavorited
           : isFavorited // ignore: cast_nullable_to_non_nullable
               as bool,
+      history: null == history
+          ? _value.history
+          : history // ignore: cast_nullable_to_non_nullable
+              as ToMany<HistoryItem>,
     ));
   }
 }
 
 /// @nodoc
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 @Entity(realClass: Episode)
 class _$EpisodeImpl extends _Episode {
   _$EpisodeImpl(
@@ -239,7 +258,10 @@ class _$EpisodeImpl extends _Episode {
       @JsonKey(name: 'img_path') this.imgPath = "",
       @JsonKey(name: 'podcast_duration') this.episodeDuration = 0.0,
       @JsonKey(name: 'has_podcast') required this.hasPodcast,
-      this.isFavorited = false})
+      this.isFavorited = false,
+      @Backlink('episode')
+      @JsonKey(fromJson: _historyItemFromJson)
+      required this.history})
       : super._();
 
   factory _$EpisodeImpl.fromJson(Map<String, dynamic> json) =>
@@ -271,10 +293,14 @@ class _$EpisodeImpl extends _Episode {
   @override
   @JsonKey()
   bool isFavorited;
+  @override
+  @Backlink('episode')
+  @JsonKey(fromJson: _historyItemFromJson)
+  ToMany<HistoryItem> history;
 
   @override
   String toString() {
-    return 'Episode(id: $id, episodeId: $episodeId, podcastId: $podcastId, date: $date, name: $name, imgPath: $imgPath, episodeDuration: $episodeDuration, hasPodcast: $hasPodcast, isFavorited: $isFavorited)';
+    return 'Episode(id: $id, episodeId: $episodeId, podcastId: $podcastId, date: $date, name: $name, imgPath: $imgPath, episodeDuration: $episodeDuration, hasPodcast: $hasPodcast, isFavorited: $isFavorited, history: $history)';
   }
 
   @override
@@ -295,13 +321,24 @@ class _$EpisodeImpl extends _Episode {
             (identical(other.hasPodcast, hasPodcast) ||
                 other.hasPodcast == hasPodcast) &&
             (identical(other.isFavorited, isFavorited) ||
-                other.isFavorited == isFavorited));
+                other.isFavorited == isFavorited) &&
+            const DeepCollectionEquality().equals(other.history, history));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, episodeId, podcastId, date,
-      name, imgPath, episodeDuration, hasPodcast, isFavorited);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      episodeId,
+      podcastId,
+      date,
+      name,
+      imgPath,
+      episodeDuration,
+      hasPodcast,
+      isFavorited,
+      const DeepCollectionEquality().hash(history));
 
   /// Create a copy of Episode
   /// with the given fields replaced by the non-null parameter values.
@@ -310,13 +347,6 @@ class _$EpisodeImpl extends _Episode {
   @pragma('vm:prefer-inline')
   _$$EpisodeImplCopyWith<_$EpisodeImpl> get copyWith =>
       __$$EpisodeImplCopyWithImpl<_$EpisodeImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$EpisodeImplToJson(
-      this,
-    );
-  }
 }
 
 abstract class _Episode extends Episode {
@@ -329,7 +359,10 @@ abstract class _Episode extends Episode {
       @JsonKey(name: 'img_path') String imgPath,
       @JsonKey(name: 'podcast_duration') double episodeDuration,
       @JsonKey(name: 'has_podcast') required bool hasPodcast,
-      bool isFavorited}) = _$EpisodeImpl;
+      bool isFavorited,
+      @Backlink('episode')
+      @JsonKey(fromJson: _historyItemFromJson)
+      required ToMany<HistoryItem> history}) = _$EpisodeImpl;
   _Episode._() : super._();
 
   factory _Episode.fromJson(Map<String, dynamic> json) = _$EpisodeImpl.fromJson;
@@ -373,6 +406,13 @@ abstract class _Episode extends Episode {
   @override
   bool get isFavorited;
   set isFavorited(bool value);
+  @override
+  @Backlink('episode')
+  @JsonKey(fromJson: _historyItemFromJson)
+  ToMany<HistoryItem> get history;
+  @Backlink('episode')
+  @JsonKey(fromJson: _historyItemFromJson)
+  set history(ToMany<HistoryItem> value);
 
   /// Create a copy of Episode
   /// with the given fields replaced by the non-null parameter values.

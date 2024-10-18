@@ -17,17 +17,5 @@ _$EpisodeImpl _$$EpisodeImplFromJson(Map<String, dynamic> json) =>
       episodeDuration: (json['podcast_duration'] as num?)?.toDouble() ?? 0.0,
       hasPodcast: json['has_podcast'] as bool,
       isFavorited: json['isFavorited'] as bool? ?? false,
+      history: _historyItemFromJson(json['history'] as List?),
     );
-
-Map<String, dynamic> _$$EpisodeImplToJson(_$EpisodeImpl instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'schedule_id': instance.episodeId,
-      'podcastId': instance.podcastId,
-      'date': instance.date.toIso8601String(),
-      'name': instance.name,
-      'img_path': instance.imgPath,
-      'podcast_duration': instance.episodeDuration,
-      'has_podcast': instance.hasPodcast,
-      'isFavorited': instance.isFavorited,
-    };
