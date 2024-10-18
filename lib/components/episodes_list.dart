@@ -75,8 +75,20 @@ class EpisodeListTile extends ConsumerWidget {
           currentEpisode.getEpisodeTitle,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        subtitle:
-            Text('Podcast duration: ${currentEpisode.getReadableDuration}'),
+        subtitle: Row(
+          children: [
+            Text('Duration: ${currentEpisode.getReadableDuration}'),
+            SizedBox(width: 10),
+            currentEpisode.progress > 0
+                ? Expanded(
+                    child: LinearProgressIndicator(
+                      value: currentEpisode.progress,
+                    ),
+                  )
+                : Spacer(),
+            SizedBox(width: 10),
+          ],
+        ),
         trailing: Wrap(spacing: 12, children: [
           Icon(favoriteIcon),
           const Icon(Icons.arrow_forward),

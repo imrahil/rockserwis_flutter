@@ -22,6 +22,7 @@ mixin _$ProgressBarState {
   Duration get progress => throw _privateConstructorUsedError;
   Duration get buffered => throw _privateConstructorUsedError;
   Duration get total => throw _privateConstructorUsedError;
+  Episode? get episode => throw _privateConstructorUsedError;
 
   /// Create a copy of ProgressBarState
   /// with the given fields replaced by the non-null parameter values.
@@ -41,7 +42,10 @@ abstract class $ProgressBarStateCopyWith<$Res> {
       AudioProcessingState processingState,
       Duration progress,
       Duration buffered,
-      Duration total});
+      Duration total,
+      Episode? episode});
+
+  $EpisodeCopyWith<$Res>? get episode;
 }
 
 /// @nodoc
@@ -64,6 +68,7 @@ class _$ProgressBarStateCopyWithImpl<$Res, $Val extends ProgressBarState>
     Object? progress = null,
     Object? buffered = null,
     Object? total = null,
+    Object? episode = freezed,
   }) {
     return _then(_value.copyWith(
       playing: null == playing
@@ -86,7 +91,25 @@ class _$ProgressBarStateCopyWithImpl<$Res, $Val extends ProgressBarState>
           ? _value.total
           : total // ignore: cast_nullable_to_non_nullable
               as Duration,
+      episode: freezed == episode
+          ? _value.episode
+          : episode // ignore: cast_nullable_to_non_nullable
+              as Episode?,
     ) as $Val);
+  }
+
+  /// Create a copy of ProgressBarState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $EpisodeCopyWith<$Res>? get episode {
+    if (_value.episode == null) {
+      return null;
+    }
+
+    return $EpisodeCopyWith<$Res>(_value.episode!, (value) {
+      return _then(_value.copyWith(episode: value) as $Val);
+    });
   }
 }
 
@@ -103,7 +126,11 @@ abstract class _$$ProgressBarStateImplCopyWith<$Res>
       AudioProcessingState processingState,
       Duration progress,
       Duration buffered,
-      Duration total});
+      Duration total,
+      Episode? episode});
+
+  @override
+  $EpisodeCopyWith<$Res>? get episode;
 }
 
 /// @nodoc
@@ -124,6 +151,7 @@ class __$$ProgressBarStateImplCopyWithImpl<$Res>
     Object? progress = null,
     Object? buffered = null,
     Object? total = null,
+    Object? episode = freezed,
   }) {
     return _then(_$ProgressBarStateImpl(
       playing: null == playing
@@ -146,6 +174,10 @@ class __$$ProgressBarStateImplCopyWithImpl<$Res>
           ? _value.total
           : total // ignore: cast_nullable_to_non_nullable
               as Duration,
+      episode: freezed == episode
+          ? _value.episode
+          : episode // ignore: cast_nullable_to_non_nullable
+              as Episode?,
     ));
   }
 }
@@ -158,7 +190,8 @@ class _$ProgressBarStateImpl implements _ProgressBarState {
       required this.processingState,
       required this.progress,
       required this.buffered,
-      required this.total});
+      required this.total,
+      this.episode});
 
   @override
   final bool playing;
@@ -170,10 +203,12 @@ class _$ProgressBarStateImpl implements _ProgressBarState {
   final Duration buffered;
   @override
   final Duration total;
+  @override
+  final Episode? episode;
 
   @override
   String toString() {
-    return 'ProgressBarState(playing: $playing, processingState: $processingState, progress: $progress, buffered: $buffered, total: $total)';
+    return 'ProgressBarState(playing: $playing, processingState: $processingState, progress: $progress, buffered: $buffered, total: $total, episode: $episode)';
   }
 
   @override
@@ -188,12 +223,13 @@ class _$ProgressBarStateImpl implements _ProgressBarState {
                 other.progress == progress) &&
             (identical(other.buffered, buffered) ||
                 other.buffered == buffered) &&
-            (identical(other.total, total) || other.total == total));
+            (identical(other.total, total) || other.total == total) &&
+            (identical(other.episode, episode) || other.episode == episode));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, playing, processingState, progress, buffered, total);
+  int get hashCode => Object.hash(runtimeType, playing, processingState,
+      progress, buffered, total, episode);
 
   /// Create a copy of ProgressBarState
   /// with the given fields replaced by the non-null parameter values.
@@ -211,7 +247,8 @@ abstract class _ProgressBarState implements ProgressBarState {
       required final AudioProcessingState processingState,
       required final Duration progress,
       required final Duration buffered,
-      required final Duration total}) = _$ProgressBarStateImpl;
+      required final Duration total,
+      final Episode? episode}) = _$ProgressBarStateImpl;
 
   @override
   bool get playing;
@@ -223,6 +260,8 @@ abstract class _ProgressBarState implements ProgressBarState {
   Duration get buffered;
   @override
   Duration get total;
+  @override
+  Episode? get episode;
 
   /// Create a copy of ProgressBarState
   /// with the given fields replaced by the non-null parameter values.

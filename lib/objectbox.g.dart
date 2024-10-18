@@ -137,7 +137,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(35, 7756478160039821406),
       name: 'Episode',
-      lastPropertyId: const obx_int.IdUid(9, 1314965858799691602),
+      lastPropertyId: const obx_int.IdUid(10, 8575235814807802968),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -184,6 +184,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(9, 1314965858799691602),
             name: 'isFavorited',
             type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(10, 8575235814807802968),
+            name: 'progress',
+            type: 8,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -658,7 +663,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         objectToFB: (Episode object, fb.Builder fbb) {
           final nameOffset = fbb.writeString(object.name);
           final imgPathOffset = fbb.writeString(object.imgPath);
-          fbb.startTable(10);
+          fbb.startTable(11);
           fbb.addInt64(0, object.id);
           fbb.addInt64(1, object.episodeId);
           fbb.addInt64(2, object.podcastId);
@@ -668,6 +673,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addFloat64(6, object.episodeDuration);
           fbb.addBool(7, object.hasPodcast);
           fbb.addBool(8, object.isFavorited);
+          fbb.addFloat64(9, object.progress);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -695,6 +701,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final isFavoritedParam =
               const fb.BoolReader().vTableGet(buffer, rootOffset, 20, false);
           final historyParam = obx.ToMany<HistoryItem>();
+          final progressParam =
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 22, 0);
           final object = Episode(
               id: idParam,
               episodeId: episodeIdParam,
@@ -705,7 +713,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
               episodeDuration: episodeDurationParam,
               hasPodcast: hasPodcastParam,
               isFavorited: isFavoritedParam,
-              history: historyParam);
+              history: historyParam,
+              progress: progressParam);
           obx_int.InternalToManyAccess.setRelInfo<Episode>(
               object.history,
               store,
@@ -865,6 +874,10 @@ class Episode_ {
   /// See [Episode.isFavorited].
   static final isFavorited =
       obx.QueryBooleanProperty<Episode>(_entities[3].properties[8]);
+
+  /// See [Episode.progress].
+  static final progress =
+      obx.QueryDoubleProperty<Episode>(_entities[3].properties[9]);
 
   /// see [Episode.history]
   static final history =

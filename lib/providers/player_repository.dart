@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:objectbox/objectbox.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
+import 'package:rockserwis_podcaster/app_startup.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/models/history_item.dart';
 import 'package:rockserwis_podcaster/models/progress_bar_state.dart';
@@ -35,6 +38,21 @@ class PlayerRepository extends _$PlayerRepository {
       state = state.copyWith(
         total: item?.duration ?? Duration.zero,
       );
+    });
+
+    Timer timer = Timer.periodic(Duration(seconds: 30), (timer) {
+      if (state.playing) {
+        double progress =
+            state.progress.inMicroseconds / state.total.inMicroseconds;
+
+        Episode updatedEpisode = state.episode!.copyWith(progress: progress);
+
+        ref.read(objectBoxProvider).requireValue.episodeBox.put(updatedEpisode);
+      }
+    });
+
+    ref.onDispose(() {
+      timer.cancel();
     });
 
     return ProgressBarState(
@@ -71,6 +89,10 @@ class PlayerRepository extends _$PlayerRepository {
   }
 
   void setAudioSource(Episode currentEpisode) async {
+    state = state.copyWith(
+      episode: currentEpisode,
+    );
+
     final apiProvider = ref.read(apiRepositoryProvider);
 
     MediaItem item = MediaItem(

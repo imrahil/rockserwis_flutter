@@ -118,7 +118,7 @@
     },
     {
       "id": "35:7756478160039821406",
-      "lastPropertyId": "9:1314965858799691602",
+      "lastPropertyId": "10:8575235814807802968",
       "name": "Episode",
       "properties": [
         {
@@ -166,6 +166,11 @@
           "id": "9:1314965858799691602",
           "name": "isFavorited",
           "type": 1
+        },
+        {
+          "id": "10:8575235814807802968",
+          "name": "progress",
+          "type": 8
         }
       ],
       "relations": []

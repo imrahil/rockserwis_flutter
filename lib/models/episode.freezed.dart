@@ -56,6 +56,8 @@ mixin _$Episode {
   @Backlink('episode')
   @JsonKey(fromJson: _historyItemFromJson)
   set history(ToMany<HistoryItem> value) => throw _privateConstructorUsedError;
+  double get progress => throw _privateConstructorUsedError;
+  set progress(double value) => throw _privateConstructorUsedError;
 
   /// Create a copy of Episode
   /// with the given fields replaced by the non-null parameter values.
@@ -80,7 +82,8 @@ abstract class $EpisodeCopyWith<$Res> {
       bool isFavorited,
       @Backlink('episode')
       @JsonKey(fromJson: _historyItemFromJson)
-      ToMany<HistoryItem> history});
+      ToMany<HistoryItem> history,
+      double progress});
 }
 
 /// @nodoc
@@ -108,6 +111,7 @@ class _$EpisodeCopyWithImpl<$Res, $Val extends Episode>
     Object? hasPodcast = null,
     Object? isFavorited = null,
     Object? history = null,
+    Object? progress = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -150,6 +154,10 @@ class _$EpisodeCopyWithImpl<$Res, $Val extends Episode>
           ? _value.history
           : history // ignore: cast_nullable_to_non_nullable
               as ToMany<HistoryItem>,
+      progress: null == progress
+          ? _value.progress
+          : progress // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 }
@@ -173,7 +181,8 @@ abstract class _$$EpisodeImplCopyWith<$Res> implements $EpisodeCopyWith<$Res> {
       bool isFavorited,
       @Backlink('episode')
       @JsonKey(fromJson: _historyItemFromJson)
-      ToMany<HistoryItem> history});
+      ToMany<HistoryItem> history,
+      double progress});
 }
 
 /// @nodoc
@@ -199,6 +208,7 @@ class __$$EpisodeImplCopyWithImpl<$Res>
     Object? hasPodcast = null,
     Object? isFavorited = null,
     Object? history = null,
+    Object? progress = null,
   }) {
     return _then(_$EpisodeImpl(
       id: null == id
@@ -241,6 +251,10 @@ class __$$EpisodeImplCopyWithImpl<$Res>
           ? _value.history
           : history // ignore: cast_nullable_to_non_nullable
               as ToMany<HistoryItem>,
+      progress: null == progress
+          ? _value.progress
+          : progress // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -261,7 +275,8 @@ class _$EpisodeImpl extends _Episode {
       this.isFavorited = false,
       @Backlink('episode')
       @JsonKey(fromJson: _historyItemFromJson)
-      required this.history})
+      required this.history,
+      this.progress = 0.0})
       : super._();
 
   factory _$EpisodeImpl.fromJson(Map<String, dynamic> json) =>
@@ -297,10 +312,13 @@ class _$EpisodeImpl extends _Episode {
   @Backlink('episode')
   @JsonKey(fromJson: _historyItemFromJson)
   ToMany<HistoryItem> history;
+  @override
+  @JsonKey()
+  double progress;
 
   @override
   String toString() {
-    return 'Episode(id: $id, episodeId: $episodeId, podcastId: $podcastId, date: $date, name: $name, imgPath: $imgPath, episodeDuration: $episodeDuration, hasPodcast: $hasPodcast, isFavorited: $isFavorited, history: $history)';
+    return 'Episode(id: $id, episodeId: $episodeId, podcastId: $podcastId, date: $date, name: $name, imgPath: $imgPath, episodeDuration: $episodeDuration, hasPodcast: $hasPodcast, isFavorited: $isFavorited, history: $history, progress: $progress)';
   }
 
   @override
@@ -322,7 +340,9 @@ class _$EpisodeImpl extends _Episode {
                 other.hasPodcast == hasPodcast) &&
             (identical(other.isFavorited, isFavorited) ||
                 other.isFavorited == isFavorited) &&
-            const DeepCollectionEquality().equals(other.history, history));
+            const DeepCollectionEquality().equals(other.history, history) &&
+            (identical(other.progress, progress) ||
+                other.progress == progress));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -338,7 +358,8 @@ class _$EpisodeImpl extends _Episode {
       episodeDuration,
       hasPodcast,
       isFavorited,
-      const DeepCollectionEquality().hash(history));
+      const DeepCollectionEquality().hash(history),
+      progress);
 
   /// Create a copy of Episode
   /// with the given fields replaced by the non-null parameter values.
@@ -362,7 +383,8 @@ abstract class _Episode extends Episode {
       bool isFavorited,
       @Backlink('episode')
       @JsonKey(fromJson: _historyItemFromJson)
-      required ToMany<HistoryItem> history}) = _$EpisodeImpl;
+      required ToMany<HistoryItem> history,
+      double progress}) = _$EpisodeImpl;
   _Episode._() : super._();
 
   factory _Episode.fromJson(Map<String, dynamic> json) = _$EpisodeImpl.fromJson;
@@ -413,6 +435,9 @@ abstract class _Episode extends Episode {
   @Backlink('episode')
   @JsonKey(fromJson: _historyItemFromJson)
   set history(ToMany<HistoryItem> value);
+  @override
+  double get progress;
+  set progress(double value);
 
   /// Create a copy of Episode
   /// with the given fields replaced by the non-null parameter values.

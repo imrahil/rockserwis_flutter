@@ -25,6 +25,7 @@ class Episode with _$Episode {
     @Backlink('episode')
     @JsonKey(fromJson: _historyItemFromJson)
     required ToMany<HistoryItem> history,
+    @Default(0.0) double progress,
   }) = _Episode;
 
   factory Episode.fromJson(Map<String, Object?> json) =>
