@@ -6,7 +6,6 @@ import 'package:just_audio/just_audio.dart';
 import 'package:objectbox/objectbox.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
-import 'package:rockserwis_podcaster/app_startup.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/models/history_item.dart';
 import 'package:rockserwis_podcaster/models/progress_bar_state.dart';

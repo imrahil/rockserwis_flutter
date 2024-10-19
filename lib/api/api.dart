@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:rockserwis_podcaster/api/const.dart';
+import 'package:rockserwis_podcaster/utils/const.dart';
 import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,7 +25,8 @@ class ApiRepository {
 
     if (rememberMe) {
       _masterCookie = sharedPreferences.getString(Const.masterCookieKey) ?? "";
-      _sessionCookie = sharedPreferences.getString(Const.sessionCookieKey) ?? "";
+      _sessionCookie =
+          sharedPreferences.getString(Const.sessionCookieKey) ?? "";
 
       return _masterCookie != "" && _sessionCookie != "";
     }

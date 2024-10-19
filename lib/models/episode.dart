@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import 'package:objectbox/objectbox.dart';
-import 'package:rockserwis_podcaster/api/const.dart';
 import 'package:rockserwis_podcaster/models/history_item.dart';
+import 'package:rockserwis_podcaster/utils/const.dart';
 
 part 'episode.freezed.dart';
 part 'episode.g.dart';
