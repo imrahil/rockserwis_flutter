@@ -9,7 +9,7 @@ class HistoryPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final historyEpisodesAsync = ref.watch(episodeHistoryListProvider);
+    final historyEpisodesAsync = ref.watch(historyEpisodesProvider);
 
     return Scaffold(
       appBar: SharedAppBar(title: 'History'),

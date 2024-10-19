@@ -3,13 +3,12 @@ import 'dart:async';
 import 'package:audio_service/audio_service.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:objectbox/objectbox.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
-import 'package:rockserwis_podcaster/models/history_item.dart';
 import 'package:rockserwis_podcaster/models/progress_bar_state.dart';
 import 'package:rockserwis_podcaster/providers/audio_service.dart';
+import 'package:rockserwis_podcaster/providers/episode_repository.dart';
 import 'package:rockserwis_podcaster/providers/objectbox_repository.dart';
 import 'package:rockserwis_podcaster/utils/audio_handler.dart';
 
@@ -114,13 +113,6 @@ class PlayerRepository extends _$PlayerRepository {
     _audioHandler.play();
 
     // push episode to the history database
-    final historyItem = HistoryItem(
-        date: DateTime.now(), episode: ToOne(target: currentEpisode));
-
-    await ref
-        .read(objectBoxProvider)
-        .requireValue
-        .historyBox
-        .putAsync(historyItem);
+    await ref.read(historyEpisodesProvider.notifier).addNew(currentEpisode);
   }
 }

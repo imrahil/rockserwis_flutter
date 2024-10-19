@@ -75,16 +75,32 @@ Future<List<Episode>> episodeList(EpisodeListRef ref, int podcastId) async {
   return sorted;
 }
 
+/// Fetches all episodes from the history.
 @riverpod
-Future<List<HistoryItem>> episodeHistoryList(EpisodeHistoryListRef ref) async {
-  final objectBox = await ref.watch(objectBoxProvider.future);
+class HistoryEpisodes extends _$HistoryEpisodes {
+  @override
+  Future<List<HistoryItem>> build() async {
+    final objectBox = await ref.watch(objectBoxProvider.future);
 
-  final query = ((objectBox.historyBox.query()
-        ..order(HistoryItem_.date, flags: Order.descending))
-      .build())
-    ..limit = 100;
+    final query = ((objectBox.historyBox.query()
+          ..order(HistoryItem_.date, flags: Order.descending))
+        .build())
+      ..limit = 100;
 
-  return query.findAsync();
+    return query.findAsync();
+  }
+
+  Future<void> addNew(Episode episode) async {
+    final objectBox = await ref.watch(objectBoxProvider.future);
+
+    final historyItem =
+        HistoryItem(date: DateTime.now(), episode: ToOne(target: episode));
+
+    await objectBox.historyBox.putAsync(historyItem);
+
+    ref.invalidateSelf();
+    await future;
+  }
 }
 
 /// Fetches all favorited episodes from the database.
