@@ -1,6 +1,7 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/app_routes.dart';
@@ -33,7 +34,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       if (result && context.mounted) {
         logger.d('Login successful');
 
-        Navigator.of(context).pushNamed(AppRoutes.podcasts);
+        while (context.canPop() == true) {
+          context.pop();
+        }
+
+        context.go(AppRoutes.podcasts);
       } else {
         _showSnackbar('Unable to sign in.');
       }

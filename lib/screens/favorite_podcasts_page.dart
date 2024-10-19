@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rockserwis_podcaster/components/podcasts_list.dart';
+import 'package:rockserwis_podcaster/components/shared_app_bar.dart';
 import 'package:rockserwis_podcaster/providers/podcast_repository.dart';
 
 class FavoritePodcastsPage extends ConsumerWidget {
@@ -11,9 +12,7 @@ class FavoritePodcastsPage extends ConsumerWidget {
     final favoritedPodcastsAsync = ref.watch(favoritedPodcastsProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Favorite podcasts"),
-      ),
+      appBar: SharedAppBar(title: 'Favorite podcasts'),
       body: favoritedPodcastsAsync.when(
         data: (podcasts) => PodcastsList(podcasts: podcasts),
         loading: () => const Center(child: CircularProgressIndicator()),

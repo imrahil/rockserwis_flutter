@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/app_routes.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
@@ -96,12 +97,9 @@ class EpisodeListTile extends ConsumerWidget {
         onTap: () => {
           if (currentEpisode.hasPodcast)
             {
-              Navigator.of(context).pushNamed(
+              context.pushNamed(
                 AppRoutes.player,
-                arguments: (
-                  currentEpisode: currentEpisode,
-                  episodes: episodes,
-                ),
+                extra: (currentEpisode, episodes),
               )
             }
         },

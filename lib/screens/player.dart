@@ -12,6 +12,8 @@ import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/providers/episode_repository.dart';
 import 'package:rockserwis_podcaster/providers/player_repository.dart';
 
+typedef PlayerData = (Episode currentEpisode, List<Episode> episodes);
+
 class Player extends ConsumerStatefulWidget {
   final Episode currentEpisode;
   final List<Episode> episodes;

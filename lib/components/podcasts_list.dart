@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/app_routes.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
@@ -61,8 +62,10 @@ class PodcastListTile extends ConsumerWidget {
         ),
         subtitle: Text('Podcast ID: ${currentPodcast.podcastId}'),
         trailing: const Icon(Icons.arrow_forward),
-        onTap: () => Navigator.of(context)
-            .pushNamed(AppRoutes.episodes, arguments: currentPodcast),
+        onTap: () => context.push(
+          '${AppRoutes.podcasts}/${AppRoutes.episodes}',
+          extra: currentPodcast,
+        ),
       ),
     );
   }
