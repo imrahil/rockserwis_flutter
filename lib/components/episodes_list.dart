@@ -26,7 +26,9 @@ class EpisodesList extends StatelessWidget {
 
         // Check if the episode has an image, if not, use the podcast image
         // side-effect: the image property will be saved to the database
-        if (currentEpisode.imgPath == "" && currentPodcast?.image != "") {
+        if (currentEpisode.imgPath == "" &&
+            currentPodcast != null &&
+            currentPodcast?.image != "") {
           currentEpisode =
               currentEpisode.copyWith(imgPath: currentPodcast!.image);
         }

@@ -301,6 +301,23 @@ class _EpisodeListProviderElement
   int get podcastId => (origin as EpisodeListProvider).podcastId;
 }
 
+String _$episodeHistoryListHash() =>
+    r'2e0d4189af6f09ac4717a0710888d79291b5d5cd';
+
+/// See also [episodeHistoryList].
+@ProviderFor(episodeHistoryList)
+final episodeHistoryListProvider =
+    AutoDisposeFutureProvider<List<HistoryItem>>.internal(
+  episodeHistoryList,
+  name: r'episodeHistoryListProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$episodeHistoryListHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef EpisodeHistoryListRef = AutoDisposeFutureProviderRef<List<HistoryItem>>;
 String _$favoritedEpisodesHash() => r'b019766cff16cb86d2fa5a612824e5cee7b617b3';
 
 /// Fetches all favorited episodes from the database.

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
+import 'package:rockserwis_podcaster/models/history_item.dart';
 import 'package:rockserwis_podcaster/objectbox.g.dart';
 import 'package:rockserwis_podcaster/providers/objectbox_repository.dart';
 import 'package:rockserwis_podcaster/providers/sort_order.dart';
@@ -72,6 +73,18 @@ Future<List<Episode>> episodeList(EpisodeListRef ref, int podcastId) async {
   };
 
   return sorted;
+}
+
+@riverpod
+Future<List<HistoryItem>> episodeHistoryList(EpisodeHistoryListRef ref) async {
+  final objectBox = await ref.watch(objectBoxProvider.future);
+
+  final query = ((objectBox.historyBox.query()
+        ..order(HistoryItem_.date, flags: Order.descending))
+      .build())
+    ..limit = 100;
+
+  return query.findAsync();
 }
 
 /// Fetches all favorited episodes from the database.
