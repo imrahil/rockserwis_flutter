@@ -50,12 +50,10 @@ mixin _$Episode {
   set hasPodcast(bool value) => throw _privateConstructorUsedError;
   bool get isFavorited => throw _privateConstructorUsedError;
   set isFavorited(bool value) => throw _privateConstructorUsedError;
-  @Backlink('episode')
-  @JsonKey(fromJson: _historyItemFromJson)
-  ToMany<HistoryItem> get history => throw _privateConstructorUsedError;
-  @Backlink('episode')
-  @JsonKey(fromJson: _historyItemFromJson)
-  set history(ToMany<HistoryItem> value) => throw _privateConstructorUsedError;
+  @Property(type: PropertyType.dateNano)
+  DateTime? get updatedAt => throw _privateConstructorUsedError;
+  @Property(type: PropertyType.dateNano)
+  set updatedAt(DateTime? value) => throw _privateConstructorUsedError;
   double get progress => throw _privateConstructorUsedError;
   set progress(double value) => throw _privateConstructorUsedError;
 
@@ -80,9 +78,7 @@ abstract class $EpisodeCopyWith<$Res> {
       @JsonKey(name: 'podcast_duration') double episodeDuration,
       @JsonKey(name: 'has_podcast') bool hasPodcast,
       bool isFavorited,
-      @Backlink('episode')
-      @JsonKey(fromJson: _historyItemFromJson)
-      ToMany<HistoryItem> history,
+      @Property(type: PropertyType.dateNano) DateTime? updatedAt,
       double progress});
 }
 
@@ -110,7 +106,7 @@ class _$EpisodeCopyWithImpl<$Res, $Val extends Episode>
     Object? episodeDuration = null,
     Object? hasPodcast = null,
     Object? isFavorited = null,
-    Object? history = null,
+    Object? updatedAt = freezed,
     Object? progress = null,
   }) {
     return _then(_value.copyWith(
@@ -150,10 +146,10 @@ class _$EpisodeCopyWithImpl<$Res, $Val extends Episode>
           ? _value.isFavorited
           : isFavorited // ignore: cast_nullable_to_non_nullable
               as bool,
-      history: null == history
-          ? _value.history
-          : history // ignore: cast_nullable_to_non_nullable
-              as ToMany<HistoryItem>,
+      updatedAt: freezed == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       progress: null == progress
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
@@ -179,9 +175,7 @@ abstract class _$$EpisodeImplCopyWith<$Res> implements $EpisodeCopyWith<$Res> {
       @JsonKey(name: 'podcast_duration') double episodeDuration,
       @JsonKey(name: 'has_podcast') bool hasPodcast,
       bool isFavorited,
-      @Backlink('episode')
-      @JsonKey(fromJson: _historyItemFromJson)
-      ToMany<HistoryItem> history,
+      @Property(type: PropertyType.dateNano) DateTime? updatedAt,
       double progress});
 }
 
@@ -207,7 +201,7 @@ class __$$EpisodeImplCopyWithImpl<$Res>
     Object? episodeDuration = null,
     Object? hasPodcast = null,
     Object? isFavorited = null,
-    Object? history = null,
+    Object? updatedAt = freezed,
     Object? progress = null,
   }) {
     return _then(_$EpisodeImpl(
@@ -247,10 +241,10 @@ class __$$EpisodeImplCopyWithImpl<$Res>
           ? _value.isFavorited
           : isFavorited // ignore: cast_nullable_to_non_nullable
               as bool,
-      history: null == history
-          ? _value.history
-          : history // ignore: cast_nullable_to_non_nullable
-              as ToMany<HistoryItem>,
+      updatedAt: freezed == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       progress: null == progress
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
@@ -273,9 +267,7 @@ class _$EpisodeImpl extends _Episode {
       @JsonKey(name: 'podcast_duration') this.episodeDuration = 0.0,
       @JsonKey(name: 'has_podcast') required this.hasPodcast,
       this.isFavorited = false,
-      @Backlink('episode')
-      @JsonKey(fromJson: _historyItemFromJson)
-      required this.history,
+      @Property(type: PropertyType.dateNano) this.updatedAt,
       this.progress = 0.0})
       : super._();
 
@@ -309,16 +301,15 @@ class _$EpisodeImpl extends _Episode {
   @JsonKey()
   bool isFavorited;
   @override
-  @Backlink('episode')
-  @JsonKey(fromJson: _historyItemFromJson)
-  ToMany<HistoryItem> history;
+  @Property(type: PropertyType.dateNano)
+  DateTime? updatedAt;
   @override
   @JsonKey()
   double progress;
 
   @override
   String toString() {
-    return 'Episode(id: $id, episodeId: $episodeId, podcastId: $podcastId, date: $date, name: $name, imgPath: $imgPath, episodeDuration: $episodeDuration, hasPodcast: $hasPodcast, isFavorited: $isFavorited, history: $history, progress: $progress)';
+    return 'Episode(id: $id, episodeId: $episodeId, podcastId: $podcastId, date: $date, name: $name, imgPath: $imgPath, episodeDuration: $episodeDuration, hasPodcast: $hasPodcast, isFavorited: $isFavorited, updatedAt: $updatedAt, progress: $progress)';
   }
 
   @override
@@ -340,7 +331,8 @@ class _$EpisodeImpl extends _Episode {
                 other.hasPodcast == hasPodcast) &&
             (identical(other.isFavorited, isFavorited) ||
                 other.isFavorited == isFavorited) &&
-            const DeepCollectionEquality().equals(other.history, history) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
             (identical(other.progress, progress) ||
                 other.progress == progress));
   }
@@ -358,7 +350,7 @@ class _$EpisodeImpl extends _Episode {
       episodeDuration,
       hasPodcast,
       isFavorited,
-      const DeepCollectionEquality().hash(history),
+      updatedAt,
       progress);
 
   /// Create a copy of Episode
@@ -381,9 +373,7 @@ abstract class _Episode extends Episode {
       @JsonKey(name: 'podcast_duration') double episodeDuration,
       @JsonKey(name: 'has_podcast') required bool hasPodcast,
       bool isFavorited,
-      @Backlink('episode')
-      @JsonKey(fromJson: _historyItemFromJson)
-      required ToMany<HistoryItem> history,
+      @Property(type: PropertyType.dateNano) DateTime? updatedAt,
       double progress}) = _$EpisodeImpl;
   _Episode._() : super._();
 
@@ -429,12 +419,10 @@ abstract class _Episode extends Episode {
   bool get isFavorited;
   set isFavorited(bool value);
   @override
-  @Backlink('episode')
-  @JsonKey(fromJson: _historyItemFromJson)
-  ToMany<HistoryItem> get history;
-  @Backlink('episode')
-  @JsonKey(fromJson: _historyItemFromJson)
-  set history(ToMany<HistoryItem> value);
+  @Property(type: PropertyType.dateNano)
+  DateTime? get updatedAt;
+  @Property(type: PropertyType.dateNano)
+  set updatedAt(DateTime? value);
   @override
   double get progress;
   set progress(double value);

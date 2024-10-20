@@ -14,9 +14,7 @@ class HistoryPage extends ConsumerWidget {
     return Scaffold(
       appBar: SharedAppBar(title: 'History'),
       body: historyEpisodesAsync.when(
-        data: (historyItems) => EpisodesList(
-            episodes:
-                historyItems.map((item) => item.episode.target!).toList()),
+        data: (episodes) => EpisodesList(episodes: episodes),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => const Center(child: Text('Error loading episodes...')),
       ),

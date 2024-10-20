@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import 'package:objectbox/objectbox.dart';
-import 'package:rockserwis_podcaster/models/history_item.dart';
 import 'package:rockserwis_podcaster/utils/const.dart';
 
 part 'episode.freezed.dart';
@@ -22,9 +21,7 @@ class Episode with _$Episode {
     @JsonKey(name: 'podcast_duration') @Default(0.0) double episodeDuration,
     @JsonKey(name: 'has_podcast') required bool hasPodcast,
     @Default(false) bool isFavorited,
-    @Backlink('episode')
-    @JsonKey(fromJson: _historyItemFromJson)
-    required ToMany<HistoryItem> history,
+    @Property(type: PropertyType.dateNano) DateTime? updatedAt,
     @Default(0.0) double progress,
   }) = _Episode;
 
@@ -53,5 +50,3 @@ class Episode with _$Episode {
   /// Gets the URL for a specific episode.
   String get getEpisodeUrl => '${Const.mainUrl}/podcast/$episodeId';
 }
-
-ToMany<HistoryItem> _historyItemFromJson(List<dynamic>? jsonList) => ToMany();

@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
-import 'package:rockserwis_podcaster/models/history_item.dart';
-import 'package:rockserwis_podcaster/objectbox.g.dart';
 import 'package:rockserwis_podcaster/providers/objectbox_repository.dart';
 import 'package:rockserwis_podcaster/providers/sort_order.dart';
 import 'package:rockserwis_podcaster/utils/const.dart';
@@ -81,69 +79,78 @@ class AllEpisodes extends _$AllEpisodes {
           )
         ]);
   }
+
+  Future<void> updateTimestamp(Episode episode) async {
+    final objectBox = await ref.watch(objectBoxProvider.future);
+
+    final updatedEpisode = episode.copyWith(updatedAt: DateTime.now());
+    await objectBox.episodeBox.putAsync(updatedEpisode);
+
+    await update((previousState) => [
+          ...previousState.map(
+            (episode) =>
+                episode.id == updatedEpisode.id ? updatedEpisode : episode,
+          )
+        ]);
+  }
+
+  Future<void> updateProgress(Episode episode, double progress) async {
+    final objectBox = await ref.watch(objectBoxProvider.future);
+
+    final updatedEpisode = episode.copyWith(progress: progress);
+    await objectBox.episodeBox.putAsync(updatedEpisode);
+
+    await update((previousState) => [
+          ...previousState.map(
+            (episode) =>
+                episode.id == updatedEpisode.id ? updatedEpisode : episode,
+          )
+        ]);
+  }
 }
 
 @riverpod
-class EpisodeList extends _$EpisodeList {
-  @override
-  Future<List<Episode>> build(int podcastId) async {
-    final allEpisodesList = await ref.watch(allEpisodesProvider.future);
+Future<List<Episode>> episodeList(EpisodeListRef ref, int podcastId) async {
+  final allEpisodesList = await ref.watch(allEpisodesProvider.future);
 
-    final episodes = allEpisodesList
-        .where((episode) => episode.podcastId == podcastId)
-        .toList();
+  final episodes = allEpisodesList
+      .where((episode) => episode.podcastId == podcastId)
+      .toList();
 
-    final sorted = switch (ref.watch(sortOrderProvider)) {
-      SortOrderType.ascending => episodes
-        ..sort((a, b) => a.date.compareTo(b.date)),
-      SortOrderType.descending => episodes
-        ..sort((a, b) => b.date.compareTo(a.date)),
-    };
+  final sorted = switch (ref.watch(sortOrderProvider)) {
+    SortOrderType.ascending => episodes
+      ..sort((a, b) => a.date.compareTo(b.date)),
+    SortOrderType.descending => episodes
+      ..sort((a, b) => b.date.compareTo(a.date)),
+  };
 
-    return sorted;
-  }
+  return sorted;
 }
 
 /// Fetches all episodes from the history.
 @riverpod
-class HistoryEpisodes extends _$HistoryEpisodes {
-  @override
-  Future<List<HistoryItem>> build() async {
-    final objectBox = await ref.watch(objectBoxProvider.future);
+Future<List<Episode>> historyEpisodes(HistoryEpisodesRef ref) async {
+  final allEpisodesList = await ref.watch(allEpisodesProvider.future);
 
-    final query = ((objectBox.historyBox.query()
-          ..order(HistoryItem_.date, flags: Order.descending))
-        .build())
-      ..limit = 100;
+  final recentItems = allEpisodesList
+      .where((episode) =>
+          DateTime.now().difference(episode.updatedAt!).inDays <= 10)
+      .toList();
 
-    return query.findAsync();
-  }
+  recentItems.sort((a, b) => b.updatedAt!.compareTo(a.updatedAt!));
 
-  Future<void> addNew(Episode episode) async {
-    final objectBox = await ref.watch(objectBoxProvider.future);
-
-    final historyItem =
-        HistoryItem(date: DateTime.now(), episode: ToOne(target: episode));
-
-    await objectBox.historyBox.putAsync(historyItem);
-
-    ref.invalidateSelf();
-    await future;
-  }
+  return recentItems.take(10).toList();
 }
 
 /// Fetches all favorited episodes from the database.
 @riverpod
-class FavoritedEpisodes extends _$FavoritedEpisodes {
-  @override
-  Future<List<Episode>> build() async {
-    final allEpisodesList = await ref.watch(allEpisodesProvider.future);
+Future<List<Episode>> favoritedEpisodes(FavoritedEpisodesRef ref) async {
+  final allEpisodesList = await ref.watch(allEpisodesProvider.future);
 
-    final favorites =
-        allEpisodesList.where((episode) => episode.isFavorited).toList();
+  final favorites =
+      allEpisodesList.where((episode) => episode.isFavorited).toList();
 
-    favorites.sort((a, b) => a.name.compareTo(b.name));
+  favorites.sort((a, b) => a.name.compareTo(b.name));
 
-    return favorites;
-  }
+  return favorites;
 }

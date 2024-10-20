@@ -17,6 +17,8 @@ _$EpisodeImpl _$$EpisodeImplFromJson(Map<String, dynamic> json) =>
       episodeDuration: (json['podcast_duration'] as num?)?.toDouble() ?? 0.0,
       hasPodcast: json['has_podcast'] as bool,
       isFavorited: json['isFavorited'] as bool? ?? false,
-      history: _historyItemFromJson(json['history'] as List?),
+      updatedAt: json['updatedAt'] == null
+          ? null
+          : DateTime.parse(json['updatedAt'] as String),
       progress: (json['progress'] as num?)?.toDouble() ?? 0.0,
     );

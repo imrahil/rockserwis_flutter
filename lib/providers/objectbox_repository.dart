@@ -2,7 +2,6 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
-import 'package:rockserwis_podcaster/models/history_item.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 
 import '../objectbox.g.dart';
@@ -14,12 +13,10 @@ class ObjectBox {
   late final Store store;
   late final Box<Podcast> podcastBox;
   late final Box<Episode> episodeBox;
-  late final Box<HistoryItem> historyBox;
 
   ObjectBox._create(this.store) {
     podcastBox = Box<Podcast>(store);
     episodeBox = Box<Episode>(store);
-    historyBox = Box<HistoryItem>(store);
   }
 }
 

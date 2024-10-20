@@ -9,7 +9,6 @@ import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/models/progress_bar_state.dart';
 import 'package:rockserwis_podcaster/providers/audio_service.dart';
 import 'package:rockserwis_podcaster/providers/episode_repository.dart';
-import 'package:rockserwis_podcaster/providers/objectbox_repository.dart';
 import 'package:rockserwis_podcaster/utils/audio_handler.dart';
 
 part 'player_repository.g.dart';
@@ -43,9 +42,9 @@ class PlayerRepository extends _$PlayerRepository {
         double progress =
             state.progress.inMicroseconds / state.total.inMicroseconds;
 
-        Episode updatedEpisode = state.episode!.copyWith(progress: progress);
-
-        ref.read(objectBoxProvider).requireValue.episodeBox.put(updatedEpisode);
+        ref
+            .read(allEpisodesProvider.notifier)
+            .updateProgress(state.episode!, progress);
       }
     });
 
@@ -84,12 +83,23 @@ class PlayerRepository extends _$PlayerRepository {
 
   void seek(Duration? position) {
     _audioHandler.seek(position ?? const Duration());
+
+    double progress = position!.inMicroseconds / state.total.inMicroseconds;
+
+    ref
+        .read(allEpisodesProvider.notifier)
+        .updateProgress(state.episode!, progress);
   }
 
   void setAudioSource(Episode currentEpisode) async {
     state = state.copyWith(
       episode: currentEpisode,
     );
+
+    // update episode's timestamp
+    await ref
+        .read(allEpisodesProvider.notifier)
+        .updateTimestamp(currentEpisode);
 
     final apiProvider = ref.read(apiRepositoryProvider);
 
@@ -111,8 +121,5 @@ class PlayerRepository extends _$PlayerRepository {
 
     await _audioHandler.setAudioSource(source, item);
     _audioHandler.play();
-
-    // push episode to the history database
-    await ref.read(historyEpisodesProvider.notifier).addNew(currentEpisode);
   }
 }

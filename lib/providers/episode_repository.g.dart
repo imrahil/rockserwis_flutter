@@ -172,42 +172,18 @@ class _FetchEpisodesProviderElement
   int get podcastId => (origin as FetchEpisodesProvider).podcastId;
 }
 
-String _$allEpisodesHash() => r'ccacb4c0c178bce6d779dac74c016fac3a637bb9';
+String _$episodeListHash() => r'8c342ae29e1110d5cdbe12e14578fd26754bdea8';
 
-/// See also [AllEpisodes].
-@ProviderFor(AllEpisodes)
-final allEpisodesProvider =
-    AutoDisposeAsyncNotifierProvider<AllEpisodes, List<Episode>>.internal(
-  AllEpisodes.new,
-  name: r'allEpisodesProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$allEpisodesHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$AllEpisodes = AutoDisposeAsyncNotifier<List<Episode>>;
-String _$episodeListHash() => r'c466db87237d7dede2cd8f5c7d48496852427485';
-
-abstract class _$EpisodeList
-    extends BuildlessAutoDisposeAsyncNotifier<List<Episode>> {
-  late final int podcastId;
-
-  FutureOr<List<Episode>> build(
-    int podcastId,
-  );
-}
-
-/// See also [EpisodeList].
-@ProviderFor(EpisodeList)
+/// See also [episodeList].
+@ProviderFor(episodeList)
 const episodeListProvider = EpisodeListFamily();
 
-/// See also [EpisodeList].
+/// See also [episodeList].
 class EpisodeListFamily extends Family<AsyncValue<List<Episode>>> {
-  /// See also [EpisodeList].
+  /// See also [episodeList].
   const EpisodeListFamily();
 
-  /// See also [EpisodeList].
+  /// See also [episodeList].
   EpisodeListProvider call(
     int podcastId,
   ) {
@@ -240,14 +216,16 @@ class EpisodeListFamily extends Family<AsyncValue<List<Episode>>> {
   String? get name => r'episodeListProvider';
 }
 
-/// See also [EpisodeList].
-class EpisodeListProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<EpisodeList, List<Episode>> {
-  /// See also [EpisodeList].
+/// See also [episodeList].
+class EpisodeListProvider extends AutoDisposeFutureProvider<List<Episode>> {
+  /// See also [episodeList].
   EpisodeListProvider(
     int podcastId,
   ) : this._internal(
-          () => EpisodeList()..podcastId = podcastId,
+          (ref) => episodeList(
+            ref as EpisodeListRef,
+            podcastId,
+          ),
           from: episodeListProvider,
           name: r'episodeListProvider',
           debugGetCreateSourceHash:
@@ -273,20 +251,13 @@ class EpisodeListProvider
   final int podcastId;
 
   @override
-  FutureOr<List<Episode>> runNotifierBuild(
-    covariant EpisodeList notifier,
+  Override overrideWith(
+    FutureOr<List<Episode>> Function(EpisodeListRef provider) create,
   ) {
-    return notifier.build(
-      podcastId,
-    );
-  }
-
-  @override
-  Override overrideWith(EpisodeList Function() create) {
     return ProviderOverride(
       origin: this,
       override: EpisodeListProvider._internal(
-        () => create()..podcastId = podcastId,
+        (ref) => create(ref as EpisodeListRef),
         from: from,
         name: null,
         dependencies: null,
@@ -298,8 +269,7 @@ class EpisodeListProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<EpisodeList, List<Episode>>
-      createElement() {
+  AutoDisposeFutureProviderElement<List<Episode>> createElement() {
     return _EpisodeListProviderElement(this);
   }
 
@@ -317,13 +287,13 @@ class EpisodeListProvider
   }
 }
 
-mixin EpisodeListRef on AutoDisposeAsyncNotifierProviderRef<List<Episode>> {
+mixin EpisodeListRef on AutoDisposeFutureProviderRef<List<Episode>> {
   /// The parameter `podcastId` of this provider.
   int get podcastId;
 }
 
 class _EpisodeListProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<EpisodeList, List<Episode>>
+    extends AutoDisposeFutureProviderElement<List<Episode>>
     with EpisodeListRef {
   _EpisodeListProviderElement(super.provider);
 
@@ -331,15 +301,15 @@ class _EpisodeListProviderElement
   int get podcastId => (origin as EpisodeListProvider).podcastId;
 }
 
-String _$historyEpisodesHash() => r'87c48663d01121c780ef6fe3c0ec8f707b2963e8';
+String _$historyEpisodesHash() => r'670e092d73f5c5b652b55835c9561ded44b9337c';
 
 /// Fetches all episodes from the history.
 ///
-/// Copied from [HistoryEpisodes].
-@ProviderFor(HistoryEpisodes)
-final historyEpisodesProvider = AutoDisposeAsyncNotifierProvider<
-    HistoryEpisodes, List<HistoryItem>>.internal(
-  HistoryEpisodes.new,
+/// Copied from [historyEpisodes].
+@ProviderFor(historyEpisodes)
+final historyEpisodesProvider =
+    AutoDisposeFutureProvider<List<Episode>>.internal(
+  historyEpisodes,
   name: r'historyEpisodesProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
@@ -348,16 +318,16 @@ final historyEpisodesProvider = AutoDisposeAsyncNotifierProvider<
   allTransitiveDependencies: null,
 );
 
-typedef _$HistoryEpisodes = AutoDisposeAsyncNotifier<List<HistoryItem>>;
-String _$favoritedEpisodesHash() => r'219b35cda0ea4ddb56df2abd8fc67b6c58ca0b3c';
+typedef HistoryEpisodesRef = AutoDisposeFutureProviderRef<List<Episode>>;
+String _$favoritedEpisodesHash() => r'5faeeb1ff0360567cdf4b5027ecdef50e2ec4b22';
 
 /// Fetches all favorited episodes from the database.
 ///
-/// Copied from [FavoritedEpisodes].
-@ProviderFor(FavoritedEpisodes)
+/// Copied from [favoritedEpisodes].
+@ProviderFor(favoritedEpisodes)
 final favoritedEpisodesProvider =
-    AutoDisposeAsyncNotifierProvider<FavoritedEpisodes, List<Episode>>.internal(
-  FavoritedEpisodes.new,
+    AutoDisposeFutureProvider<List<Episode>>.internal(
+  favoritedEpisodes,
   name: r'favoritedEpisodesProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
@@ -366,6 +336,21 @@ final favoritedEpisodesProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$FavoritedEpisodes = AutoDisposeAsyncNotifier<List<Episode>>;
+typedef FavoritedEpisodesRef = AutoDisposeFutureProviderRef<List<Episode>>;
+String _$allEpisodesHash() => r'559c4a04547672789b16d75e92601254def79667';
+
+/// See also [AllEpisodes].
+@ProviderFor(AllEpisodes)
+final allEpisodesProvider =
+    AutoDisposeAsyncNotifierProvider<AllEpisodes, List<Episode>>.internal(
+  AllEpisodes.new,
+  name: r'allEpisodesProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$allEpisodesHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$AllEpisodes = AutoDisposeAsyncNotifier<List<Episode>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

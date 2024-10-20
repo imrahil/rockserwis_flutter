@@ -11,7 +11,6 @@ import 'package:http/http.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i6;
 import 'package:rockserwis_podcaster/models/episode.dart' as _i10;
-import 'package:rockserwis_podcaster/models/history_item.dart' as _i11;
 import 'package:rockserwis_podcaster/models/podcast.dart' as _i9;
 import 'package:rockserwis_podcaster/objectbox.g.dart' as _i3;
 import 'package:rockserwis_podcaster/providers/objectbox_repository.dart'
@@ -386,24 +385,6 @@ class MockObjectBox extends _i1.Mock implements _i8.ObjectBox {
         Invocation.setter(
           #episodeBox,
           _episodeBox,
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  _i3.Box<_i11.HistoryItem> get historyBox => (super.noSuchMethod(
-        Invocation.getter(#historyBox),
-        returnValue: _FakeBox_3<_i11.HistoryItem>(
-          this,
-          Invocation.getter(#historyBox),
-        ),
-      ) as _i3.Box<_i11.HistoryItem>);
-
-  @override
-  set historyBox(_i3.Box<_i11.HistoryItem>? _historyBox) => super.noSuchMethod(
-        Invocation.setter(
-          #historyBox,
-          _historyBox,
         ),
         returnValueForMissingStub: null,
       );

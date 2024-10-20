@@ -64,8 +64,10 @@ class PodcastSyncHelper {
 
       for (Episode remoteEpisode in remoteEpisodes) {
         if (!localEpisodeIds.contains(remoteEpisode.episodeId)) {
-          Episode newEpisode =
-              remoteEpisode.copyWith(podcastId: podcast.podcastId);
+          Episode newEpisode = remoteEpisode.copyWith(
+              podcastId: podcast.podcastId,
+              // initialize with old date to keep track with history
+              updatedAt: DateTime.utc(2000, 1, 1));
           newEpisodes.add(newEpisode);
         }
       }

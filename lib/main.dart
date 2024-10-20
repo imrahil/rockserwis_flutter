@@ -10,7 +10,7 @@ import 'package:rockserwis_podcaster/app_routes.dart';
 import 'package:rockserwis_podcaster/app_startup.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 import 'package:rockserwis_podcaster/screens/episodes_page.dart';
-import 'package:rockserwis_podcaster/screens/favorite_podcasts_page.dart';
+import 'package:rockserwis_podcaster/screens/favorite_episodes_page.dart';
 import 'package:rockserwis_podcaster/screens/history_page.dart';
 import 'package:rockserwis_podcaster/screens/login_page.dart';
 import 'package:rockserwis_podcaster/screens/player.dart';
@@ -129,9 +129,9 @@ class _MusicPlayerState extends ConsumerState<MusicPlayer> {
                 GoRoute(
                   path: '/favorites',
                   pageBuilder: (context, state) => const NoTransitionPage(
-                    child: FavoritePodcastsPage(),
+                    child: FavoritesEpisodesPage(),
                   ),
-                  // FIXME - add favorite episodes
+                  // FIXME - add favorite podcasts/episodes
                   // routes: [
                   //   GoRoute(
                   //     path: 'details',
