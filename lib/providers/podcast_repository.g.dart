@@ -37,7 +37,7 @@ final fetchPodcastsProvider = AutoDisposeFutureProvider<List<Podcast>>.internal(
 );
 
 typedef FetchPodcastsRef = AutoDisposeFutureProviderRef<List<Podcast>>;
-String _$podcastListHash() => r'2c634708a01a45b0c087b0e824c562e977ce32ce';
+String _$podcastListHash() => r'f02cfd03d3aa96331b693c7ea014b0b455d07b84';
 
 /// See also [podcastList].
 @ProviderFor(podcastList)
@@ -51,7 +51,7 @@ final podcastListProvider = AutoDisposeFutureProvider<List<Podcast>>.internal(
 );
 
 typedef PodcastListRef = AutoDisposeFutureProviderRef<List<Podcast>>;
-String _$favoritedPodcastsHash() => r'dfc2e0ba57329d07402fbd0aeb6bb3966c758c71';
+String _$favoritedPodcastsHash() => r'3192588aa32cdf55390ec57b84d581fb0dda89d0';
 
 /// Fetches all favorited podcasts from the database.
 ///

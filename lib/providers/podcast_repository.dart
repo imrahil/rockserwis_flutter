@@ -60,7 +60,11 @@ Future<List<Podcast>> fetchPodcasts(FetchPodcastsRef ref) {
 Future<List<Podcast>> podcastList(PodcastListRef ref) async {
   final objectBox = await ref.watch(objectBoxProvider.future);
 
-  return objectBox.podcastBox.getAllAsync();
+  return objectBox.podcastBox
+      .query()
+      .order(Podcast_.podcastName)
+      .build()
+      .findAsync();
 }
 
 /// Fetches all favorited podcasts from the database.
@@ -68,12 +72,12 @@ Future<List<Podcast>> podcastList(PodcastListRef ref) async {
 class FavoritedPodcasts extends _$FavoritedPodcasts {
   @override
   Future<List<Podcast>> build() async {
-    final objectBox = await ref.watch(objectBoxProvider.future);
+    final podcasts = await ref.watch(podcastListProvider.future);
 
-    return objectBox.podcastBox
-        .query(Podcast_.isFavorited.equals(true))
-        .build()
-        .findAsync();
+    final favorites = podcasts.where((podcast) => podcast.isFavorited).toList();
+    favorites.sort((a, b) => a.podcastName.compareTo(b.podcastName));
+
+    return favorites;
   }
 
   /// Toggles the favorite status of an podcast.
@@ -85,7 +89,18 @@ class FavoritedPodcasts extends _$FavoritedPodcasts {
     final updatedPodcast = podcast.copyWith(isFavorited: !podcast.isFavorited);
     await objectBox.podcastBox.putAsync(updatedPodcast);
 
-    ref.invalidateSelf();
-    await future;
+    await update((previousState) {
+      var newState = [...previousState];
+
+      if (updatedPodcast.isFavorited) {
+        newState.add(updatedPodcast);
+      } else {
+        newState.removeWhere((podcast) => podcast.id == updatedPodcast.id);
+      }
+
+      newState.sort((a, b) => a.podcastName.compareTo(b.podcastName));
+
+      return newState;
+    });
   }
 }
