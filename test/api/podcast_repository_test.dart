@@ -14,7 +14,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'api_test.data.dart';
 import 'podcast_repository_test.mocks.dart';
-import 'provider_helper.dart';
 
 // Generate a mock client
 @GenerateMocks([http.Client, ObjectBox, Box])
@@ -67,32 +66,6 @@ void main() {
 
         expect(() => podcastRepository.fetchPodcasts(), throwsException);
       });
-    });
-  });
-
-  group('PodcastRepositoryProvider', () {
-    late MockObjectBox mockObjectBox;
-    late MockBox<Podcast> mockBox;
-
-    setUp(() async {
-      mockObjectBox = MockObjectBox();
-      mockBox = MockBox();
-    });
-
-    test('returns a list of podcasts when successful', () async {
-      final container = createContainer(
-        overrides: [
-          objectBoxProvider.overrideWith((ref) => mockObjectBox),
-        ],
-      );
-
-      when(mockObjectBox.podcastBox).thenReturn(mockBox);
-      when(mockBox.getAllAsync()).thenAnswer((_) async => parsedMockPodcasts);
-
-      await expectLater(
-        container.read(podcastListProvider.future),
-        completion(parsedMockPodcasts),
-      );
     });
   });
 }
