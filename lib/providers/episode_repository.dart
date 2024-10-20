@@ -57,22 +57,51 @@ Future<List<Episode>> fetchEpisodes(FetchEpisodesRef ref, int podcastId) {
 }
 
 @riverpod
-Future<List<Episode>> episodeList(EpisodeListRef ref, int podcastId) async {
-  final objectBox = await ref.watch(objectBoxProvider.future);
+class AllEpisodes extends _$AllEpisodes {
+  @override
+  Future<List<Episode>> build() async {
+    final objectBox = await ref.watch(objectBoxProvider.future);
 
-  final episodes = await objectBox.episodeBox
-      .query(Episode_.podcastId.equals(podcastId))
-      .build()
-      .findAsync();
+    return await objectBox.episodeBox.getAllAsync();
+  }
 
-  final sorted = switch (ref.watch(sortOrderProvider)) {
-    SortOrderType.ascending => episodes
-      ..sort((a, b) => a.date.compareTo(b.date)),
-    SortOrderType.descending => episodes
-      ..sort((a, b) => b.date.compareTo(a.date)),
-  };
+  /// Toggles the favorite status of an episode.
+  ///
+  /// @param episode The episode to toggle the favorite status of.
+  Future<void> toggleFavoriteEpisode(Episode episode) async {
+    final objectBox = await ref.watch(objectBoxProvider.future);
 
-  return sorted;
+    final updatedEpisode = episode.copyWith(isFavorited: !episode.isFavorited);
+    await objectBox.episodeBox.putAsync(updatedEpisode);
+
+    await update((previousState) => [
+          ...previousState.map(
+            (episode) =>
+                episode.id == updatedEpisode.id ? updatedEpisode : episode,
+          )
+        ]);
+  }
+}
+
+@riverpod
+class EpisodeList extends _$EpisodeList {
+  @override
+  Future<List<Episode>> build(int podcastId) async {
+    final allEpisodesList = await ref.watch(allEpisodesProvider.future);
+
+    final episodes = allEpisodesList
+        .where((episode) => episode.podcastId == podcastId)
+        .toList();
+
+    final sorted = switch (ref.watch(sortOrderProvider)) {
+      SortOrderType.ascending => episodes
+        ..sort((a, b) => a.date.compareTo(b.date)),
+      SortOrderType.descending => episodes
+        ..sort((a, b) => b.date.compareTo(a.date)),
+    };
+
+    return sorted;
+  }
 }
 
 /// Fetches all episodes from the history.
@@ -108,24 +137,13 @@ class HistoryEpisodes extends _$HistoryEpisodes {
 class FavoritedEpisodes extends _$FavoritedEpisodes {
   @override
   Future<List<Episode>> build() async {
-    final objectBox = await ref.watch(objectBoxProvider.future);
+    final allEpisodesList = await ref.watch(allEpisodesProvider.future);
 
-    return objectBox.episodeBox
-        .query(Episode_.isFavorited.equals(true))
-        .build()
-        .findAsync();
-  }
+    final favorites =
+        allEpisodesList.where((episode) => episode.isFavorited).toList();
 
-  /// Toggles the favorite status of an episode.
-  ///
-  /// @param episode The episode to toggle the favorite status of.
-  Future<void> toggleFavoriteEpisode(Episode episode) async {
-    final objectBox = await ref.watch(objectBoxProvider.future);
+    favorites.sort((a, b) => a.name.compareTo(b.name));
 
-    final updatedEpisode = episode.copyWith(isFavorited: !episode.isFavorited);
-    await objectBox.episodeBox.putAsync(updatedEpisode);
-
-    ref.invalidateSelf();
-    await future;
+    return favorites;
   }
 }

@@ -129,7 +129,7 @@ class _PlayerState extends ConsumerState<Player> {
                 ),
                 onPressed: () async {
                   await ref
-                      .read(favoritedEpisodesProvider.notifier)
+                      .read(allEpisodesProvider.notifier)
                       .toggleFavoriteEpisode(_currentEpisode);
                   setState(() {
                     _currentEpisode.isFavorited = !_currentEpisode.isFavorited;

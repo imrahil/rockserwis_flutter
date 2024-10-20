@@ -172,18 +172,42 @@ class _FetchEpisodesProviderElement
   int get podcastId => (origin as FetchEpisodesProvider).podcastId;
 }
 
-String _$episodeListHash() => r'd47359fdd363ef2a34f249783e37ba33f8662f62';
+String _$allEpisodesHash() => r'ccacb4c0c178bce6d779dac74c016fac3a637bb9';
 
-/// See also [episodeList].
-@ProviderFor(episodeList)
+/// See also [AllEpisodes].
+@ProviderFor(AllEpisodes)
+final allEpisodesProvider =
+    AutoDisposeAsyncNotifierProvider<AllEpisodes, List<Episode>>.internal(
+  AllEpisodes.new,
+  name: r'allEpisodesProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$allEpisodesHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$AllEpisodes = AutoDisposeAsyncNotifier<List<Episode>>;
+String _$episodeListHash() => r'c466db87237d7dede2cd8f5c7d48496852427485';
+
+abstract class _$EpisodeList
+    extends BuildlessAutoDisposeAsyncNotifier<List<Episode>> {
+  late final int podcastId;
+
+  FutureOr<List<Episode>> build(
+    int podcastId,
+  );
+}
+
+/// See also [EpisodeList].
+@ProviderFor(EpisodeList)
 const episodeListProvider = EpisodeListFamily();
 
-/// See also [episodeList].
+/// See also [EpisodeList].
 class EpisodeListFamily extends Family<AsyncValue<List<Episode>>> {
-  /// See also [episodeList].
+  /// See also [EpisodeList].
   const EpisodeListFamily();
 
-  /// See also [episodeList].
+  /// See also [EpisodeList].
   EpisodeListProvider call(
     int podcastId,
   ) {
@@ -216,16 +240,14 @@ class EpisodeListFamily extends Family<AsyncValue<List<Episode>>> {
   String? get name => r'episodeListProvider';
 }
 
-/// See also [episodeList].
-class EpisodeListProvider extends AutoDisposeFutureProvider<List<Episode>> {
-  /// See also [episodeList].
+/// See also [EpisodeList].
+class EpisodeListProvider
+    extends AutoDisposeAsyncNotifierProviderImpl<EpisodeList, List<Episode>> {
+  /// See also [EpisodeList].
   EpisodeListProvider(
     int podcastId,
   ) : this._internal(
-          (ref) => episodeList(
-            ref as EpisodeListRef,
-            podcastId,
-          ),
+          () => EpisodeList()..podcastId = podcastId,
           from: episodeListProvider,
           name: r'episodeListProvider',
           debugGetCreateSourceHash:
@@ -251,13 +273,20 @@ class EpisodeListProvider extends AutoDisposeFutureProvider<List<Episode>> {
   final int podcastId;
 
   @override
-  Override overrideWith(
-    FutureOr<List<Episode>> Function(EpisodeListRef provider) create,
+  FutureOr<List<Episode>> runNotifierBuild(
+    covariant EpisodeList notifier,
   ) {
+    return notifier.build(
+      podcastId,
+    );
+  }
+
+  @override
+  Override overrideWith(EpisodeList Function() create) {
     return ProviderOverride(
       origin: this,
       override: EpisodeListProvider._internal(
-        (ref) => create(ref as EpisodeListRef),
+        () => create()..podcastId = podcastId,
         from: from,
         name: null,
         dependencies: null,
@@ -269,7 +298,8 @@ class EpisodeListProvider extends AutoDisposeFutureProvider<List<Episode>> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<List<Episode>> createElement() {
+  AutoDisposeAsyncNotifierProviderElement<EpisodeList, List<Episode>>
+      createElement() {
     return _EpisodeListProviderElement(this);
   }
 
@@ -287,13 +317,13 @@ class EpisodeListProvider extends AutoDisposeFutureProvider<List<Episode>> {
   }
 }
 
-mixin EpisodeListRef on AutoDisposeFutureProviderRef<List<Episode>> {
+mixin EpisodeListRef on AutoDisposeAsyncNotifierProviderRef<List<Episode>> {
   /// The parameter `podcastId` of this provider.
   int get podcastId;
 }
 
 class _EpisodeListProviderElement
-    extends AutoDisposeFutureProviderElement<List<Episode>>
+    extends AutoDisposeAsyncNotifierProviderElement<EpisodeList, List<Episode>>
     with EpisodeListRef {
   _EpisodeListProviderElement(super.provider);
 
@@ -319,7 +349,7 @@ final historyEpisodesProvider = AutoDisposeAsyncNotifierProvider<
 );
 
 typedef _$HistoryEpisodes = AutoDisposeAsyncNotifier<List<HistoryItem>>;
-String _$favoritedEpisodesHash() => r'b019766cff16cb86d2fa5a612824e5cee7b617b3';
+String _$favoritedEpisodesHash() => r'219b35cda0ea4ddb56df2abd8fc67b6c58ca0b3c';
 
 /// Fetches all favorited episodes from the database.
 ///
