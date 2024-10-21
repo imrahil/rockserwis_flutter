@@ -8,6 +8,9 @@ Simple podcast player for rockserwis.fm internet radio.
 - favorited podcasts
 - favorited episodes
 - dark/light theme
+- history of listened episodes
+- tracking the progress of the listened episode
+- sorting episodes based on date field
 
 ## Screenshots
 
@@ -41,11 +44,14 @@ Favorited episodes list
   <img src="./docs/screenshot_favorited_episodes.jpg" width="200" >
 </p>
 
+History of listened episodes
+
+<p align="center">
+  <img src="./docs/screenshot_history.jpg" width="200" >
+</p>
+
 ## TODO
 
-- history of listened episodes
-- tracking the progress of the listened episode
-- sorting episodes based on date field
 - filtering episodes by e.g.: last month, last year, custom range
 - search (?)
 - offline playback - downloading the episode locally before playing
