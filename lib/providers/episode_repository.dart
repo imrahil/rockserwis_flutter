@@ -54,7 +54,7 @@ Future<List<Episode>> fetchEpisodes(FetchEpisodesRef ref, int podcastId) {
   return ref.watch(episodeRepositoryProvider).fetchEpisodes(podcastId);
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class AllEpisodes extends _$AllEpisodes {
   @override
   Future<List<Episode>> build() async {

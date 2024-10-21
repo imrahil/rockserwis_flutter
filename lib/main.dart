@@ -8,16 +8,16 @@ import 'package:go_router/go_router.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/app_routes.dart';
 import 'package:rockserwis_podcaster/app_startup.dart';
+import 'package:rockserwis_podcaster/components/scaffold.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 import 'package:rockserwis_podcaster/screens/episodes_page.dart';
-import 'package:rockserwis_podcaster/screens/favorite_episodes_page.dart';
+import 'package:rockserwis_podcaster/screens/favorites.dart';
 import 'package:rockserwis_podcaster/screens/history_page.dart';
 import 'package:rockserwis_podcaster/screens/login_page.dart';
 import 'package:rockserwis_podcaster/screens/player.dart';
 import 'package:rockserwis_podcaster/screens/podcasts_page.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_data.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_mode.dart';
-import 'package:rockserwis_podcaster/utils/scaffold.dart';
 import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';
 
 import 'utils/firebase_options.dart';
@@ -129,16 +129,8 @@ class _MusicPlayerState extends ConsumerState<MusicPlayer> {
                 GoRoute(
                   path: '/favorites',
                   pageBuilder: (context, state) => const NoTransitionPage(
-                    child: FavoritesEpisodesPage(),
+                    child: FavoritesPage(),
                   ),
-                  // FIXME - add favorite podcasts/episodes
-                  // routes: [
-                  //   GoRoute(
-                  //     path: 'details',
-                  //     builder: (context, state) =>
-                  //         const DetailsScreen(label: 'B'),
-                  //   ),
-                  // ],
                 ),
               ],
             ),

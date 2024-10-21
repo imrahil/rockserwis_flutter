@@ -3,17 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rockserwis_podcaster/components/episodes_list.dart';
 import 'package:rockserwis_podcaster/providers/episode_repository.dart';
 
-class FavoritesEpisodesPage extends ConsumerWidget {
-  const FavoritesEpisodesPage({super.key});
+class FavoriteEpisodesPage extends ConsumerWidget {
+  const FavoriteEpisodesPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final favoritedEpisodesAsync = ref.watch(favoritedEpisodesProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Favorite episodes"),
-      ),
       body: favoritedEpisodesAsync.when(
         data: (episodes) => EpisodesList(episodes: episodes),
         loading: () => const Center(child: CircularProgressIndicator()),

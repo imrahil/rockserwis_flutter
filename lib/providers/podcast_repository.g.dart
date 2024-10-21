@@ -37,29 +37,13 @@ final fetchPodcastsProvider = AutoDisposeFutureProvider<List<Podcast>>.internal(
 );
 
 typedef FetchPodcastsRef = AutoDisposeFutureProviderRef<List<Podcast>>;
-String _$podcastListHash() => r'f02cfd03d3aa96331b693c7ea014b0b455d07b84';
+String _$favoritedPodcastsHash() => r'056e88c82c76314cab740a55c808d180350e67a5';
 
-/// See also [podcastList].
-@ProviderFor(podcastList)
-final podcastListProvider = AutoDisposeFutureProvider<List<Podcast>>.internal(
-  podcastList,
-  name: r'podcastListProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$podcastListHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef PodcastListRef = AutoDisposeFutureProviderRef<List<Podcast>>;
-String _$favoritedPodcastsHash() => r'3192588aa32cdf55390ec57b84d581fb0dda89d0';
-
-/// Fetches all favorited podcasts from the database.
-///
-/// Copied from [FavoritedPodcasts].
-@ProviderFor(FavoritedPodcasts)
+/// See also [favoritedPodcasts].
+@ProviderFor(favoritedPodcasts)
 final favoritedPodcastsProvider =
-    AutoDisposeAsyncNotifierProvider<FavoritedPodcasts, List<Podcast>>.internal(
-  FavoritedPodcasts.new,
+    AutoDisposeFutureProvider<List<Podcast>>.internal(
+  favoritedPodcasts,
   name: r'favoritedPodcastsProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
@@ -68,6 +52,21 @@ final favoritedPodcastsProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$FavoritedPodcasts = AutoDisposeAsyncNotifier<List<Podcast>>;
+typedef FavoritedPodcastsRef = AutoDisposeFutureProviderRef<List<Podcast>>;
+String _$allPodcastsHash() => r'cb37183afda3a1a4f9ba5c042a660d1b7853d554';
+
+/// See also [AllPodcasts].
+@ProviderFor(AllPodcasts)
+final allPodcastsProvider =
+    AutoDisposeAsyncNotifierProvider<AllPodcasts, List<Podcast>>.internal(
+  AllPodcasts.new,
+  name: r'allPodcastsProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$allPodcastsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$AllPodcasts = AutoDisposeAsyncNotifier<List<Podcast>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

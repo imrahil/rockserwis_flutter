@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/api/data/missing_podcasts.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
-import 'package:rockserwis_podcaster/objectbox.g.dart';
 import 'package:rockserwis_podcaster/providers/objectbox_repository.dart';
 import 'package:rockserwis_podcaster/utils/const.dart';
 import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';
@@ -57,50 +56,37 @@ Future<List<Podcast>> fetchPodcasts(FetchPodcastsRef ref) {
 }
 
 @riverpod
-Future<List<Podcast>> podcastList(PodcastListRef ref) async {
-  final objectBox = await ref.watch(objectBoxProvider.future);
-
-  return objectBox.podcastBox
-      .query()
-      .order(Podcast_.podcastName)
-      .build()
-      .findAsync();
-}
-
-/// Fetches all favorited podcasts from the database.
-@riverpod
-class FavoritedPodcasts extends _$FavoritedPodcasts {
+class AllPodcasts extends _$AllPodcasts {
   @override
   Future<List<Podcast>> build() async {
-    final podcasts = await ref.watch(podcastListProvider.future);
+    final objectBox = await ref.watch(objectBoxProvider.future);
 
-    final favorites = podcasts.where((podcast) => podcast.isFavorited).toList();
-    favorites.sort((a, b) => a.podcastName.compareTo(b.podcastName));
-
-    return favorites;
+    return objectBox.podcastBox.getAllAsync();
   }
 
-  /// Toggles the favorite status of an podcast.
-  ///
-  /// @param podcast The episode to toggle the favorite status of.
   Future<void> toggleFavoritePodcast(Podcast podcast) async {
     final objectBox = await ref.watch(objectBoxProvider.future);
 
     final updatedPodcast = podcast.copyWith(isFavorited: !podcast.isFavorited);
     await objectBox.podcastBox.putAsync(updatedPodcast);
 
-    await update((previousState) {
-      var newState = [...previousState];
-
-      if (updatedPodcast.isFavorited) {
-        newState.add(updatedPodcast);
-      } else {
-        newState.removeWhere((podcast) => podcast.id == updatedPodcast.id);
-      }
-
-      newState.sort((a, b) => a.podcastName.compareTo(b.podcastName));
-
-      return newState;
-    });
+    await update((previousState) => [
+          ...previousState.map(
+            (podcast) =>
+                podcast.id == updatedPodcast.id ? updatedPodcast : podcast,
+          )
+        ]);
   }
+}
+
+@riverpod
+Future<List<Podcast>> favoritedPodcasts(FavoritedPodcastsRef ref) async {
+  final allPodcastsList = await ref.watch(allPodcastsProvider.future);
+
+  final favorites =
+      allPodcastsList.where((podcast) => podcast.isFavorited).toList();
+
+  favorites.sort((a, b) => a.podcastName.compareTo(b.podcastName));
+
+  return favorites;
 }

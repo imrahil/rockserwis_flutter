@@ -113,7 +113,7 @@ class _EpisodesPageState extends ConsumerState<EpisodesPage> {
             ),
             onPressed: () async {
               await ref
-                  .read(favoritedPodcastsProvider.notifier)
+                  .read(allPodcastsProvider.notifier)
                   .toggleFavoritePodcast(_currentPodcast);
               setState(() {
                 _isFavorited = !_isFavorited;

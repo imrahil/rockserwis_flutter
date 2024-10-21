@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rockserwis_podcaster/components/episodes_list.dart';
-import 'package:rockserwis_podcaster/components/shared_app_bar.dart';
 import 'package:rockserwis_podcaster/providers/episode_repository.dart';
 
 class HistoryPage extends ConsumerWidget {
@@ -12,7 +11,9 @@ class HistoryPage extends ConsumerWidget {
     final historyEpisodesAsync = ref.watch(historyEpisodesProvider);
 
     return Scaffold(
-      appBar: SharedAppBar(title: 'History'),
+      appBar: AppBar(
+        title: Text('History'),
+      ),
       body: historyEpisodesAsync.when(
         data: (episodes) => EpisodesList(episodes: episodes),
         loading: () => const Center(child: CircularProgressIndicator()),

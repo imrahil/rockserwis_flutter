@@ -337,12 +337,12 @@ final favoritedEpisodesProvider =
 );
 
 typedef FavoritedEpisodesRef = AutoDisposeFutureProviderRef<List<Episode>>;
-String _$allEpisodesHash() => r'559c4a04547672789b16d75e92601254def79667';
+String _$allEpisodesHash() => r'224b43677de37c995e9ae31ebdb9e7843c8211bc';
 
 /// See also [AllEpisodes].
 @ProviderFor(AllEpisodes)
 final allEpisodesProvider =
-    AutoDisposeAsyncNotifierProvider<AllEpisodes, List<Episode>>.internal(
+    AsyncNotifierProvider<AllEpisodes, List<Episode>>.internal(
   AllEpisodes.new,
   name: r'allEpisodesProvider',
   debugGetCreateSourceHash:
@@ -351,6 +351,6 @@ final allEpisodesProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$AllEpisodes = AutoDisposeAsyncNotifier<List<Episode>>;
+typedef _$AllEpisodes = AsyncNotifier<List<Episode>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

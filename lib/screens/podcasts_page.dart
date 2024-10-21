@@ -14,7 +14,7 @@ class PodcastsPage extends ConsumerStatefulWidget {
 class _PodcastsPageState extends ConsumerState<PodcastsPage> {
   @override
   Widget build(BuildContext context) {
-    final podcastsAsync = ref.watch(podcastListProvider);
+    final podcastsAsync = ref.watch(allPodcastsProvider);
 
     return Scaffold(
       appBar: SharedAppBar(title: 'Podcasts'),
