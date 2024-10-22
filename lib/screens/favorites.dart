@@ -9,7 +9,6 @@ class FavoritesPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DefaultTabController(
-      initialIndex: 1,
       length: 2,
       child: Scaffold(
         appBar: AppBar(
