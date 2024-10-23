@@ -21,7 +21,7 @@ class FavoritesPage extends ConsumerWidget {
               ),
               Tab(
                 text: 'Episodes',
-                icon: Icon(Icons.favorite),
+                icon: Icon(Icons.radio),
               ),
             ],
           ),

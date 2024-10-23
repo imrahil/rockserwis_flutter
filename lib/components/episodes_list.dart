@@ -55,8 +55,9 @@ class EpisodeListTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final apiProvider = ref.read(apiRepositoryProvider);
-    final favoriteIcon =
-        currentEpisode.isFavorited ? Icons.favorite : Icons.favorite_border;
+    final favoriteIcon = currentEpisode.isFavorited
+        ? Icon(Icons.favorite, color: const Color.fromARGB(255, 189, 69, 60))
+        : SizedBox.shrink();
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -93,8 +94,8 @@ class EpisodeListTile extends ConsumerWidget {
           ],
         ),
         trailing: Wrap(spacing: 12, children: [
-          Icon(favoriteIcon),
-          const Icon(Icons.arrow_forward),
+          favoriteIcon,
+          const Icon(Icons.play_circle),
         ]),
         onTap: () => {
           if (currentEpisode.hasPodcast)
