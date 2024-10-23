@@ -55,3 +55,8 @@ History of listened episodes
 - filtering episodes by e.g.: last month, last year, custom range
 - search (?)
 - offline playback - downloading the episode locally before playing
+
+## Known issues
+
+- audio is still playing when leaving player
+- crashes from time to time without reason :)
