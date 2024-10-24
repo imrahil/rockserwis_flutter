@@ -82,11 +82,15 @@ class MyAudioHandler extends BaseAudioHandler with SeekHandler {
     _player.seek(newPosition);
   }
 
-  Future<void> setAudioSource(AudioSource source, MediaItem item) async {
+  Future<void> setAudioSource(
+    AudioSource source,
+    MediaItem item,
+    Duration initialPosition,
+  ) async {
     mediaItem.add(item);
 
     try {
-      await _player.setAudioSource(source);
+      await _player.setAudioSource(source, initialPosition: initialPosition);
     } on PlayerException catch (e) {
       logger.d('PlayerException: ${e.message}');
     } on PlayerInterruptedException catch (e) {

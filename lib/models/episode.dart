@@ -22,7 +22,8 @@ class Episode with _$Episode {
     @JsonKey(name: 'has_podcast') required bool hasPodcast,
     @Default(false) bool isFavorited,
     @Property(type: PropertyType.dateNano) DateTime? updatedAt,
-    @Default(0.0) double progress,
+    @Default(0) int progress,
+    @Default(0) int total,
   }) = _Episode;
 
   factory Episode.fromJson(Map<String, Object?> json) =>

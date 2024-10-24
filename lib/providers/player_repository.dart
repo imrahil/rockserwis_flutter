@@ -39,12 +39,11 @@ class PlayerRepository extends _$PlayerRepository {
 
     Timer timer = Timer.periodic(Duration(seconds: 30), (timer) {
       if (state.playing) {
-        double progress =
-            state.progress.inMicroseconds / state.total.inMicroseconds;
-
-        ref
-            .read(allEpisodesProvider.notifier)
-            .updateProgress(state.episode!, progress);
+        ref.read(allEpisodesProvider.notifier).updateProgress(
+              state.episode!.episodeId,
+              state.progress.inMilliseconds,
+              state.total.inMilliseconds,
+            );
       }
     });
 
@@ -84,11 +83,11 @@ class PlayerRepository extends _$PlayerRepository {
   void seek(Duration? position) {
     _audioHandler.seek(position ?? const Duration());
 
-    double progress = position!.inMicroseconds / state.total.inMicroseconds;
-
-    ref
-        .read(allEpisodesProvider.notifier)
-        .updateProgress(state.episode!, progress);
+    ref.read(allEpisodesProvider.notifier).updateProgress(
+          state.episode!.episodeId,
+          position!.inMilliseconds,
+          state.total.inMilliseconds,
+        );
   }
 
   void setAudioSource(Episode currentEpisode) async {
@@ -99,7 +98,7 @@ class PlayerRepository extends _$PlayerRepository {
     // update episode's timestamp
     await ref
         .read(allEpisodesProvider.notifier)
-        .updateTimestamp(currentEpisode);
+        .updateTimestamp(currentEpisode.episodeId);
 
     final apiProvider = ref.read(apiRepositoryProvider);
 
@@ -119,7 +118,12 @@ class PlayerRepository extends _$PlayerRepository {
       headers: apiProvider.getHeaders(),
     );
 
-    await _audioHandler.setAudioSource(source, item);
+    await _audioHandler.setAudioSource(
+        source,
+        item,
+        currentEpisode.progress > 0
+            ? Duration(milliseconds: currentEpisode.progress)
+            : Duration.zero);
     _audioHandler.play();
   }
 }

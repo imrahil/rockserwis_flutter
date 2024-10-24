@@ -54,8 +54,10 @@ mixin _$Episode {
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   @Property(type: PropertyType.dateNano)
   set updatedAt(DateTime? value) => throw _privateConstructorUsedError;
-  double get progress => throw _privateConstructorUsedError;
-  set progress(double value) => throw _privateConstructorUsedError;
+  int get progress => throw _privateConstructorUsedError;
+  set progress(int value) => throw _privateConstructorUsedError;
+  int get total => throw _privateConstructorUsedError;
+  set total(int value) => throw _privateConstructorUsedError;
 
   /// Create a copy of Episode
   /// with the given fields replaced by the non-null parameter values.
@@ -79,7 +81,8 @@ abstract class $EpisodeCopyWith<$Res> {
       @JsonKey(name: 'has_podcast') bool hasPodcast,
       bool isFavorited,
       @Property(type: PropertyType.dateNano) DateTime? updatedAt,
-      double progress});
+      int progress,
+      int total});
 }
 
 /// @nodoc
@@ -108,6 +111,7 @@ class _$EpisodeCopyWithImpl<$Res, $Val extends Episode>
     Object? isFavorited = null,
     Object? updatedAt = freezed,
     Object? progress = null,
+    Object? total = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -153,7 +157,11 @@ class _$EpisodeCopyWithImpl<$Res, $Val extends Episode>
       progress: null == progress
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
+      total: null == total
+          ? _value.total
+          : total // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -176,7 +184,8 @@ abstract class _$$EpisodeImplCopyWith<$Res> implements $EpisodeCopyWith<$Res> {
       @JsonKey(name: 'has_podcast') bool hasPodcast,
       bool isFavorited,
       @Property(type: PropertyType.dateNano) DateTime? updatedAt,
-      double progress});
+      int progress,
+      int total});
 }
 
 /// @nodoc
@@ -203,6 +212,7 @@ class __$$EpisodeImplCopyWithImpl<$Res>
     Object? isFavorited = null,
     Object? updatedAt = freezed,
     Object? progress = null,
+    Object? total = null,
   }) {
     return _then(_$EpisodeImpl(
       id: null == id
@@ -248,7 +258,11 @@ class __$$EpisodeImplCopyWithImpl<$Res>
       progress: null == progress
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
+      total: null == total
+          ? _value.total
+          : total // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -268,7 +282,8 @@ class _$EpisodeImpl extends _Episode {
       @JsonKey(name: 'has_podcast') required this.hasPodcast,
       this.isFavorited = false,
       @Property(type: PropertyType.dateNano) this.updatedAt,
-      this.progress = 0.0})
+      this.progress = 0,
+      this.total = 0})
       : super._();
 
   factory _$EpisodeImpl.fromJson(Map<String, dynamic> json) =>
@@ -305,11 +320,14 @@ class _$EpisodeImpl extends _Episode {
   DateTime? updatedAt;
   @override
   @JsonKey()
-  double progress;
+  int progress;
+  @override
+  @JsonKey()
+  int total;
 
   @override
   String toString() {
-    return 'Episode(id: $id, episodeId: $episodeId, podcastId: $podcastId, date: $date, name: $name, imgPath: $imgPath, episodeDuration: $episodeDuration, hasPodcast: $hasPodcast, isFavorited: $isFavorited, updatedAt: $updatedAt, progress: $progress)';
+    return 'Episode(id: $id, episodeId: $episodeId, podcastId: $podcastId, date: $date, name: $name, imgPath: $imgPath, episodeDuration: $episodeDuration, hasPodcast: $hasPodcast, isFavorited: $isFavorited, updatedAt: $updatedAt, progress: $progress, total: $total)';
   }
 
   @override
@@ -334,7 +352,8 @@ class _$EpisodeImpl extends _Episode {
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
             (identical(other.progress, progress) ||
-                other.progress == progress));
+                other.progress == progress) &&
+            (identical(other.total, total) || other.total == total));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -351,7 +370,8 @@ class _$EpisodeImpl extends _Episode {
       hasPodcast,
       isFavorited,
       updatedAt,
-      progress);
+      progress,
+      total);
 
   /// Create a copy of Episode
   /// with the given fields replaced by the non-null parameter values.
@@ -374,7 +394,8 @@ abstract class _Episode extends Episode {
       @JsonKey(name: 'has_podcast') required bool hasPodcast,
       bool isFavorited,
       @Property(type: PropertyType.dateNano) DateTime? updatedAt,
-      double progress}) = _$EpisodeImpl;
+      int progress,
+      int total}) = _$EpisodeImpl;
   _Episode._() : super._();
 
   factory _Episode.fromJson(Map<String, dynamic> json) = _$EpisodeImpl.fromJson;
@@ -424,8 +445,11 @@ abstract class _Episode extends Episode {
   @Property(type: PropertyType.dateNano)
   set updatedAt(DateTime? value);
   @override
-  double get progress;
-  set progress(double value);
+  int get progress;
+  set progress(int value);
+  @override
+  int get total;
+  set total(int value);
 
   /// Create a copy of Episode
   /// with the given fields replaced by the non-null parameter values.

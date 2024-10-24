@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
+import 'package:rockserwis_podcaster/objectbox.g.dart';
 import 'package:rockserwis_podcaster/providers/objectbox_repository.dart';
 import 'package:rockserwis_podcaster/providers/sort_order.dart';
 import 'package:rockserwis_podcaster/utils/const.dart';
@@ -66,46 +67,70 @@ class AllEpisodes extends _$AllEpisodes {
   /// Toggles the favorite status of an episode.
   ///
   /// @param episode The episode to toggle the favorite status of.
-  Future<void> toggleFavoriteEpisode(Episode episode) async {
+  Future<void> toggleFavoriteEpisode(int episodeId) async {
     final objectBox = await ref.watch(objectBoxProvider.future);
 
-    final updatedEpisode = episode.copyWith(isFavorited: !episode.isFavorited);
-    await objectBox.episodeBox.putAsync(updatedEpisode);
+    final episode = await getSingleEpisode(objectBox, episodeId);
 
-    await update((previousState) => [
-          ...previousState.map(
-            (episode) =>
-                episode.id == updatedEpisode.id ? updatedEpisode : episode,
-          )
-        ]);
+    if (episode != null) {
+      final updatedEpisode =
+          episode.copyWith(isFavorited: !episode.isFavorited);
+      await objectBox.episodeBox.putAsync(updatedEpisode);
+
+      await update((previousState) => [
+            ...previousState.map(
+              (episode) =>
+                  episode.id == updatedEpisode.id ? updatedEpisode : episode,
+            )
+          ]);
+    }
   }
 
-  Future<void> updateTimestamp(Episode episode) async {
+  Future<void> updateTimestamp(int episodeId) async {
     final objectBox = await ref.watch(objectBoxProvider.future);
 
-    final updatedEpisode = episode.copyWith(updatedAt: DateTime.now());
-    await objectBox.episodeBox.putAsync(updatedEpisode);
+    final episode = await getSingleEpisode(objectBox, episodeId);
 
-    await update((previousState) => [
-          ...previousState.map(
-            (episode) =>
-                episode.id == updatedEpisode.id ? updatedEpisode : episode,
-          )
-        ]);
+    if (episode != null) {
+      final updatedEpisode = episode.copyWith(updatedAt: DateTime.now());
+      await objectBox.episodeBox.putAsync(updatedEpisode);
+
+      await update((previousState) => [
+            ...previousState.map(
+              (episode) =>
+                  episode.id == updatedEpisode.id ? updatedEpisode : episode,
+            )
+          ]);
+    }
   }
 
-  Future<void> updateProgress(Episode episode, double progress) async {
+  Future<void> updateProgress(int episodeId, int progress, int total) async {
     final objectBox = await ref.watch(objectBoxProvider.future);
 
-    final updatedEpisode = episode.copyWith(progress: progress);
-    await objectBox.episodeBox.putAsync(updatedEpisode);
+    final episode = await getSingleEpisode(objectBox, episodeId);
 
-    await update((previousState) => [
-          ...previousState.map(
-            (episode) =>
-                episode.id == updatedEpisode.id ? updatedEpisode : episode,
-          )
-        ]);
+    if (episode != null) {
+      final updatedEpisode = episode.copyWith(
+        progress: progress,
+        total: total,
+      );
+
+      await objectBox.episodeBox.putAsync(updatedEpisode);
+
+      await update((previousState) => [
+            ...previousState.map(
+              (episode) =>
+                  episode.id == updatedEpisode.id ? updatedEpisode : episode,
+            )
+          ]);
+    }
+  }
+
+  Future<Episode?> getSingleEpisode(objectBox, int episodeId) async {
+    return objectBox.episodeBox
+        .query(Episode_.episodeId.equals(episodeId))
+        .build()
+        .findFirstAsync();
   }
 }
 

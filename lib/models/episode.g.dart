@@ -20,5 +20,6 @@ _$EpisodeImpl _$$EpisodeImplFromJson(Map<String, dynamic> json) =>
       updatedAt: json['updatedAt'] == null
           ? null
           : DateTime.parse(json['updatedAt'] as String),
-      progress: (json['progress'] as num?)?.toDouble() ?? 0.0,
+      progress: (json['progress'] as num?)?.toInt() ?? 0,
+      total: (json['total'] as num?)?.toInt() ?? 0,
     );

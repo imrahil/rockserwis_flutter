@@ -136,7 +136,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(41, 6594091496338156520),
       name: 'Episode',
-      lastPropertyId: const obx_int.IdUid(11, 6421359935704911044),
+      lastPropertyId: const obx_int.IdUid(12, 6556979852637378670),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -192,7 +192,12 @@ final _entities = <obx_int.ModelEntity>[
         obx_int.ModelProperty(
             id: const obx_int.IdUid(11, 6421359935704911044),
             name: 'progress',
-            type: 8,
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(12, 6556979852637378670),
+            name: 'total',
+            type: 6,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -662,7 +667,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         objectToFB: (Episode object, fb.Builder fbb) {
           final nameOffset = fbb.writeString(object.name);
           final imgPathOffset = fbb.writeString(object.imgPath);
-          fbb.startTable(12);
+          fbb.startTable(13);
           fbb.addInt64(0, object.id);
           fbb.addInt64(1, object.episodeId);
           fbb.addInt64(2, object.podcastId);
@@ -677,7 +682,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
               object.updatedAt == null
                   ? null
                   : object.updatedAt!.microsecondsSinceEpoch * 1000);
-          fbb.addFloat64(10, object.progress);
+          fbb.addInt64(10, object.progress);
+          fbb.addInt64(11, object.total);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -711,7 +717,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
               : DateTime.fromMicrosecondsSinceEpoch(
                   (updatedAtValue / 1000).round());
           final progressParam =
-              const fb.Float64Reader().vTableGet(buffer, rootOffset, 24, 0);
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 24, 0);
+          final totalParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 26, 0);
           final object = Episode(
               id: idParam,
               episodeId: episodeIdParam,
@@ -723,7 +731,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
               hasPodcast: hasPodcastParam,
               isFavorited: isFavoritedParam,
               updatedAt: updatedAtParam,
-              progress: progressParam);
+              progress: progressParam,
+              total: totalParam);
 
           return object;
         })
@@ -853,5 +862,9 @@ class Episode_ {
 
   /// See [Episode.progress].
   static final progress =
-      obx.QueryDoubleProperty<Episode>(_entities[3].properties[10]);
+      obx.QueryIntegerProperty<Episode>(_entities[3].properties[10]);
+
+  /// See [Episode.total].
+  static final total =
+      obx.QueryIntegerProperty<Episode>(_entities[3].properties[11]);
 }

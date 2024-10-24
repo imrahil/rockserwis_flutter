@@ -337,7 +337,7 @@ final favoritedEpisodesProvider =
 );
 
 typedef FavoritedEpisodesRef = AutoDisposeFutureProviderRef<List<Episode>>;
-String _$allEpisodesHash() => r'224b43677de37c995e9ae31ebdb9e7843c8211bc';
+String _$allEpisodesHash() => r'4319677a45a5ddecbbb2633d7fc46b960c55d29b';
 
 /// See also [AllEpisodes].
 @ProviderFor(AllEpisodes)

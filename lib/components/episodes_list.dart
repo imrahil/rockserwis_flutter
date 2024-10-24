@@ -83,10 +83,10 @@ class EpisodeListTile extends ConsumerWidget {
           children: [
             Text('Duration: ${currentEpisode.getReadableDuration}'),
             SizedBox(width: 10),
-            currentEpisode.progress > 0
+            currentEpisode.progress > 0 && currentEpisode.total > 0
                 ? Expanded(
                     child: LinearProgressIndicator(
-                      value: currentEpisode.progress,
+                      value: currentEpisode.progress / currentEpisode.total,
                     ),
                   )
                 : Spacer(),
