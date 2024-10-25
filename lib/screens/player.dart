@@ -48,12 +48,6 @@ class _PlayerState extends ConsumerState<Player> {
       setState(() {
         _connectionStatus = result;
       });
-
-      if (!result.contains(ConnectivityResult.none)) {
-        _setAudioSource(_currentEpisode);
-      } else {
-        await ref.read(playerRepositoryProvider.notifier).stop();
-      }
     });
   }
 

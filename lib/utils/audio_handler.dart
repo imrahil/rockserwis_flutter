@@ -68,18 +68,22 @@ class MyAudioHandler extends BaseAudioHandler with SeekHandler {
   @override
   Future<void> seek(Duration position) => _player.seek(position);
 
-  @override
-  Future<void> rewind() async {
+  Duration customRewind() {
     final currentPosition = _player.position;
-    final newPosition = currentPosition - const Duration(seconds: 30);
-    _player.seek(newPosition.isNegative ? Duration.zero : newPosition);
+
+    var newPosition = currentPosition - const Duration(seconds: 30);
+    newPosition = newPosition.isNegative ? Duration.zero : newPosition;
+    _player.seek(newPosition);
+
+    return newPosition;
   }
 
-  @override
-  Future<void> fastForward() async {
+  Duration customFastForward() {
     final currentPosition = _player.position;
     final newPosition = currentPosition + const Duration(seconds: 30);
     _player.seek(newPosition);
+
+    return newPosition;
   }
 
   Future<void> setAudioSource(

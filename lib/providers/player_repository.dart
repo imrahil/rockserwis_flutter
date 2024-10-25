@@ -73,19 +73,29 @@ class PlayerRepository extends _$PlayerRepository {
   }
 
   void rewind() {
-    _audioHandler.rewind();
+    final position = _audioHandler.customRewind();
+
+    updateProgress(position);
   }
 
   void fastForward() {
-    _audioHandler.fastForward();
+    final position = _audioHandler.customFastForward();
+
+    updateProgress(position);
   }
 
   void seek(Duration? position) {
     _audioHandler.seek(position ?? const Duration());
 
+    if (position != null) {
+      updateProgress(position);
+    }
+  }
+
+  void updateProgress(Duration position) {
     ref.read(allEpisodesProvider.notifier).updateProgress(
           state.episode!.episodeId,
-          position!.inMilliseconds,
+          position.inMilliseconds,
           state.total.inMilliseconds,
         );
   }
