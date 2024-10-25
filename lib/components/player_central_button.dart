@@ -1,15 +1,11 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rockserwis_podcaster/providers/player_repository.dart';
 
 class CentralButton extends ConsumerWidget {
-  final List<ConnectivityResult> connectionStatus;
-
   const CentralButton({
     super.key,
-    required this.connectionStatus,
   });
 
   @override
@@ -29,12 +25,6 @@ class CentralButton extends ConsumerWidget {
         width: 64.0,
         height: 64.0,
         child: const CircularProgressIndicator(),
-      );
-    } else if (connectionStatus.contains(ConnectivityResult.none)) {
-      return IconButton(
-        icon: const Icon(Icons.wifi_off),
-        iconSize: 64.0,
-        onPressed: () {},
       );
     } else if (playing != true) {
       return IconButton(

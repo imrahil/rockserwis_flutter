@@ -50,6 +50,7 @@ class ScaffoldWithNavigationBar extends StatelessWidget {
           NavigationDestination(label: 'Podcasts', icon: Icon(Icons.home)),
           NavigationDestination(label: 'Favorites', icon: Icon(Icons.favorite)),
           NavigationDestination(label: 'History', icon: Icon(Icons.history)),
+          NavigationDestination(label: 'Player', icon: Icon(Icons.live_tv)),
         ],
         onDestinationSelected: onDestinationSelected,
       ),

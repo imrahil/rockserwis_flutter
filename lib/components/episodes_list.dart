@@ -6,6 +6,7 @@ import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/app_routes.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
+import 'package:rockserwis_podcaster/providers/player_repository.dart';
 
 class EpisodesList extends StatelessWidget {
   final List<Episode> episodes;
@@ -59,6 +60,9 @@ class EpisodeListTile extends ConsumerWidget {
         ? Icon(Icons.favorite, color: const Color.fromARGB(255, 189, 69, 60))
         : SizedBox.shrink();
 
+    final playerRepositoryNotifier =
+        ref.read(playerRepositoryProvider.notifier);
+
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: ListTile(
@@ -97,14 +101,13 @@ class EpisodeListTile extends ConsumerWidget {
           favoriteIcon,
           const Icon(Icons.play_circle),
         ]),
-        onTap: () => {
-          if (currentEpisode.hasPodcast)
-            {
-              context.pushNamed(
-                AppRoutes.player,
-                extra: (currentEpisode, episodes),
-              )
-            }
+        onTap: () {
+          if (currentEpisode.hasPodcast) {
+            playerRepositoryNotifier.setEpisodes(episodes);
+            playerRepositoryNotifier.setAudioSource(currentEpisode);
+
+            context.go(AppRoutes.player);
+          }
         },
       ),
     );

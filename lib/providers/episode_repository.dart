@@ -179,3 +179,13 @@ Future<List<Episode>> favoritedEpisodes(FavoritedEpisodesRef ref) async {
 
   return favorites;
 }
+
+@riverpod
+Future<bool> watchFavoritedEpisode(
+    WatchFavoritedEpisodeRef ref, int episodeId) async {
+  final allEpisodesList = await ref.watch(allEpisodesProvider.future);
+
+  return allEpisodesList
+      .firstWhere((episode) => episode.episodeId == episodeId)
+      .isFavorited;
+}

@@ -337,6 +337,137 @@ final favoritedEpisodesProvider =
 );
 
 typedef FavoritedEpisodesRef = AutoDisposeFutureProviderRef<List<Episode>>;
+String _$watchFavoritedEpisodeHash() =>
+    r'5966d8f5745df6467f85faf53fd1cac4f80ea1ba';
+
+/// See also [watchFavoritedEpisode].
+@ProviderFor(watchFavoritedEpisode)
+const watchFavoritedEpisodeProvider = WatchFavoritedEpisodeFamily();
+
+/// See also [watchFavoritedEpisode].
+class WatchFavoritedEpisodeFamily extends Family<AsyncValue<bool>> {
+  /// See also [watchFavoritedEpisode].
+  const WatchFavoritedEpisodeFamily();
+
+  /// See also [watchFavoritedEpisode].
+  WatchFavoritedEpisodeProvider call(
+    int episodeId,
+  ) {
+    return WatchFavoritedEpisodeProvider(
+      episodeId,
+    );
+  }
+
+  @override
+  WatchFavoritedEpisodeProvider getProviderOverride(
+    covariant WatchFavoritedEpisodeProvider provider,
+  ) {
+    return call(
+      provider.episodeId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'watchFavoritedEpisodeProvider';
+}
+
+/// See also [watchFavoritedEpisode].
+class WatchFavoritedEpisodeProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [watchFavoritedEpisode].
+  WatchFavoritedEpisodeProvider(
+    int episodeId,
+  ) : this._internal(
+          (ref) => watchFavoritedEpisode(
+            ref as WatchFavoritedEpisodeRef,
+            episodeId,
+          ),
+          from: watchFavoritedEpisodeProvider,
+          name: r'watchFavoritedEpisodeProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$watchFavoritedEpisodeHash,
+          dependencies: WatchFavoritedEpisodeFamily._dependencies,
+          allTransitiveDependencies:
+              WatchFavoritedEpisodeFamily._allTransitiveDependencies,
+          episodeId: episodeId,
+        );
+
+  WatchFavoritedEpisodeProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.episodeId,
+  }) : super.internal();
+
+  final int episodeId;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(WatchFavoritedEpisodeRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: WatchFavoritedEpisodeProvider._internal(
+        (ref) => create(ref as WatchFavoritedEpisodeRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        episodeId: episodeId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _WatchFavoritedEpisodeProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is WatchFavoritedEpisodeProvider &&
+        other.episodeId == episodeId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, episodeId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin WatchFavoritedEpisodeRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `episodeId` of this provider.
+  int get episodeId;
+}
+
+class _WatchFavoritedEpisodeProviderElement
+    extends AutoDisposeFutureProviderElement<bool>
+    with WatchFavoritedEpisodeRef {
+  _WatchFavoritedEpisodeProviderElement(super.provider);
+
+  @override
+  int get episodeId => (origin as WatchFavoritedEpisodeProvider).episodeId;
+}
+
 String _$allEpisodesHash() => r'4319677a45a5ddecbbb2633d7fc46b960c55d29b';
 
 /// See also [AllEpisodes].

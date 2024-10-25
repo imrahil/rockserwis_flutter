@@ -6,7 +6,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
-import 'package:rockserwis_podcaster/models/progress_bar_state.dart';
+import 'package:rockserwis_podcaster/models/player_state.dart';
 import 'package:rockserwis_podcaster/providers/audio_service.dart';
 import 'package:rockserwis_podcaster/providers/episode_repository.dart';
 import 'package:rockserwis_podcaster/utils/audio_handler.dart';
@@ -19,7 +19,7 @@ class PlayerRepository extends _$PlayerRepository {
       ref.watch(audioServiceProvider).requireValue;
 
   @override
-  ProgressBarState build() {
+  EpisodePlayerState build() {
     _audioHandler.playbackState.listen(
       (PlaybackState playbackState) {
         state = state.copyWith(
@@ -40,7 +40,7 @@ class PlayerRepository extends _$PlayerRepository {
     Timer timer = Timer.periodic(Duration(seconds: 30), (timer) {
       if (state.playing) {
         ref.read(allEpisodesProvider.notifier).updateProgress(
-              state.episode!.episodeId,
+              state.currentEpisode!.episodeId,
               state.progress.inMilliseconds,
               state.total.inMilliseconds,
             );
@@ -51,7 +51,7 @@ class PlayerRepository extends _$PlayerRepository {
       timer.cancel();
     });
 
-    return ProgressBarState(
+    return EpisodePlayerState(
       playing: false,
       processingState: AudioProcessingState.idle,
       progress: Duration.zero,
@@ -92,17 +92,47 @@ class PlayerRepository extends _$PlayerRepository {
     }
   }
 
+  void skipToPrevious() async {
+    if (state.episodes.isNotEmpty) {
+      final currentIndex = state.episodes.indexWhere(
+          (episode) => episode.episodeId == state.currentEpisode?.episodeId);
+
+      if (currentIndex > 0 && currentIndex < state.episodes.length) {
+        await stop();
+
+        setAudioSource(state.episodes[currentIndex - 1]);
+      }
+    }
+  }
+
+  void skipToNext() async {
+    final currentIndex = state.episodes.indexWhere(
+        (episode) => episode.episodeId == state.currentEpisode?.episodeId);
+
+    if (currentIndex >= 0 && currentIndex < state.episodes.length - 1) {
+      await stop();
+
+      setAudioSource(state.episodes[currentIndex + 1]);
+    }
+  }
+
   void updateProgress(Duration position) {
     ref.read(allEpisodesProvider.notifier).updateProgress(
-          state.episode!.episodeId,
+          state.currentEpisode!.episodeId,
           position.inMilliseconds,
           state.total.inMilliseconds,
         );
   }
 
+  void setEpisodes(List<Episode> episodes) {
+    state = state.copyWith(
+      episodes: episodes,
+    );
+  }
+
   void setAudioSource(Episode currentEpisode) async {
     state = state.copyWith(
-      episode: currentEpisode,
+      currentEpisode: currentEpisode,
     );
 
     // update episode's timestamp

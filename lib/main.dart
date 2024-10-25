@@ -61,6 +61,7 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorPodcastsKey = GlobalKey<NavigatorState>();
 final _shellNavigatorFavoritesKey = GlobalKey<NavigatorState>();
 final _shellNavigatorHistoryKey = GlobalKey<NavigatorState>();
+final _shellPlayerHistoryKey = GlobalKey<NavigatorState>();
 
 class MusicPlayer extends ConsumerStatefulWidget {
   const MusicPlayer({super.key});
@@ -86,15 +87,6 @@ class _MusicPlayerState extends ConsumerState<MusicPlayer> {
           parentNavigatorKey: _rootNavigatorKey,
           builder: (BuildContext context, GoRouterState state) =>
               const LoginPage(),
-        ),
-        GoRoute(
-          path: AppRoutes.player,
-          name: AppRoutes.player,
-          parentNavigatorKey: _rootNavigatorKey,
-          builder: (BuildContext context, GoRouterState state) {
-            final (currentEpisode, episodes) = state.extra as PlayerData;
-            return Player(currentEpisode: currentEpisode, episodes: episodes);
-          },
         ),
         StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) {
@@ -141,6 +133,17 @@ class _MusicPlayerState extends ConsumerState<MusicPlayer> {
                   path: AppRoutes.history,
                   pageBuilder: (context, state) => const NoTransitionPage(
                     child: HistoryPage(),
+                  ),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              navigatorKey: _shellPlayerHistoryKey,
+              routes: [
+                GoRoute(
+                  path: AppRoutes.player,
+                  pageBuilder: (context, state) => const NoTransitionPage(
+                    child: Player(),
                   ),
                 ),
               ],

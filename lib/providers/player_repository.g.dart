@@ -6,12 +6,12 @@ part of 'player_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$playerRepositoryHash() => r'63c1a05ddb2da41c3fb33d01e0ba434da73416e0';
+String _$playerRepositoryHash() => r'a7e8666feebf40161a14c3047191d2897196e05b';
 
 /// See also [PlayerRepository].
 @ProviderFor(PlayerRepository)
 final playerRepositoryProvider =
-    NotifierProvider<PlayerRepository, ProgressBarState>.internal(
+    NotifierProvider<PlayerRepository, EpisodePlayerState>.internal(
   PlayerRepository.new,
   name: r'playerRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,6 +21,6 @@ final playerRepositoryProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$PlayerRepository = Notifier<ProgressBarState>;
+typedef _$PlayerRepository = Notifier<EpisodePlayerState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
