@@ -123,6 +123,7 @@ class _EpisodesPageState extends ConsumerState<EpisodesPage> {
         ],
       ),
       body: episodesAsync.when(
+        skipLoadingOnReload: true,
         data: (episodes) => EpisodesList(
           episodes: episodes,
           currentPodcast: _currentPodcast,

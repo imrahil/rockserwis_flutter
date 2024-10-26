@@ -13,8 +13,15 @@ class HistoryPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('History'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.delete_forever),
+            onPressed: ref.read(allEpisodesProvider.notifier).resetTimestamp,
+          ),
+        ],
       ),
       body: historyEpisodesAsync.when(
+        skipLoadingOnReload: true,
         data: (episodes) => EpisodesList(episodes: episodes),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => const Center(child: Text('Error loading episodes...')),

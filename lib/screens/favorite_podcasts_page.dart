@@ -12,6 +12,7 @@ class FavoritePodcastsPage extends ConsumerWidget {
 
     return Scaffold(
       body: favoritedPodcastsAsync.when(
+        skipLoadingOnReload: true,
         data: (podcasts) => PodcastsList(podcasts: podcasts),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => const Center(child: Text('Error loading podcasts...')),

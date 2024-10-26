@@ -19,6 +19,7 @@ class _PodcastsPageState extends ConsumerState<PodcastsPage> {
     return Scaffold(
       appBar: SharedAppBar(title: 'Podcasts'),
       body: podcastsAsync.when(
+        skipLoadingOnReload: true,
         data: (podcasts) => PodcastsList(podcasts: podcasts),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => const Center(child: Text('Error loading podcasts...')),

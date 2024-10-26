@@ -468,7 +468,7 @@ class _WatchFavoritedEpisodeProviderElement
   int get episodeId => (origin as WatchFavoritedEpisodeProvider).episodeId;
 }
 
-String _$allEpisodesHash() => r'4319677a45a5ddecbbb2633d7fc46b960c55d29b';
+String _$allEpisodesHash() => r'7417b6cd619a373dba6a43d2a5c5682bc8651601';
 
 /// See also [AllEpisodes].
 @ProviderFor(AllEpisodes)

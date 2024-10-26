@@ -58,10 +58,12 @@ Future<List<Episode>> fetchEpisodes(FetchEpisodesRef ref, int podcastId) {
 @Riverpod(keepAlive: true)
 class AllEpisodes extends _$AllEpisodes {
   @override
-  Future<List<Episode>> build() async {
+  Future<List<Episode>> build() => getAll();
+
+  Future<List<Episode>> getAll() async {
     final objectBox = await ref.watch(objectBoxProvider.future);
 
-    return await objectBox.episodeBox.getAllAsync();
+    return objectBox.episodeBox.getAllAsync();
   }
 
   /// Toggles the favorite status of an episode.
@@ -76,13 +78,7 @@ class AllEpisodes extends _$AllEpisodes {
       final updatedEpisode =
           episode.copyWith(isFavorited: !episode.isFavorited);
       await objectBox.episodeBox.putAsync(updatedEpisode);
-
-      await update((previousState) => [
-            ...previousState.map(
-              (episode) =>
-                  episode.id == updatedEpisode.id ? updatedEpisode : episode,
-            )
-          ]);
+      await updateList(updatedEpisode);
     }
   }
 
@@ -93,14 +89,30 @@ class AllEpisodes extends _$AllEpisodes {
 
     if (episode != null) {
       final updatedEpisode = episode.copyWith(updatedAt: DateTime.now());
-      await objectBox.episodeBox.putAsync(updatedEpisode);
 
-      await update((previousState) => [
-            ...previousState.map(
-              (episode) =>
-                  episode.id == updatedEpisode.id ? updatedEpisode : episode,
-            )
-          ]);
+      await objectBox.episodeBox.putAsync(updatedEpisode);
+      await updateList(updatedEpisode);
+    }
+  }
+
+  Future<void> resetTimestamp() async {
+    final objectBox = await ref.watch(objectBoxProvider.future);
+
+    var resetDate = DateTime.utc(2000, 1, 1);
+
+    final historyItems = state.requireValue
+        .where((episode) => episode.updatedAt!.isAfter(resetDate))
+        .toList();
+
+    if (historyItems.isNotEmpty) {
+      final updatedEpisodes = historyItems.map((episode) {
+        return episode.copyWith(updatedAt: resetDate);
+      }).toList();
+
+      await objectBox.episodeBox.putManyAsync(updatedEpisodes);
+      await update((previousState) async {
+        return await getAll();
+      });
     }
   }
 
@@ -116,14 +128,18 @@ class AllEpisodes extends _$AllEpisodes {
       );
 
       await objectBox.episodeBox.putAsync(updatedEpisode);
-
-      await update((previousState) => [
-            ...previousState.map(
-              (episode) =>
-                  episode.id == updatedEpisode.id ? updatedEpisode : episode,
-            )
-          ]);
+      await updateList(updatedEpisode);
     }
+  }
+
+  Future<void> updateList(Episode updatedEpisode) async {
+    await update((previousState) => [
+          ...previousState.map(
+            (episode) => episode.episodeId == updatedEpisode.episodeId
+                ? updatedEpisode
+                : episode,
+          ),
+        ]);
   }
 
   Future<Episode?> getSingleEpisode(objectBox, int episodeId) async {
