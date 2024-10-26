@@ -110,9 +110,7 @@ class AllEpisodes extends _$AllEpisodes {
       }).toList();
 
       await objectBox.episodeBox.putManyAsync(updatedEpisodes);
-      await update((previousState) async {
-        return await getAll();
-      });
+      state = await AsyncValue.guard(getAll);
     }
   }
 
