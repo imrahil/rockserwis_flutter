@@ -6,7 +6,7 @@ part of 'podcast_sync_helper.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$podcastSyncHelperHash() => r'b954bd549b434481b61a13c42fd93882ecd93a44';
+String _$podcastSyncHelperHash() => r'471c8ed25dc0706ea4a98288a0d29c602242b4dc';
 
 /// See also [podcastSyncHelper].
 @ProviderFor(podcastSyncHelper)
@@ -21,6 +21,8 @@ final podcastSyncHelperProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef PodcastSyncHelperRef = AutoDisposeProviderRef<PodcastSyncHelper>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -6,7 +6,7 @@ part of 'podcast_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$podcastRepositoryHash() => r'd729744ec2a1bc281142889d82ea00330bef2bb6';
+String _$podcastRepositoryHash() => r'42df5432089adf9068df2c92c6d289cc23ec736b';
 
 /// See also [podcastRepository].
 @ProviderFor(podcastRepository)
@@ -21,8 +21,10 @@ final podcastRepositoryProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef PodcastRepositoryRef = AutoDisposeProviderRef<PodcastJsonRepository>;
-String _$fetchPodcastsHash() => r'a05557c9a901ecda762c8fb5fe70c6b3acdc82cb';
+String _$fetchPodcastsHash() => r'087ad5e3daad76214b7d1427c91f0940fc0c7de6';
 
 /// See also [fetchPodcasts].
 @ProviderFor(fetchPodcasts)
@@ -36,8 +38,10 @@ final fetchPodcastsProvider = AutoDisposeFutureProvider<List<Podcast>>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef FetchPodcastsRef = AutoDisposeFutureProviderRef<List<Podcast>>;
-String _$favoritedPodcastsHash() => r'056e88c82c76314cab740a55c808d180350e67a5';
+String _$favoritedPodcastsHash() => r'8e9b3bb1eb06bdb26fe4c84febe045fa515e452f';
 
 /// See also [favoritedPodcasts].
 @ProviderFor(favoritedPodcasts)
@@ -52,6 +56,8 @@ final favoritedPodcastsProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef FavoritedPodcastsRef = AutoDisposeFutureProviderRef<List<Podcast>>;
 String _$allPodcastsHash() => r'cb37183afda3a1a4f9ba5c042a660d1b7853d554';
 
@@ -69,4 +75,4 @@ final allPodcastsProvider =
 
 typedef _$AllPodcasts = AutoDisposeAsyncNotifier<List<Podcast>>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

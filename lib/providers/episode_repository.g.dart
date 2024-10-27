@@ -6,7 +6,7 @@ part of 'episode_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$episodeRepositoryHash() => r'17a1f4f5dc9e1d7ffe760b71c80bfb5ad27341ec';
+String _$episodeRepositoryHash() => r'ccb293ce617049e07cb042d5552c61473bcb175d';
 
 /// See also [episodeRepository].
 @ProviderFor(episodeRepository)
@@ -21,8 +21,10 @@ final episodeRepositoryProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef EpisodeRepositoryRef = AutoDisposeProviderRef<EpisodeRepository>;
-String _$fetchEpisodesHash() => r'767fe513f2fd6772634dce0b098d85a4a05da845';
+String _$fetchEpisodesHash() => r'e97576f984cd9893d2bceb7ea556d333e89c13f3';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -158,6 +160,8 @@ class FetchEpisodesProvider extends AutoDisposeFutureProvider<List<Episode>> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin FetchEpisodesRef on AutoDisposeFutureProviderRef<List<Episode>> {
   /// The parameter `podcastId` of this provider.
   int get podcastId;
@@ -172,7 +176,7 @@ class _FetchEpisodesProviderElement
   int get podcastId => (origin as FetchEpisodesProvider).podcastId;
 }
 
-String _$episodeListHash() => r'8c342ae29e1110d5cdbe12e14578fd26754bdea8';
+String _$episodeListHash() => r'bbb7f8d3dd619bd99f223b950ea34a5e9a4dbc44';
 
 /// See also [episodeList].
 @ProviderFor(episodeList)
@@ -287,6 +291,8 @@ class EpisodeListProvider extends AutoDisposeFutureProvider<List<Episode>> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin EpisodeListRef on AutoDisposeFutureProviderRef<List<Episode>> {
   /// The parameter `podcastId` of this provider.
   int get podcastId;
@@ -301,7 +307,7 @@ class _EpisodeListProviderElement
   int get podcastId => (origin as EpisodeListProvider).podcastId;
 }
 
-String _$historyEpisodesHash() => r'670e092d73f5c5b652b55835c9561ded44b9337c';
+String _$historyEpisodesHash() => r'bd9b189838508fd0035d85419a8a0504aba97d86';
 
 /// Fetches all episodes from the history.
 ///
@@ -318,8 +324,10 @@ final historyEpisodesProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef HistoryEpisodesRef = AutoDisposeFutureProviderRef<List<Episode>>;
-String _$favoritedEpisodesHash() => r'5faeeb1ff0360567cdf4b5027ecdef50e2ec4b22';
+String _$favoritedEpisodesHash() => r'b90ebb2495f9af5d79495972f2a654a49254ac84';
 
 /// Fetches all favorited episodes from the database.
 ///
@@ -336,9 +344,11 @@ final favoritedEpisodesProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef FavoritedEpisodesRef = AutoDisposeFutureProviderRef<List<Episode>>;
 String _$watchFavoritedEpisodeHash() =>
-    r'5966d8f5745df6467f85faf53fd1cac4f80ea1ba';
+    r'83ac593413671d32d28c030686c12634a5166fb7';
 
 /// See also [watchFavoritedEpisode].
 @ProviderFor(watchFavoritedEpisode)
@@ -454,6 +464,8 @@ class WatchFavoritedEpisodeProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin WatchFavoritedEpisodeRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `episodeId` of this provider.
   int get episodeId;
@@ -484,4 +496,4 @@ final allEpisodesProvider =
 
 typedef _$AllEpisodes = AsyncNotifier<List<Episode>>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

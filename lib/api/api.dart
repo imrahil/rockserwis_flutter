@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -114,7 +115,7 @@ class ApiRepository {
 }
 
 @Riverpod(keepAlive: true)
-ApiRepository apiRepository(ApiRepositoryRef ref) {
+ApiRepository apiRepository(Ref ref) {
   return ApiRepository(
     client: http.Client(),
     sharedPreferences: ref.watch(sharedPreferencesProvider).requireValue,

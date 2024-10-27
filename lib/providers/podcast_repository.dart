@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/api/data/missing_podcasts.dart';
@@ -43,7 +44,7 @@ class PodcastJsonRepository {
 }
 
 @riverpod
-PodcastJsonRepository podcastRepository(PodcastRepositoryRef ref) {
+PodcastJsonRepository podcastRepository(Ref ref) {
   return PodcastJsonRepository(
     client: http.Client(),
     sharedPreferences: ref.watch(sharedPreferencesProvider).requireValue,
@@ -51,7 +52,7 @@ PodcastJsonRepository podcastRepository(PodcastRepositoryRef ref) {
 }
 
 @riverpod
-Future<List<Podcast>> fetchPodcasts(FetchPodcastsRef ref) {
+Future<List<Podcast>> fetchPodcasts(Ref ref) {
   return ref.watch(podcastRepositoryProvider).fetchPodcasts();
 }
 
@@ -80,7 +81,7 @@ class AllPodcasts extends _$AllPodcasts {
 }
 
 @riverpod
-Future<List<Podcast>> favoritedPodcasts(FavoritedPodcastsRef ref) async {
+Future<List<Podcast>> favoritedPodcasts(Ref ref) async {
   final allPodcastsList = await ref.watch(allPodcastsProvider.future);
 
   final favorites =

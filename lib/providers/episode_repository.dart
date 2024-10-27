@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
@@ -43,7 +44,7 @@ class EpisodeRepository {
 }
 
 @riverpod
-EpisodeRepository episodeRepository(EpisodeRepositoryRef ref) {
+EpisodeRepository episodeRepository(Ref ref) {
   return EpisodeRepository(
     client: http.Client(),
     sharedPreferences: ref.watch(sharedPreferencesProvider).requireValue,
@@ -51,7 +52,7 @@ EpisodeRepository episodeRepository(EpisodeRepositoryRef ref) {
 }
 
 @riverpod
-Future<List<Episode>> fetchEpisodes(FetchEpisodesRef ref, int podcastId) {
+Future<List<Episode>> fetchEpisodes(Ref ref, int podcastId) {
   return ref.watch(episodeRepositoryProvider).fetchEpisodes(podcastId);
 }
 
@@ -149,7 +150,7 @@ class AllEpisodes extends _$AllEpisodes {
 }
 
 @riverpod
-Future<List<Episode>> episodeList(EpisodeListRef ref, int podcastId) async {
+Future<List<Episode>> episodeList(Ref ref, int podcastId) async {
   final allEpisodesList = await ref.watch(allEpisodesProvider.future);
 
   final episodes = allEpisodesList
@@ -168,7 +169,7 @@ Future<List<Episode>> episodeList(EpisodeListRef ref, int podcastId) async {
 
 /// Fetches all episodes from the history.
 @riverpod
-Future<List<Episode>> historyEpisodes(HistoryEpisodesRef ref) async {
+Future<List<Episode>> historyEpisodes(Ref ref) async {
   final allEpisodesList = await ref.watch(allEpisodesProvider.future);
 
   final recentItems = allEpisodesList
@@ -183,7 +184,7 @@ Future<List<Episode>> historyEpisodes(HistoryEpisodesRef ref) async {
 
 /// Fetches all favorited episodes from the database.
 @riverpod
-Future<List<Episode>> favoritedEpisodes(FavoritedEpisodesRef ref) async {
+Future<List<Episode>> favoritedEpisodes(Ref ref) async {
   final allEpisodesList = await ref.watch(allEpisodesProvider.future);
 
   final favorites =
@@ -195,8 +196,7 @@ Future<List<Episode>> favoritedEpisodes(FavoritedEpisodesRef ref) async {
 }
 
 @riverpod
-Future<bool> watchFavoritedEpisode(
-    WatchFavoritedEpisodeRef ref, int episodeId) async {
+Future<bool> watchFavoritedEpisode(Ref ref, int episodeId) async {
   final allEpisodesList = await ref.watch(allEpisodesProvider.future);
 
   return allEpisodesList
