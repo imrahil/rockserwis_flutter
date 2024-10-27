@@ -52,7 +52,6 @@ History of listened episodes
 
 ## TODO
 
-- cleaning favorites & history
 - filtering episodes by e.g.: last month, last year, custom range
 - search (?)
 - offline playback - downloading the episode locally before playing
