@@ -8,16 +8,13 @@ import 'package:rockserwis_podcaster/objectbox.g.dart';
 import 'package:rockserwis_podcaster/providers/objectbox_repository.dart';
 import 'package:rockserwis_podcaster/providers/sort_order.dart';
 import 'package:rockserwis_podcaster/utils/const.dart';
-import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 part 'episode_repository.g.dart';
 
 class EpisodeRepository {
-  EpisodeRepository({required this.client, required this.sharedPreferences});
+  EpisodeRepository({required this.client});
 
   final http.Client client;
-  final SharedPreferences sharedPreferences;
 
   List<Episode> _selectedPodcastEpisodes = [];
 
@@ -47,7 +44,6 @@ class EpisodeRepository {
 EpisodeRepository episodeRepository(Ref ref) {
   return EpisodeRepository(
     client: http.Client(),
-    sharedPreferences: ref.watch(sharedPreferencesProvider).requireValue,
   );
 }
 

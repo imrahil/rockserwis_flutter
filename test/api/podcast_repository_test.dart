@@ -10,7 +10,6 @@ import 'package:rockserwis_podcaster/objectbox.g.dart';
 import 'package:rockserwis_podcaster/providers/objectbox_repository.dart';
 import 'package:rockserwis_podcaster/providers/podcast_repository.dart';
 import 'package:rockserwis_podcaster/utils/const.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'api_test.data.dart';
 import 'podcast_repository_test.mocks.dart';
@@ -24,12 +23,8 @@ void main() {
 
     setUp(() async {
       mockClient = MockClient();
-      SharedPreferences.setMockInitialValues({});
 
-      final sharedPreferences = await SharedPreferences.getInstance();
-
-      podcastRepository = PodcastJsonRepository(
-          client: mockClient, sharedPreferences: sharedPreferences);
+      podcastRepository = PodcastJsonRepository(client: mockClient);
     });
 
     group('fetchPodcasts', () {

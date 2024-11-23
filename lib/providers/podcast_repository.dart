@@ -7,17 +7,13 @@ import 'package:rockserwis_podcaster/api/data/missing_podcasts.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 import 'package:rockserwis_podcaster/providers/objectbox_repository.dart';
 import 'package:rockserwis_podcaster/utils/const.dart';
-import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 part 'podcast_repository.g.dart';
 
 class PodcastJsonRepository {
-  PodcastJsonRepository(
-      {required this.client, required this.sharedPreferences});
+  PodcastJsonRepository({required this.client});
 
   final http.Client client;
-  final SharedPreferences sharedPreferences;
 
   /// Fetches and caches JSON data for all podcasts.
   ///
@@ -47,7 +43,6 @@ class PodcastJsonRepository {
 PodcastJsonRepository podcastRepository(Ref ref) {
   return PodcastJsonRepository(
     client: http.Client(),
-    sharedPreferences: ref.watch(sharedPreferencesProvider).requireValue,
   );
 }
 
