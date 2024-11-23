@@ -9,13 +9,13 @@ import 'package:rockserwis_podcaster/providers/podcast_sync_helper.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_data.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_mode.dart';
 import 'package:rockserwis_podcaster/utils/const.dart';
-import 'package:rockserwis_podcaster/utils/package_info_provider.dart';
 import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';
 
 part 'app_startup.g.dart';
 
 var logger = Logger();
 
+// Local variable to clean the internal database
 const _forceRefresh = false;
 
 @riverpod
@@ -24,7 +24,6 @@ class AppStartupNotifier extends _$AppStartupNotifier {
   Future<void> build() async {
     // Preload any other FutureProviders what will be used with requireValue later
     await ref.watch(objectBoxProvider.future);
-    await ref.watch(packageInfoProvider.future);
     await ref.watch(audioServiceProvider.future);
 
     await _updateDatabaseFromNetwork();
@@ -34,17 +33,9 @@ class AppStartupNotifier extends _$AppStartupNotifier {
     state = const AsyncValue.loading();
 
     final sharedPreferences = ref.watch(sharedPreferencesProvider).requireValue;
-    final packageInfo = ref.watch(packageInfoProvider).requireValue;
 
-    final lastVersion = sharedPreferences.getString(Const.versionKey);
-    final currentVersion = '${packageInfo.version}+${packageInfo.buildNumber}';
-
-    bool shouldUpdateForNewVersion = false;
-
-    if (lastVersion != currentVersion || _forceRefresh) {
-      logger.d('Current version: $currentVersion, last version: $lastVersion');
-
-      shouldUpdateForNewVersion = true;
+    if (_forceRefresh) {
+      logger.d('Force refresh! Cleaning everything!');
 
       await ref
           .read(objectBoxProvider)
@@ -56,8 +47,6 @@ class AppStartupNotifier extends _$AppStartupNotifier {
           .requireValue
           .episodeBox
           .removeAllAsync();
-
-      await sharedPreferences.setString(Const.versionKey, currentVersion);
     }
 
     const cacheDuration = Duration(days: 1);
@@ -66,10 +55,9 @@ class AppStartupNotifier extends _$AppStartupNotifier {
     final lastUpdated =
         lastUpdatedString != null ? DateTime.parse(lastUpdatedString) : null;
 
-    if (lastUpdated == null ||
-        now.difference(lastUpdated) > cacheDuration ||
-        shouldUpdateForNewVersion ||
-        _forceRefresh) {
+    if (_forceRefresh ||
+        lastUpdated == null ||
+        now.difference(lastUpdated) > cacheDuration) {
       logger.d('Syncing podcasts and episodes');
       await ref.read(podcastSyncHelperProvider).syncAll();
 

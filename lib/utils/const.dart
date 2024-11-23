@@ -6,7 +6,6 @@ class Const {
   static const String loginPostUrl = '$mainUrl/login';
 
   static const String appThemeModeKey = 'app_theme_mode';
-  static const String versionKey = 'current_version';
   static const String lastUpdatedKey = 'last_updated';
 
   static const String rememberMeKey = 'rememberMe';
