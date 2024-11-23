@@ -6,7 +6,7 @@ part of 'episode_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$episodeRepositoryHash() => r'ccb293ce617049e07cb042d5552c61473bcb175d';
+String _$episodeRepositoryHash() => r'ee90ae0b41c357aca8aa0f4f456d16bd2b09124d';
 
 /// See also [episodeRepository].
 @ProviderFor(episodeRepository)
