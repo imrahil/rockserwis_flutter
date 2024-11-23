@@ -52,9 +52,14 @@ History of listened episodes
 
 ## TODO
 
-- filtering episodes by e.g.: last month, last year, custom range
+- filtering episodes by:
+  - last month,
+  - last year,
+  - custom range,
+  - already listened
 - search (?)
 - offline playback - downloading the episode locally before playing
+- demo mode for users without Rockserwis accounts
 
 ## Known issues
 
