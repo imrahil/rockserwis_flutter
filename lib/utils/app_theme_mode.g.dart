@@ -15,14 +15,14 @@ String _$appThemeModeNotifierHash() =>
 @ProviderFor(AppThemeModeNotifier)
 final appThemeModeNotifierProvider =
     AutoDisposeNotifierProvider<AppThemeModeNotifier, ThemeMode>.internal(
-  AppThemeModeNotifier.new,
-  name: r'appThemeModeNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$appThemeModeNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      AppThemeModeNotifier.new,
+      name: r'appThemeModeNotifierProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$appThemeModeNotifierHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$AppThemeModeNotifier = AutoDisposeNotifier<ThemeMode>;
 // ignore_for_file: type=lint

@@ -12,14 +12,14 @@ String _$podcastSyncHelperHash() => r'471c8ed25dc0706ea4a98288a0d29c602242b4dc';
 @ProviderFor(podcastSyncHelper)
 final podcastSyncHelperProvider =
     AutoDisposeProvider<PodcastSyncHelper>.internal(
-  podcastSyncHelper,
-  name: r'podcastSyncHelperProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$podcastSyncHelperHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      podcastSyncHelper,
+      name: r'podcastSyncHelperProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$podcastSyncHelperHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element

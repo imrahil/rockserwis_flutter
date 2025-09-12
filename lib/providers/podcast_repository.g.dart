@@ -12,14 +12,14 @@ String _$podcastRepositoryHash() => r'e75ebd53b832a0dc7107c1eac64f8e44559fee4f';
 @ProviderFor(podcastRepository)
 final podcastRepositoryProvider =
     AutoDisposeProvider<PodcastJsonRepository>.internal(
-  podcastRepository,
-  name: r'podcastRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$podcastRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      podcastRepository,
+      name: r'podcastRepositoryProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$podcastRepositoryHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
@@ -47,14 +47,14 @@ String _$favoritedPodcastsHash() => r'8e9b3bb1eb06bdb26fe4c84febe045fa515e452f';
 @ProviderFor(favoritedPodcasts)
 final favoritedPodcastsProvider =
     AutoDisposeFutureProvider<List<Podcast>>.internal(
-  favoritedPodcasts,
-  name: r'favoritedPodcastsProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$favoritedPodcastsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      favoritedPodcasts,
+      name: r'favoritedPodcastsProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$favoritedPodcastsHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
@@ -65,13 +65,14 @@ String _$allPodcastsHash() => r'cb37183afda3a1a4f9ba5c042a660d1b7853d554';
 @ProviderFor(AllPodcasts)
 final allPodcastsProvider =
     AutoDisposeAsyncNotifierProvider<AllPodcasts, List<Podcast>>.internal(
-  AllPodcasts.new,
-  name: r'allPodcastsProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$allPodcastsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      AllPodcasts.new,
+      name: r'allPodcastsProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$allPodcastsHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$AllPodcasts = AutoDisposeAsyncNotifier<List<Podcast>>;
 // ignore_for_file: type=lint

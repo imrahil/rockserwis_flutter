@@ -13,8 +13,9 @@ String _$objectBoxHash() => r'e8a8cd717ae2d93c747598a2f7db6ac12677a2af';
 final objectBoxProvider = FutureProvider<ObjectBox>.internal(
   objectBox,
   name: r'objectBoxProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$objectBoxHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$objectBoxHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

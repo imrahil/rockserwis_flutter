@@ -12,14 +12,14 @@ String _$episodeRepositoryHash() => r'ee90ae0b41c357aca8aa0f4f456d16bd2b09124d';
 @ProviderFor(episodeRepository)
 final episodeRepositoryProvider =
     AutoDisposeProvider<EpisodeRepository>.internal(
-  episodeRepository,
-  name: r'episodeRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$episodeRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      episodeRepository,
+      name: r'episodeRepositoryProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$episodeRepositoryHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
@@ -57,21 +57,15 @@ class FetchEpisodesFamily extends Family<AsyncValue<List<Episode>>> {
   const FetchEpisodesFamily();
 
   /// See also [fetchEpisodes].
-  FetchEpisodesProvider call(
-    int podcastId,
-  ) {
-    return FetchEpisodesProvider(
-      podcastId,
-    );
+  FetchEpisodesProvider call(int podcastId) {
+    return FetchEpisodesProvider(podcastId);
   }
 
   @override
   FetchEpisodesProvider getProviderOverride(
     covariant FetchEpisodesProvider provider,
   ) {
-    return call(
-      provider.podcastId,
-    );
+    return call(provider.podcastId);
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -92,24 +86,19 @@ class FetchEpisodesFamily extends Family<AsyncValue<List<Episode>>> {
 /// See also [fetchEpisodes].
 class FetchEpisodesProvider extends AutoDisposeFutureProvider<List<Episode>> {
   /// See also [fetchEpisodes].
-  FetchEpisodesProvider(
-    int podcastId,
-  ) : this._internal(
-          (ref) => fetchEpisodes(
-            ref as FetchEpisodesRef,
-            podcastId,
-          ),
-          from: fetchEpisodesProvider,
-          name: r'fetchEpisodesProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$fetchEpisodesHash,
-          dependencies: FetchEpisodesFamily._dependencies,
-          allTransitiveDependencies:
-              FetchEpisodesFamily._allTransitiveDependencies,
-          podcastId: podcastId,
-        );
+  FetchEpisodesProvider(int podcastId)
+    : this._internal(
+        (ref) => fetchEpisodes(ref as FetchEpisodesRef, podcastId),
+        from: fetchEpisodesProvider,
+        name: r'fetchEpisodesProvider',
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$fetchEpisodesHash,
+        dependencies: FetchEpisodesFamily._dependencies,
+        allTransitiveDependencies:
+            FetchEpisodesFamily._allTransitiveDependencies,
+        podcastId: podcastId,
+      );
 
   FetchEpisodesProvider._internal(
     super._createNotifier, {
@@ -188,21 +177,15 @@ class EpisodeListFamily extends Family<AsyncValue<List<Episode>>> {
   const EpisodeListFamily();
 
   /// See also [episodeList].
-  EpisodeListProvider call(
-    int podcastId,
-  ) {
-    return EpisodeListProvider(
-      podcastId,
-    );
+  EpisodeListProvider call(int podcastId) {
+    return EpisodeListProvider(podcastId);
   }
 
   @override
   EpisodeListProvider getProviderOverride(
     covariant EpisodeListProvider provider,
   ) {
-    return call(
-      provider.podcastId,
-    );
+    return call(provider.podcastId);
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -223,24 +206,18 @@ class EpisodeListFamily extends Family<AsyncValue<List<Episode>>> {
 /// See also [episodeList].
 class EpisodeListProvider extends AutoDisposeFutureProvider<List<Episode>> {
   /// See also [episodeList].
-  EpisodeListProvider(
-    int podcastId,
-  ) : this._internal(
-          (ref) => episodeList(
-            ref as EpisodeListRef,
-            podcastId,
-          ),
-          from: episodeListProvider,
-          name: r'episodeListProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$episodeListHash,
-          dependencies: EpisodeListFamily._dependencies,
-          allTransitiveDependencies:
-              EpisodeListFamily._allTransitiveDependencies,
-          podcastId: podcastId,
-        );
+  EpisodeListProvider(int podcastId)
+    : this._internal(
+        (ref) => episodeList(ref as EpisodeListRef, podcastId),
+        from: episodeListProvider,
+        name: r'episodeListProvider',
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$episodeListHash,
+        dependencies: EpisodeListFamily._dependencies,
+        allTransitiveDependencies: EpisodeListFamily._allTransitiveDependencies,
+        podcastId: podcastId,
+      );
 
   EpisodeListProvider._internal(
     super._createNotifier, {
@@ -315,14 +292,14 @@ String _$historyEpisodesHash() => r'bd9b189838508fd0035d85419a8a0504aba97d86';
 @ProviderFor(historyEpisodes)
 final historyEpisodesProvider =
     AutoDisposeFutureProvider<List<Episode>>.internal(
-  historyEpisodes,
-  name: r'historyEpisodesProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$historyEpisodesHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      historyEpisodes,
+      name: r'historyEpisodesProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$historyEpisodesHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
@@ -335,14 +312,14 @@ String _$favoritedEpisodesHash() => r'b90ebb2495f9af5d79495972f2a654a49254ac84';
 @ProviderFor(favoritedEpisodes)
 final favoritedEpisodesProvider =
     AutoDisposeFutureProvider<List<Episode>>.internal(
-  favoritedEpisodes,
-  name: r'favoritedEpisodesProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$favoritedEpisodesHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      favoritedEpisodes,
+      name: r'favoritedEpisodesProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$favoritedEpisodesHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
@@ -360,21 +337,15 @@ class WatchFavoritedEpisodeFamily extends Family<AsyncValue<bool>> {
   const WatchFavoritedEpisodeFamily();
 
   /// See also [watchFavoritedEpisode].
-  WatchFavoritedEpisodeProvider call(
-    int episodeId,
-  ) {
-    return WatchFavoritedEpisodeProvider(
-      episodeId,
-    );
+  WatchFavoritedEpisodeProvider call(int episodeId) {
+    return WatchFavoritedEpisodeProvider(episodeId);
   }
 
   @override
   WatchFavoritedEpisodeProvider getProviderOverride(
     covariant WatchFavoritedEpisodeProvider provider,
   ) {
-    return call(
-      provider.episodeId,
-    );
+    return call(provider.episodeId);
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -395,24 +366,20 @@ class WatchFavoritedEpisodeFamily extends Family<AsyncValue<bool>> {
 /// See also [watchFavoritedEpisode].
 class WatchFavoritedEpisodeProvider extends AutoDisposeFutureProvider<bool> {
   /// See also [watchFavoritedEpisode].
-  WatchFavoritedEpisodeProvider(
-    int episodeId,
-  ) : this._internal(
-          (ref) => watchFavoritedEpisode(
-            ref as WatchFavoritedEpisodeRef,
-            episodeId,
-          ),
-          from: watchFavoritedEpisodeProvider,
-          name: r'watchFavoritedEpisodeProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$watchFavoritedEpisodeHash,
-          dependencies: WatchFavoritedEpisodeFamily._dependencies,
-          allTransitiveDependencies:
-              WatchFavoritedEpisodeFamily._allTransitiveDependencies,
-          episodeId: episodeId,
-        );
+  WatchFavoritedEpisodeProvider(int episodeId)
+    : this._internal(
+        (ref) =>
+            watchFavoritedEpisode(ref as WatchFavoritedEpisodeRef, episodeId),
+        from: watchFavoritedEpisodeProvider,
+        name: r'watchFavoritedEpisodeProvider',
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$watchFavoritedEpisodeHash,
+        dependencies: WatchFavoritedEpisodeFamily._dependencies,
+        allTransitiveDependencies:
+            WatchFavoritedEpisodeFamily._allTransitiveDependencies,
+        episodeId: episodeId,
+      );
 
   WatchFavoritedEpisodeProvider._internal(
     super._createNotifier, {
@@ -486,13 +453,14 @@ String _$allEpisodesHash() => r'bfdb52a89188298cb08b87def060325d13cf4e49';
 @ProviderFor(AllEpisodes)
 final allEpisodesProvider =
     AsyncNotifierProvider<AllEpisodes, List<Episode>>.internal(
-  AllEpisodes.new,
-  name: r'allEpisodesProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$allEpisodesHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      AllEpisodes.new,
+      name: r'allEpisodesProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$allEpisodesHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$AllEpisodes = AsyncNotifier<List<Episode>>;
 // ignore_for_file: type=lint

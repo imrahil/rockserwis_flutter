@@ -13,8 +13,9 @@ String _$audioServiceHash() => r'36ff69a5630fc76e4b7afdb7943881307821f913';
 final audioServiceProvider = FutureProvider<MyAudioHandler>.internal(
   audioService,
   name: r'audioServiceProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$audioServiceHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$audioServiceHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

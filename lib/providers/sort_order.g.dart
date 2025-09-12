@@ -13,8 +13,9 @@ String _$sortOrderHash() => r'238b184209ddbddc6a067f59f0849176b0dff6d9';
 final sortOrderProvider = NotifierProvider<SortOrder, SortOrderType>.internal(
   SortOrder.new,
   name: r'sortOrderProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$sortOrderHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$sortOrderHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
