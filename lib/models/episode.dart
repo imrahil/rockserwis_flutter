@@ -7,7 +7,7 @@ part 'episode.freezed.dart';
 part 'episode.g.dart';
 
 @Freezed(addImplicitFinal: false, toJson: false)
-class Episode with _$Episode {
+abstract class Episode with _$Episode {
   const Episode._();
 
   @Entity(realClass: Episode)

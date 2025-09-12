@@ -7,7 +7,7 @@ part of 'app_startup.dart';
 // **************************************************************************
 
 String _$appStartupNotifierHash() =>
-    r'be21f7f13a2265b0e2bc2b0bca19460cc87e4f77';
+    r'e1dbf83db178a09e11b250d16115626917ba68f8';
 
 /// See also [AppStartupNotifier].
 @ProviderFor(AppStartupNotifier)

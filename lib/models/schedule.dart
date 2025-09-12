@@ -5,7 +5,7 @@ part 'schedule.freezed.dart';
 part 'schedule.g.dart';
 
 @Freezed(addImplicitFinal: false)
-class Schedule with _$Schedule {
+abstract class Schedule with _$Schedule {
   @Entity(realClass: Schedule)
   factory Schedule({
     @Id() @Default(0) int id,

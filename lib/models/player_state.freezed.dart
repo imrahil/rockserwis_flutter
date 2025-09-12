@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,34 +10,67 @@ part of 'player_state.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$EpisodePlayerState {
-  bool get playing => throw _privateConstructorUsedError;
-  AudioProcessingState get processingState =>
-      throw _privateConstructorUsedError;
-  Duration get progress => throw _privateConstructorUsedError;
-  Duration get buffered => throw _privateConstructorUsedError;
-  Duration get total => throw _privateConstructorUsedError;
-  Episode? get currentEpisode => throw _privateConstructorUsedError;
-  List<Episode> get episodes => throw _privateConstructorUsedError;
+  bool get playing;
+  AudioProcessingState get processingState;
+  Duration get progress;
+  Duration get buffered;
+  Duration get total;
+  Episode? get currentEpisode;
+  List<Episode> get episodes;
 
   /// Create a copy of EpisodePlayerState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
   $EpisodePlayerStateCopyWith<EpisodePlayerState> get copyWith =>
-      throw _privateConstructorUsedError;
+      _$EpisodePlayerStateCopyWithImpl<EpisodePlayerState>(
+          this as EpisodePlayerState, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is EpisodePlayerState &&
+            (identical(other.playing, playing) || other.playing == playing) &&
+            (identical(other.processingState, processingState) ||
+                other.processingState == processingState) &&
+            (identical(other.progress, progress) ||
+                other.progress == progress) &&
+            (identical(other.buffered, buffered) ||
+                other.buffered == buffered) &&
+            (identical(other.total, total) || other.total == total) &&
+            (identical(other.currentEpisode, currentEpisode) ||
+                other.currentEpisode == currentEpisode) &&
+            const DeepCollectionEquality().equals(other.episodes, episodes));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      playing,
+      processingState,
+      progress,
+      buffered,
+      total,
+      currentEpisode,
+      const DeepCollectionEquality().hash(episodes));
+
+  @override
+  String toString() {
+    return 'EpisodePlayerState(playing: $playing, processingState: $processingState, progress: $progress, buffered: $buffered, total: $total, currentEpisode: $currentEpisode, episodes: $episodes)';
+  }
 }
 
 /// @nodoc
-abstract class $EpisodePlayerStateCopyWith<$Res> {
+abstract mixin class $EpisodePlayerStateCopyWith<$Res> {
   factory $EpisodePlayerStateCopyWith(
-          EpisodePlayerState value, $Res Function(EpisodePlayerState) then) =
-      _$EpisodePlayerStateCopyWithImpl<$Res, EpisodePlayerState>;
+          EpisodePlayerState value, $Res Function(EpisodePlayerState) _then) =
+      _$EpisodePlayerStateCopyWithImpl;
   @useResult
   $Res call(
       {bool playing,
@@ -46,19 +80,15 @@ abstract class $EpisodePlayerStateCopyWith<$Res> {
       Duration total,
       Episode? currentEpisode,
       List<Episode> episodes});
-
-  $EpisodeCopyWith<$Res>? get currentEpisode;
 }
 
 /// @nodoc
-class _$EpisodePlayerStateCopyWithImpl<$Res, $Val extends EpisodePlayerState>
+class _$EpisodePlayerStateCopyWithImpl<$Res>
     implements $EpisodePlayerStateCopyWith<$Res> {
-  _$EpisodePlayerStateCopyWithImpl(this._value, this._then);
+  _$EpisodePlayerStateCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final EpisodePlayerState _self;
+  final $Res Function(EpisodePlayerState) _then;
 
   /// Create a copy of EpisodePlayerState
   /// with the given fields replaced by the non-null parameter values.
@@ -73,122 +103,33 @@ class _$EpisodePlayerStateCopyWithImpl<$Res, $Val extends EpisodePlayerState>
     Object? currentEpisode = freezed,
     Object? episodes = null,
   }) {
-    return _then(_value.copyWith(
+    return _then(_self.copyWith(
       playing: null == playing
-          ? _value.playing
+          ? _self.playing
           : playing // ignore: cast_nullable_to_non_nullable
               as bool,
       processingState: null == processingState
-          ? _value.processingState
+          ? _self.processingState
           : processingState // ignore: cast_nullable_to_non_nullable
               as AudioProcessingState,
       progress: null == progress
-          ? _value.progress
+          ? _self.progress
           : progress // ignore: cast_nullable_to_non_nullable
               as Duration,
       buffered: null == buffered
-          ? _value.buffered
+          ? _self.buffered
           : buffered // ignore: cast_nullable_to_non_nullable
               as Duration,
       total: null == total
-          ? _value.total
+          ? _self.total
           : total // ignore: cast_nullable_to_non_nullable
               as Duration,
       currentEpisode: freezed == currentEpisode
-          ? _value.currentEpisode
+          ? _self.currentEpisode
           : currentEpisode // ignore: cast_nullable_to_non_nullable
               as Episode?,
       episodes: null == episodes
-          ? _value.episodes
-          : episodes // ignore: cast_nullable_to_non_nullable
-              as List<Episode>,
-    ) as $Val);
-  }
-
-  /// Create a copy of EpisodePlayerState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $EpisodeCopyWith<$Res>? get currentEpisode {
-    if (_value.currentEpisode == null) {
-      return null;
-    }
-
-    return $EpisodeCopyWith<$Res>(_value.currentEpisode!, (value) {
-      return _then(_value.copyWith(currentEpisode: value) as $Val);
-    });
-  }
-}
-
-/// @nodoc
-abstract class _$$EpisodePlayerStateImplCopyWith<$Res>
-    implements $EpisodePlayerStateCopyWith<$Res> {
-  factory _$$EpisodePlayerStateImplCopyWith(_$EpisodePlayerStateImpl value,
-          $Res Function(_$EpisodePlayerStateImpl) then) =
-      __$$EpisodePlayerStateImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {bool playing,
-      AudioProcessingState processingState,
-      Duration progress,
-      Duration buffered,
-      Duration total,
-      Episode? currentEpisode,
-      List<Episode> episodes});
-
-  @override
-  $EpisodeCopyWith<$Res>? get currentEpisode;
-}
-
-/// @nodoc
-class __$$EpisodePlayerStateImplCopyWithImpl<$Res>
-    extends _$EpisodePlayerStateCopyWithImpl<$Res, _$EpisodePlayerStateImpl>
-    implements _$$EpisodePlayerStateImplCopyWith<$Res> {
-  __$$EpisodePlayerStateImplCopyWithImpl(_$EpisodePlayerStateImpl _value,
-      $Res Function(_$EpisodePlayerStateImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of EpisodePlayerState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? playing = null,
-    Object? processingState = null,
-    Object? progress = null,
-    Object? buffered = null,
-    Object? total = null,
-    Object? currentEpisode = freezed,
-    Object? episodes = null,
-  }) {
-    return _then(_$EpisodePlayerStateImpl(
-      playing: null == playing
-          ? _value.playing
-          : playing // ignore: cast_nullable_to_non_nullable
-              as bool,
-      processingState: null == processingState
-          ? _value.processingState
-          : processingState // ignore: cast_nullable_to_non_nullable
-              as AudioProcessingState,
-      progress: null == progress
-          ? _value.progress
-          : progress // ignore: cast_nullable_to_non_nullable
-              as Duration,
-      buffered: null == buffered
-          ? _value.buffered
-          : buffered // ignore: cast_nullable_to_non_nullable
-              as Duration,
-      total: null == total
-          ? _value.total
-          : total // ignore: cast_nullable_to_non_nullable
-              as Duration,
-      currentEpisode: freezed == currentEpisode
-          ? _value.currentEpisode
-          : currentEpisode // ignore: cast_nullable_to_non_nullable
-              as Episode?,
-      episodes: null == episodes
-          ? _value._episodes
+          ? _self.episodes
           : episodes // ignore: cast_nullable_to_non_nullable
               as List<Episode>,
     ));
@@ -197,8 +138,8 @@ class __$$EpisodePlayerStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$EpisodePlayerStateImpl implements _EpisodePlayerState {
-  _$EpisodePlayerStateImpl(
+class _EpisodePlayerState implements EpisodePlayerState {
+  _EpisodePlayerState(
       {required this.playing,
       required this.processingState,
       required this.progress,
@@ -229,16 +170,19 @@ class _$EpisodePlayerStateImpl implements _EpisodePlayerState {
     return EqualUnmodifiableListView(_episodes);
   }
 
+  /// Create a copy of EpisodePlayerState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'EpisodePlayerState(playing: $playing, processingState: $processingState, progress: $progress, buffered: $buffered, total: $total, currentEpisode: $currentEpisode, episodes: $episodes)';
-  }
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$EpisodePlayerStateCopyWith<_EpisodePlayerState> get copyWith =>
+      __$EpisodePlayerStateCopyWithImpl<_EpisodePlayerState>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$EpisodePlayerStateImpl &&
+            other is _EpisodePlayerState &&
             (identical(other.playing, playing) || other.playing == playing) &&
             (identical(other.processingState, processingState) ||
                 other.processingState == processingState) &&
@@ -263,45 +207,82 @@ class _$EpisodePlayerStateImpl implements _EpisodePlayerState {
       currentEpisode,
       const DeepCollectionEquality().hash(_episodes));
 
+  @override
+  String toString() {
+    return 'EpisodePlayerState(playing: $playing, processingState: $processingState, progress: $progress, buffered: $buffered, total: $total, currentEpisode: $currentEpisode, episodes: $episodes)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$EpisodePlayerStateCopyWith<$Res>
+    implements $EpisodePlayerStateCopyWith<$Res> {
+  factory _$EpisodePlayerStateCopyWith(
+          _EpisodePlayerState value, $Res Function(_EpisodePlayerState) _then) =
+      __$EpisodePlayerStateCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {bool playing,
+      AudioProcessingState processingState,
+      Duration progress,
+      Duration buffered,
+      Duration total,
+      Episode? currentEpisode,
+      List<Episode> episodes});
+}
+
+/// @nodoc
+class __$EpisodePlayerStateCopyWithImpl<$Res>
+    implements _$EpisodePlayerStateCopyWith<$Res> {
+  __$EpisodePlayerStateCopyWithImpl(this._self, this._then);
+
+  final _EpisodePlayerState _self;
+  final $Res Function(_EpisodePlayerState) _then;
+
   /// Create a copy of EpisodePlayerState
   /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$EpisodePlayerStateImplCopyWith<_$EpisodePlayerStateImpl> get copyWith =>
-      __$$EpisodePlayerStateImplCopyWithImpl<_$EpisodePlayerStateImpl>(
-          this, _$identity);
+  $Res call({
+    Object? playing = null,
+    Object? processingState = null,
+    Object? progress = null,
+    Object? buffered = null,
+    Object? total = null,
+    Object? currentEpisode = freezed,
+    Object? episodes = null,
+  }) {
+    return _then(_EpisodePlayerState(
+      playing: null == playing
+          ? _self.playing
+          : playing // ignore: cast_nullable_to_non_nullable
+              as bool,
+      processingState: null == processingState
+          ? _self.processingState
+          : processingState // ignore: cast_nullable_to_non_nullable
+              as AudioProcessingState,
+      progress: null == progress
+          ? _self.progress
+          : progress // ignore: cast_nullable_to_non_nullable
+              as Duration,
+      buffered: null == buffered
+          ? _self.buffered
+          : buffered // ignore: cast_nullable_to_non_nullable
+              as Duration,
+      total: null == total
+          ? _self.total
+          : total // ignore: cast_nullable_to_non_nullable
+              as Duration,
+      currentEpisode: freezed == currentEpisode
+          ? _self.currentEpisode
+          : currentEpisode // ignore: cast_nullable_to_non_nullable
+              as Episode?,
+      episodes: null == episodes
+          ? _self._episodes
+          : episodes // ignore: cast_nullable_to_non_nullable
+              as List<Episode>,
+    ));
+  }
 }
 
-abstract class _EpisodePlayerState implements EpisodePlayerState {
-  factory _EpisodePlayerState(
-      {required final bool playing,
-      required final AudioProcessingState processingState,
-      required final Duration progress,
-      required final Duration buffered,
-      required final Duration total,
-      final Episode? currentEpisode,
-      final List<Episode> episodes}) = _$EpisodePlayerStateImpl;
-
-  @override
-  bool get playing;
-  @override
-  AudioProcessingState get processingState;
-  @override
-  Duration get progress;
-  @override
-  Duration get buffered;
-  @override
-  Duration get total;
-  @override
-  Episode? get currentEpisode;
-  @override
-  List<Episode> get episodes;
-
-  /// Create a copy of EpisodePlayerState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$EpisodePlayerStateImplCopyWith<_$EpisodePlayerStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+// dart format on

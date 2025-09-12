@@ -6,8 +6,7 @@ part of 'episode.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$EpisodeImpl _$$EpisodeImplFromJson(Map<String, dynamic> json) =>
-    _$EpisodeImpl(
+_Episode _$EpisodeFromJson(Map<String, dynamic> json) => _Episode(
       id: (json['id'] as num?)?.toInt() ?? 0,
       episodeId: (json['schedule_id'] as num).toInt(),
       podcastId: (json['podcastId'] as num?)?.toInt(),
