@@ -95,6 +95,7 @@ class _EpisodesPageState extends ConsumerState<EpisodesPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.info_outline),
+            tooltip: 'Podcast info',
             onPressed: () => _showPodcastInfoDialog(context),
           ),
           IconButton(
@@ -103,6 +104,7 @@ class _EpisodesPageState extends ConsumerState<EpisodesPage> {
                   ? Icons.arrow_upward
                   : Icons.arrow_downward,
             ),
+            tooltip: 'Toggle sort order',
             onPressed: () {
               ref.read(sortOrderProvider.notifier).change();
             },
@@ -111,6 +113,9 @@ class _EpisodesPageState extends ConsumerState<EpisodesPage> {
             icon: Icon(
               _isFavorited ? Icons.bookmark_remove : Icons.bookmark_add,
             ),
+            tooltip: _isFavorited
+                ? 'Remove from favorites'
+                : 'Add to favorites',
             onPressed: () async {
               await ref
                   .read(allPodcastsProvider.notifier)

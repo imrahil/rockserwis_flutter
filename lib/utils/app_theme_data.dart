@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 // Define your themes
 ThemeData lightTheme = ThemeData(
-  brightness: Brightness.light,
-  primarySwatch: Colors.blue,
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: Colors.blue,
+    brightness: Brightness.light,
+  ),
+  useMaterial3: true,
   inputDecorationTheme: InputDecorationTheme(
     filled: true,
     fillColor: Colors.grey[200],
@@ -24,8 +27,11 @@ ThemeData lightTheme = ThemeData(
 );
 
 ThemeData darkTheme = ThemeData(
-  brightness: Brightness.dark,
-  primarySwatch: Colors.blue,
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: Colors.blue,
+    brightness: Brightness.dark,
+  ),
+  useMaterial3: true,
   inputDecorationTheme: InputDecorationTheme(
     filled: true,
     fillColor: Colors.grey[850],

@@ -34,11 +34,13 @@ class SharedAppBar extends ConsumerWidget implements PreferredSizeWidget {
           icon: Icon(
             themeMode.name == 'dark' ? Icons.dark_mode : Icons.light_mode,
           ),
+          tooltip: 'Toggle theme',
           onPressed: () =>
               ref.read(appThemeModeProvider.notifier).toggleTheme(),
         ),
         IconButton(
           icon: const Icon(Icons.logout),
+          tooltip: 'Log out',
           onPressed: () => logout(context),
         ),
       ],

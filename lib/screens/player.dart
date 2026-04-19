@@ -67,6 +67,9 @@ class Player extends ConsumerWidget {
                 icon: Icon(
                   isFavorited ? Icons.favorite : Icons.favorite_border,
                 ),
+                tooltip: isFavorited
+                    ? 'Remove from favorites'
+                    : 'Add to favorites',
                 onPressed: () async {
                   await ref
                       .read(allEpisodesProvider.notifier)
@@ -81,6 +84,7 @@ class Player extends ConsumerWidget {
                 IconButton(
                   icon: const Icon(Icons.skip_previous),
                   iconSize: 34.0,
+                  tooltip: 'Previous episode',
                   onPressed: ref
                       .read(playerRepositoryProvider.notifier)
                       .skipToPrevious,
@@ -88,17 +92,20 @@ class Player extends ConsumerWidget {
                 IconButton(
                   icon: const Icon(Icons.replay_30),
                   iconSize: 36.0,
+                  tooltip: 'Rewind 30 seconds',
                   onPressed: playerRepositoryNotifier.rewind,
                 ),
                 CentralButton(),
                 IconButton(
                   icon: const Icon(Icons.forward_30),
                   iconSize: 36.0,
+                  tooltip: 'Forward 30 seconds',
                   onPressed: playerRepositoryNotifier.fastForward,
                 ),
                 IconButton(
                   icon: const Icon(Icons.skip_next),
                   iconSize: 34.0,
+                  tooltip: 'Next episode',
                   onPressed:
                       ref.read(playerRepositoryProvider.notifier).skipToNext,
                 ),

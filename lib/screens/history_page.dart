@@ -16,6 +16,7 @@ class HistoryPage extends ConsumerWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.delete_forever),
+            tooltip: 'Clear history',
             onPressed: ref.read(allEpisodesProvider.notifier).resetTimestamp,
           ),
         ],

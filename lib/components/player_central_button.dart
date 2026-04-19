@@ -30,18 +30,21 @@ class CentralButton extends ConsumerWidget {
       return IconButton(
         icon: const Icon(Icons.play_arrow),
         iconSize: 64.0,
+        tooltip: 'Play',
         onPressed: playerRepositoryNotifier.play,
       );
     } else if (processingState != AudioProcessingState.completed) {
       return IconButton(
         icon: const Icon(Icons.pause),
         iconSize: 64.0,
+        tooltip: 'Pause',
         onPressed: playerRepositoryNotifier.pause,
       );
     } else {
       return IconButton(
         icon: const Icon(Icons.replay),
         iconSize: 64.0,
+        tooltip: 'Replay',
         onPressed: () => playerRepositoryNotifier.seek(Duration.zero),
       );
     }
