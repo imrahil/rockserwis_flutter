@@ -156,7 +156,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(41, 6594091496338156520),
     name: 'Episode',
-    lastPropertyId: const obx_int.IdUid(12, 6556979852637378670),
+    lastPropertyId: const obx_int.IdUid(13, 8779372856480870057),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -229,6 +229,12 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(12, 6556979852637378670),
         name: 'total',
         type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(13, 8779372856480870057),
+        name: 'downloadedPath',
+        type: 9,
         flags: 0,
       ),
     ],
@@ -767,7 +773,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectToFB: (Episode object, fb.Builder fbb) {
         final nameOffset = fbb.writeString(object.name);
         final imgPathOffset = fbb.writeString(object.imgPath);
-        fbb.startTable(13);
+        final downloadedPathOffset = object.downloadedPath == null
+            ? null
+            : fbb.writeString(object.downloadedPath!);
+        fbb.startTable(14);
         fbb.addInt64(0, object.id);
         fbb.addInt64(1, object.episodeId);
         fbb.addInt64(2, object.podcastId);
@@ -785,6 +794,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         );
         fbb.addInt64(10, object.progress);
         fbb.addInt64(11, object.total);
+        fbb.addOffset(12, downloadedPathOffset);
         fbb.finish(fbb.endTable());
         return object.id;
       },
@@ -858,6 +868,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
           26,
           0,
         );
+        final downloadedPathParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 28);
         final object = Episode(
           id: idParam,
           episodeId: episodeIdParam,
@@ -871,6 +884,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           updatedAt: updatedAtParam,
           progress: progressParam,
           total: totalParam,
+          downloadedPath: downloadedPathParam,
         );
 
         return object;
@@ -1035,5 +1049,10 @@ class Episode_ {
   /// See [Episode.total].
   static final total = obx.QueryIntegerProperty<Episode>(
     _entities[3].properties[11],
+  );
+
+  /// See [Episode.downloadedPath].
+  static final downloadedPath = obx.QueryStringProperty<Episode>(
+    _entities[3].properties[12],
   );
 }

@@ -16,6 +16,7 @@ import 'package:rockserwis_podcaster/screens/history_page.dart';
 import 'package:rockserwis_podcaster/screens/login_page.dart';
 import 'package:rockserwis_podcaster/screens/player.dart';
 import 'package:rockserwis_podcaster/screens/podcasts_page.dart';
+import 'package:rockserwis_podcaster/screens/settings_page.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_data.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_mode.dart';
 import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';
@@ -87,6 +88,12 @@ class _MusicPlayerState extends ConsumerState<MusicPlayer> {
           parentNavigatorKey: _rootNavigatorKey,
           builder: (BuildContext context, GoRouterState state) =>
               const LoginPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.settings,
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (BuildContext context, GoRouterState state) =>
+              const SettingsPage(),
         ),
         StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) {

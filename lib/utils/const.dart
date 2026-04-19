@@ -14,4 +14,10 @@ class Const {
 
   static const String favoritePodcastsKey = 'favoritePodcasts';
   static const String favoriteEpisodesKey = 'favoriteEpisodes';
+
+  static const String downloadsEnabledKey = 'downloads_enabled';
+  static const String downloadsWifiOnlyKey = 'downloads_wifi_only';
+  static const String autoDownloadFavoritesKey = 'auto_download_favorites';
+  static const String maxStorageMbKey = 'max_storage_mb';
+  static const String autoDeleteAfterPlayedKey = 'auto_delete_after_played';
 }

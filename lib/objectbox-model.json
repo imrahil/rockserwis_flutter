@@ -118,7 +118,7 @@
     },
     {
       "id": "41:6594091496338156520",
-      "lastPropertyId": "12:6556979852637378670",
+      "lastPropertyId": "13:8779372856480870057",
       "name": "Episode",
       "properties": [
         {
@@ -181,6 +181,11 @@
           "id": "12:6556979852637378670",
           "name": "total",
           "type": 6
+        },
+        {
+          "id": "13:8779372856480870057",
+          "name": "downloadedPath",
+          "type": 9
         }
       ],
       "relations": []

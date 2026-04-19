@@ -21,4 +21,5 @@ _Episode _$EpisodeFromJson(Map<String, dynamic> json) => _Episode(
       : DateTime.parse(json['updatedAt'] as String),
   progress: (json['progress'] as num?)?.toInt() ?? 0,
   total: (json['total'] as num?)?.toInt() ?? 0,
+  downloadedPath: json['downloadedPath'] as String?,
 );

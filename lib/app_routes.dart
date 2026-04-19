@@ -5,4 +5,5 @@ class AppRoutes {
   static const episodes = 'episodes';
   static const player = '/player';
   static const history = '/history';
+  static const settings = '/settings';
 }

@@ -136,6 +136,17 @@ class AllEpisodes extends _$AllEpisodes {
         ]);
   }
 
+  Future<void> updateDownloadedPath(int episodeId, String? path) async {
+    final objectBox = await ref.watch(objectBoxProvider.future);
+    final episode = await getSingleEpisode(objectBox, episodeId);
+
+    if (episode != null) {
+      final updatedEpisode = episode.copyWith(downloadedPath: path);
+      await objectBox.episodeBox.putAsync(updatedEpisode);
+      await updateList(updatedEpisode);
+    }
+  }
+
   Future<Episode?> getSingleEpisode(ObjectBox objectBox, int episodeId) async {
     return objectBox.episodeBox
         .query(Episode_.episodeId.equals(episodeId))

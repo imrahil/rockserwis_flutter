@@ -15,13 +15,17 @@ Future<ProviderContainer> _buildContainer(Map<String, Object> initial) async {
     ],
   );
   addTearDown(container.dispose);
-  // Ensure the async SharedPreferences provider is resolved before use.
   await container.read(sharedPreferencesProvider.future);
   return container;
 }
 
 void main() {
   group('AppThemeModeNotifier', () {
+    test('defaults to system when nothing is saved', () async {
+      final container = await _buildContainer({});
+      expect(container.read(appThemeModeProvider), ThemeMode.system);
+    });
+
     test('reads saved light theme from prefs', () async {
       final container = await _buildContainer({
         Const.appThemeModeKey: 'light',
@@ -36,12 +40,12 @@ void main() {
       expect(container.read(appThemeModeProvider), ThemeMode.dark);
     });
 
-    test('toggleTheme flips and persists the value', () async {
-      final container = await _buildContainer({
-        Const.appThemeModeKey: 'light',
-      });
+    test('setTheme updates state and persists the value', () async {
+      final container = await _buildContainer({});
 
-      await container.read(appThemeModeProvider.notifier).toggleTheme();
+      await container
+          .read(appThemeModeProvider.notifier)
+          .setTheme(ThemeMode.dark);
 
       expect(container.read(appThemeModeProvider), ThemeMode.dark);
 

@@ -24,6 +24,7 @@ abstract class Episode with _$Episode {
     @Property(type: PropertyType.dateNano) DateTime? updatedAt,
     @Default(0) int progress,
     @Default(0) int total,
+    String? downloadedPath,
   }) = _Episode;
 
   factory Episode.fromJson(Map<String, Object?> json) =>

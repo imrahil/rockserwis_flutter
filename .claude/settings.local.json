@@ -6,7 +6,9 @@
       "Bash(flutter pub *)",
       "Bash(where flutter.bat flutter)",
       "Read(//c/Users/szcze/fvm/default/**)",
-      "Bash(cmd.exe //c \"flutter test\")"
+      "Bash(cmd.exe //c \"flutter test\")",
+      "Bash(cmd.exe //c \"dart run build_runner build --delete-conflicting-outputs\")",
+      "Bash(cmd.exe //c \"flutter analyze\")"
     ],
     "deny": [],
     "ask": []

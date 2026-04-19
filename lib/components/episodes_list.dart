@@ -6,6 +6,8 @@ import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/app_routes.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
+import 'package:rockserwis_podcaster/providers/download_repository.dart';
+import 'package:rockserwis_podcaster/providers/download_settings.dart';
 import 'package:rockserwis_podcaster/providers/player_repository.dart';
 
 class EpisodesList extends StatelessWidget {
@@ -72,7 +74,6 @@ class EpisodeListTile extends ConsumerWidget {
         contentPadding: const EdgeInsets.all(16),
         leading: currentEpisode.imgPath != ""
             ? CachedNetworkImage(
-                // Use CachedNetworkImage
                 imageUrl: apiProvider.getImagePath(currentEpisode.imgPath),
                 placeholder: (context, url) => SizedBox(
                   height: 56.0,
@@ -100,10 +101,15 @@ class EpisodeListTile extends ConsumerWidget {
             SizedBox(width: 10),
           ],
         ),
-        trailing: Wrap(spacing: 12, children: [
-          favoriteIcon,
-          const Icon(Icons.play_circle),
-        ]),
+        trailing: Wrap(
+          spacing: 12,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            favoriteIcon,
+            _DownloadButton(episode: currentEpisode),
+            const Icon(Icons.play_circle),
+          ],
+        ),
         onTap: () {
           if (currentEpisode.hasPodcast) {
             playerRepositoryNotifier.setEpisodes(episodes);
@@ -114,5 +120,77 @@ class EpisodeListTile extends ConsumerWidget {
         },
       ),
     );
+  }
+}
+
+class _DownloadButton extends ConsumerWidget {
+  const _DownloadButton({required this.episode});
+
+  final Episode episode;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (!ref.watch(downloadSettingsProvider).downloadsEnabled) {
+      return const SizedBox.shrink();
+    }
+
+    if (episode.downloadedPath != null) {
+      return IconButton(
+        icon: const Icon(Icons.cloud_done, color: Colors.green),
+        tooltip: 'Downloaded — tap to remove',
+        onPressed: () => _confirmDelete(context, ref),
+      );
+    }
+
+    final progressAsync = ref.watch(downloadProgressProvider(episode.episodeId));
+    final progress = progressAsync.asData?.value;
+
+    if (progress != null && progress >= 0 && progress < 1) {
+      return IconButton(
+        icon: SizedBox(
+          height: 20,
+          width: 20,
+          child: CircularProgressIndicator(
+            value: progress > 0 ? progress : null,
+            strokeWidth: 2,
+          ),
+        ),
+        tooltip: 'Cancel download',
+        onPressed: () => ref
+            .read(downloadRepositoryProvider)
+            .cancelDownload(episode.episodeId),
+      );
+    }
+
+    return IconButton(
+      icon: const Icon(Icons.download),
+      tooltip: 'Download episode',
+      onPressed: () =>
+          ref.read(downloadRepositoryProvider).downloadEpisode(episode),
+    );
+  }
+
+  Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Remove download?'),
+        content: Text('Delete the downloaded file for "${episode.name}"?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      await ref.read(downloadRepositoryProvider).deleteDownload(episode);
+    }
   }
 }

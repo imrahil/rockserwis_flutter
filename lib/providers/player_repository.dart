@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:intl/intl.dart';
@@ -153,10 +154,15 @@ class PlayerRepository extends _$PlayerRepository {
           : null,
     );
 
-    AudioSource source = AudioSource.uri(
-      Uri.parse(currentEpisode.getEpisodeUrl),
-      headers: apiProvider.getHeaders(),
-    );
+    final localPath = currentEpisode.downloadedPath;
+    final hasLocal = localPath != null && File(localPath).existsSync();
+
+    AudioSource source = hasLocal
+        ? AudioSource.file(localPath)
+        : AudioSource.uri(
+            Uri.parse(currentEpisode.getEpisodeUrl),
+            headers: apiProvider.getHeaders(),
+          );
 
     await _audioHandler.setAudioSource(
         source,

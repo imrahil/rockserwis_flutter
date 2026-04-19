@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/utils/const.dart';
 import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';
@@ -13,19 +12,20 @@ class AppThemeModeNotifier extends _$AppThemeModeNotifier {
     final prefs = ref.watch(sharedPreferencesProvider).requireValue;
     final saved = prefs.getString(Const.appThemeModeKey);
 
-    if (saved == 'light') return ThemeMode.light;
-    if (saved == 'dark') return ThemeMode.dark;
-    return _systemIsDark() ? ThemeMode.dark : ThemeMode.light;
+    switch (saved) {
+      case 'light':
+        return ThemeMode.light;
+      case 'dark':
+        return ThemeMode.dark;
+      case 'system':
+      default:
+        return ThemeMode.system;
+    }
   }
 
-  Future<void> toggleTheme() async {
+  Future<void> setTheme(ThemeMode mode) async {
     final prefs = ref.read(sharedPreferencesProvider).requireValue;
-    final next = state == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
-    await prefs.setString(Const.appThemeModeKey, next.name);
-    state = next;
+    await prefs.setString(Const.appThemeModeKey, mode.name);
+    state = mode;
   }
-
-  bool _systemIsDark() =>
-      SchedulerBinding.instance.platformDispatcher.platformBrightness ==
-      Brightness.dark;
 }
