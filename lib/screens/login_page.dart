@@ -2,10 +2,10 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:logger/logger.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/app_routes.dart';
 import 'package:rockserwis_podcaster/components/labeled_checkbox.dart';
+import 'package:rockserwis_podcaster/utils/logger.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -16,8 +16,6 @@ class LoginPage extends ConsumerStatefulWidget {
 
 class _LoginPageState extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-
-  var logger = Logger();
 
   String _email = '';
   String _password = '';

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:logger/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/components/error_prompt.dart';
 import 'package:rockserwis_podcaster/providers/audio_service.dart';
@@ -9,11 +8,10 @@ import 'package:rockserwis_podcaster/providers/podcast_sync_helper.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_data.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_mode.dart';
 import 'package:rockserwis_podcaster/utils/const.dart';
+import 'package:rockserwis_podcaster/utils/logger.dart';
 import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';
 
 part 'app_startup.g.dart';
-
-var logger = Logger();
 
 // Local variable to clean the internal database
 const _forceRefresh = false;

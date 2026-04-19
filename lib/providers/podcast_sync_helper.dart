@@ -1,11 +1,11 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:rockserwis_podcaster/app_startup.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 import 'package:rockserwis_podcaster/objectbox.g.dart';
 import 'package:rockserwis_podcaster/providers/episode_repository.dart';
 import 'package:rockserwis_podcaster/providers/objectbox_repository.dart';
 import 'package:rockserwis_podcaster/providers/podcast_repository.dart';
+import 'package:rockserwis_podcaster/utils/logger.dart';
 
 part 'podcast_sync_helper.g.dart';
 

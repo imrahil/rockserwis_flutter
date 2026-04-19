@@ -1,11 +1,9 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:logger/logger.dart';
+import 'package:rockserwis_podcaster/utils/logger.dart';
 
 class MyAudioHandler extends BaseAudioHandler with SeekHandler {
   final _player = AudioPlayer();
-
-  var logger = Logger();
 
   late MediaItem localMediaItem;
 

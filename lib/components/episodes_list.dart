@@ -11,22 +11,22 @@ import 'package:rockserwis_podcaster/providers/player_repository.dart';
 class EpisodesList extends StatelessWidget {
   final List<Episode> episodes;
   final Podcast? currentPodcast;
+  final Future<void> Function()? onRefresh;
 
   const EpisodesList({
     super.key,
     required this.episodes,
     this.currentPodcast,
+    this.onRefresh,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    final list = ListView.builder(
       itemCount: episodes.length,
       itemBuilder: (context, index) {
         Episode currentEpisode = episodes[index];
 
-        // Check if the episode has an image, if not, use the podcast image
-        // side-effect: the image property will be saved to the database
         if (currentEpisode.imgPath == "" &&
             currentPodcast != null &&
             currentPodcast?.image != "") {
@@ -40,6 +40,9 @@ class EpisodesList extends StatelessWidget {
         );
       },
     );
+
+    if (onRefresh == null) return list;
+    return RefreshIndicator(onRefresh: onRefresh!, child: list);
   }
 }
 

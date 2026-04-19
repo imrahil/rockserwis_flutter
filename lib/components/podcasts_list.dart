@@ -8,15 +8,17 @@ import 'package:rockserwis_podcaster/models/podcast.dart';
 
 class PodcastsList extends StatelessWidget {
   final List<Podcast> podcasts;
+  final Future<void> Function()? onRefresh;
 
   const PodcastsList({
     super.key,
     required this.podcasts,
+    this.onRefresh,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    final list = ListView.builder(
       itemCount: podcasts.length,
       itemBuilder: (context, index) {
         Podcast currentPodcast = podcasts[index];
@@ -24,6 +26,9 @@ class PodcastsList extends StatelessWidget {
         return PodcastListTile(currentPodcast: currentPodcast);
       },
     );
+
+    if (onRefresh == null) return list;
+    return RefreshIndicator(onRefresh: onRefresh!, child: list);
   }
 }
 
