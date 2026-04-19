@@ -5,7 +5,8 @@
       "Bash(find:*)",
       "Bash(flutter pub *)",
       "Bash(where flutter.bat flutter)",
-      "Read(//c/Users/szcze/fvm/default/**)"
+      "Read(//c/Users/szcze/fvm/default/**)",
+      "Bash(cmd.exe //c \"flutter test\")"
     ],
     "deny": [],
     "ask": []
