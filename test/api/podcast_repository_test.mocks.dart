@@ -29,6 +29,7 @@ import 'package:rockserwis_podcaster/providers/objectbox_repository.dart'
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
+// ignore_for_file: invalid_use_of_internal_member
 
 class _FakeResponse_0 extends _i1.SmartFake implements _i2.Response {
   _FakeResponse_0(Object parent, Invocation parentInvocation)
@@ -283,20 +284,20 @@ class MockObjectBox extends _i1.Mock implements _i8.ObjectBox {
           as _i3.Box<_i10.Episode>);
 
   @override
-  set store(_i3.Store? _store) => super.noSuchMethod(
-    Invocation.setter(#store, _store),
+  set store(_i3.Store? value) => super.noSuchMethod(
+    Invocation.setter(#store, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set podcastBox(_i3.Box<_i9.Podcast>? _podcastBox) => super.noSuchMethod(
-    Invocation.setter(#podcastBox, _podcastBox),
+  set podcastBox(_i3.Box<_i9.Podcast>? value) => super.noSuchMethod(
+    Invocation.setter(#podcastBox, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set episodeBox(_i3.Box<_i10.Episode>? _episodeBox) => super.noSuchMethod(
-    Invocation.setter(#episodeBox, _episodeBox),
+  set episodeBox(_i3.Box<_i10.Episode>? value) => super.noSuchMethod(
+    Invocation.setter(#episodeBox, value),
     returnValueForMissingStub: null,
   );
 }

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
@@ -137,7 +136,7 @@ class AllEpisodes extends _$AllEpisodes {
         ]);
   }
 
-  Future<Episode?> getSingleEpisode(objectBox, int episodeId) async {
+  Future<Episode?> getSingleEpisode(ObjectBox objectBox, int episodeId) async {
     return objectBox.episodeBox
         .query(Episode_.episodeId.equals(episodeId))
         .build()

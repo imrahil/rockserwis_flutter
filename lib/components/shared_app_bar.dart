@@ -15,7 +15,7 @@ class SharedAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(appThemeModeNotifierProvider);
+    final themeMode = ref.watch(appThemeModeProvider);
 
     void logout(context) async {
       await ref.read(apiRepositoryProvider).logout();
@@ -35,7 +35,7 @@ class SharedAppBar extends ConsumerWidget implements PreferredSizeWidget {
             themeMode.name == 'dark' ? Icons.dark_mode : Icons.light_mode,
           ),
           onPressed: () =>
-              ref.read(appThemeModeNotifierProvider.notifier).toggleTheme(),
+              ref.read(appThemeModeProvider.notifier).toggleTheme(),
         ),
         IconButton(
           icon: const Icon(Icons.logout),

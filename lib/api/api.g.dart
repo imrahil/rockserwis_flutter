@@ -6,22 +6,46 @@ part of 'api.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$apiRepositoryHash() => r'e1bf9e972ed9fc0ff934c57d2d7a8f85be250c1b';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [apiRepository].
 @ProviderFor(apiRepository)
-final apiRepositoryProvider = Provider<ApiRepository>.internal(
-  apiRepository,
-  name: r'apiRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$apiRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final apiRepositoryProvider = ApiRepositoryProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ApiRepositoryRef = ProviderRef<ApiRepository>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class ApiRepositoryProvider
+    extends $FunctionalProvider<ApiRepository, ApiRepository, ApiRepository>
+    with $Provider<ApiRepository> {
+  ApiRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'apiRepositoryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$apiRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<ApiRepository> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ApiRepository create(Ref ref) {
+    return apiRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ApiRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ApiRepository>(value),
+    );
+  }
+}
+
+String _$apiRepositoryHash() => r'e1bf9e972ed9fc0ff934c57d2d7a8f85be250c1b';

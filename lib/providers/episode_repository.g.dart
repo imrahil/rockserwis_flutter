@@ -6,462 +6,404 @@ part of 'episode_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$episodeRepositoryHash() => r'ee90ae0b41c357aca8aa0f4f456d16bd2b09124d';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [episodeRepository].
 @ProviderFor(episodeRepository)
-final episodeRepositoryProvider =
-    AutoDisposeProvider<EpisodeRepository>.internal(
-      episodeRepository,
-      name: r'episodeRepositoryProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$episodeRepositoryHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+final episodeRepositoryProvider = EpisodeRepositoryProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef EpisodeRepositoryRef = AutoDisposeProviderRef<EpisodeRepository>;
-String _$fetchEpisodesHash() => r'e97576f984cd9893d2bceb7ea556d333e89c13f3';
-
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-/// See also [fetchEpisodes].
-@ProviderFor(fetchEpisodes)
-const fetchEpisodesProvider = FetchEpisodesFamily();
-
-/// See also [fetchEpisodes].
-class FetchEpisodesFamily extends Family<AsyncValue<List<Episode>>> {
-  /// See also [fetchEpisodes].
-  const FetchEpisodesFamily();
-
-  /// See also [fetchEpisodes].
-  FetchEpisodesProvider call(int podcastId) {
-    return FetchEpisodesProvider(podcastId);
-  }
-
-  @override
-  FetchEpisodesProvider getProviderOverride(
-    covariant FetchEpisodesProvider provider,
-  ) {
-    return call(provider.podcastId);
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'fetchEpisodesProvider';
-}
-
-/// See also [fetchEpisodes].
-class FetchEpisodesProvider extends AutoDisposeFutureProvider<List<Episode>> {
-  /// See also [fetchEpisodes].
-  FetchEpisodesProvider(int podcastId)
-    : this._internal(
-        (ref) => fetchEpisodes(ref as FetchEpisodesRef, podcastId),
-        from: fetchEpisodesProvider,
-        name: r'fetchEpisodesProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$fetchEpisodesHash,
-        dependencies: FetchEpisodesFamily._dependencies,
-        allTransitiveDependencies:
-            FetchEpisodesFamily._allTransitiveDependencies,
-        podcastId: podcastId,
+final class EpisodeRepositoryProvider
+    extends
+        $FunctionalProvider<
+          EpisodeRepository,
+          EpisodeRepository,
+          EpisodeRepository
+        >
+    with $Provider<EpisodeRepository> {
+  EpisodeRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'episodeRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
 
-  FetchEpisodesProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.podcastId,
-  }) : super.internal();
+  @override
+  String debugGetCreateSourceHash() => _$episodeRepositoryHash();
 
-  final int podcastId;
+  @$internal
+  @override
+  $ProviderElement<EpisodeRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
-  Override overrideWith(
-    FutureOr<List<Episode>> Function(FetchEpisodesRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: FetchEpisodesProvider._internal(
-        (ref) => create(ref as FetchEpisodesRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        podcastId: podcastId,
-      ),
-    );
+  EpisodeRepository create(Ref ref) {
+    return episodeRepository(ref);
   }
 
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(EpisodeRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<EpisodeRepository>(value),
+    );
+  }
+}
+
+String _$episodeRepositoryHash() => r'ee90ae0b41c357aca8aa0f4f456d16bd2b09124d';
+
+@ProviderFor(fetchEpisodes)
+final fetchEpisodesProvider = FetchEpisodesFamily._();
+
+final class FetchEpisodesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Episode>>,
+          List<Episode>,
+          FutureOr<List<Episode>>
+        >
+    with $FutureModifier<List<Episode>>, $FutureProvider<List<Episode>> {
+  FetchEpisodesProvider._({
+    required FetchEpisodesFamily super.from,
+    required int super.argument,
+  }) : super(
+         retry: null,
+         name: r'fetchEpisodesProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
   @override
-  AutoDisposeFutureProviderElement<List<Episode>> createElement() {
-    return _FetchEpisodesProviderElement(this);
+  String debugGetCreateSourceHash() => _$fetchEpisodesHash();
+
+  @override
+  String toString() {
+    return r'fetchEpisodesProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<List<Episode>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<Episode>> create(Ref ref) {
+    final argument = this.argument as int;
+    return fetchEpisodes(ref, argument);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is FetchEpisodesProvider && other.podcastId == podcastId;
+    return other is FetchEpisodesProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, podcastId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin FetchEpisodesRef on AutoDisposeFutureProviderRef<List<Episode>> {
-  /// The parameter `podcastId` of this provider.
-  int get podcastId;
-}
+String _$fetchEpisodesHash() => r'e97576f984cd9893d2bceb7ea556d333e89c13f3';
 
-class _FetchEpisodesProviderElement
-    extends AutoDisposeFutureProviderElement<List<Episode>>
-    with FetchEpisodesRef {
-  _FetchEpisodesProviderElement(super.provider);
+final class FetchEpisodesFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<List<Episode>>, int> {
+  FetchEpisodesFamily._()
+    : super(
+        retry: null,
+        name: r'fetchEpisodesProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  FetchEpisodesProvider call(int podcastId) =>
+      FetchEpisodesProvider._(argument: podcastId, from: this);
 
   @override
-  int get podcastId => (origin as FetchEpisodesProvider).podcastId;
+  String toString() => r'fetchEpisodesProvider';
+}
+
+@ProviderFor(AllEpisodes)
+final allEpisodesProvider = AllEpisodesProvider._();
+
+final class AllEpisodesProvider
+    extends $AsyncNotifierProvider<AllEpisodes, List<Episode>> {
+  AllEpisodesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'allEpisodesProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$allEpisodesHash();
+
+  @$internal
+  @override
+  AllEpisodes create() => AllEpisodes();
+}
+
+String _$allEpisodesHash() => r'd9de503333adb6725a79f17c5f85a4a161e46ee7';
+
+abstract class _$AllEpisodes extends $AsyncNotifier<List<Episode>> {
+  FutureOr<List<Episode>> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<AsyncValue<List<Episode>>, List<Episode>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<List<Episode>>, List<Episode>>,
+              AsyncValue<List<Episode>>,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}
+
+@ProviderFor(episodeList)
+final episodeListProvider = EpisodeListFamily._();
+
+final class EpisodeListProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Episode>>,
+          List<Episode>,
+          FutureOr<List<Episode>>
+        >
+    with $FutureModifier<List<Episode>>, $FutureProvider<List<Episode>> {
+  EpisodeListProvider._({
+    required EpisodeListFamily super.from,
+    required int super.argument,
+  }) : super(
+         retry: null,
+         name: r'episodeListProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$episodeListHash();
+
+  @override
+  String toString() {
+    return r'episodeListProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<List<Episode>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<Episode>> create(Ref ref) {
+    final argument = this.argument as int;
+    return episodeList(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is EpisodeListProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
 }
 
 String _$episodeListHash() => r'bbb7f8d3dd619bd99f223b950ea34a5e9a4dbc44';
 
-/// See also [episodeList].
-@ProviderFor(episodeList)
-const episodeListProvider = EpisodeListFamily();
-
-/// See also [episodeList].
-class EpisodeListFamily extends Family<AsyncValue<List<Episode>>> {
-  /// See also [episodeList].
-  const EpisodeListFamily();
-
-  /// See also [episodeList].
-  EpisodeListProvider call(int podcastId) {
-    return EpisodeListProvider(podcastId);
-  }
-
-  @override
-  EpisodeListProvider getProviderOverride(
-    covariant EpisodeListProvider provider,
-  ) {
-    return call(provider.podcastId);
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'episodeListProvider';
-}
-
-/// See also [episodeList].
-class EpisodeListProvider extends AutoDisposeFutureProvider<List<Episode>> {
-  /// See also [episodeList].
-  EpisodeListProvider(int podcastId)
-    : this._internal(
-        (ref) => episodeList(ref as EpisodeListRef, podcastId),
-        from: episodeListProvider,
+final class EpisodeListFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<List<Episode>>, int> {
+  EpisodeListFamily._()
+    : super(
+        retry: null,
         name: r'episodeListProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$episodeListHash,
-        dependencies: EpisodeListFamily._dependencies,
-        allTransitiveDependencies: EpisodeListFamily._allTransitiveDependencies,
-        podcastId: podcastId,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
       );
 
-  EpisodeListProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.podcastId,
-  }) : super.internal();
-
-  final int podcastId;
+  EpisodeListProvider call(int podcastId) =>
+      EpisodeListProvider._(argument: podcastId, from: this);
 
   @override
-  Override overrideWith(
-    FutureOr<List<Episode>> Function(EpisodeListRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: EpisodeListProvider._internal(
-        (ref) => create(ref as EpisodeListRef),
-        from: from,
-        name: null,
+  String toString() => r'episodeListProvider';
+}
+
+/// Fetches all episodes from the history.
+
+@ProviderFor(historyEpisodes)
+final historyEpisodesProvider = HistoryEpisodesProvider._();
+
+/// Fetches all episodes from the history.
+
+final class HistoryEpisodesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Episode>>,
+          List<Episode>,
+          FutureOr<List<Episode>>
+        >
+    with $FutureModifier<List<Episode>>, $FutureProvider<List<Episode>> {
+  /// Fetches all episodes from the history.
+  HistoryEpisodesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'historyEpisodesProvider',
+        isAutoDispose: true,
         dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        podcastId: podcastId,
-      ),
-    );
-  }
+        $allTransitiveDependencies: null,
+      );
 
   @override
-  AutoDisposeFutureProviderElement<List<Episode>> createElement() {
-    return _EpisodeListProviderElement(this);
-  }
+  String debugGetCreateSourceHash() => _$historyEpisodesHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<Episode>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
-  bool operator ==(Object other) {
-    return other is EpisodeListProvider && other.podcastId == podcastId;
+  FutureOr<List<Episode>> create(Ref ref) {
+    return historyEpisodes(ref);
   }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, podcastId.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
-}
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin EpisodeListRef on AutoDisposeFutureProviderRef<List<Episode>> {
-  /// The parameter `podcastId` of this provider.
-  int get podcastId;
-}
-
-class _EpisodeListProviderElement
-    extends AutoDisposeFutureProviderElement<List<Episode>>
-    with EpisodeListRef {
-  _EpisodeListProviderElement(super.provider);
-
-  @override
-  int get podcastId => (origin as EpisodeListProvider).podcastId;
 }
 
 String _$historyEpisodesHash() => r'bd9b189838508fd0035d85419a8a0504aba97d86';
 
-/// Fetches all episodes from the history.
-///
-/// Copied from [historyEpisodes].
-@ProviderFor(historyEpisodes)
-final historyEpisodesProvider =
-    AutoDisposeFutureProvider<List<Episode>>.internal(
-      historyEpisodes,
-      name: r'historyEpisodesProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$historyEpisodesHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+/// Fetches all favorited episodes from the database.
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef HistoryEpisodesRef = AutoDisposeFutureProviderRef<List<Episode>>;
-String _$favoritedEpisodesHash() => r'b90ebb2495f9af5d79495972f2a654a49254ac84';
+@ProviderFor(favoritedEpisodes)
+final favoritedEpisodesProvider = FavoritedEpisodesProvider._();
 
 /// Fetches all favorited episodes from the database.
-///
-/// Copied from [favoritedEpisodes].
-@ProviderFor(favoritedEpisodes)
-final favoritedEpisodesProvider =
-    AutoDisposeFutureProvider<List<Episode>>.internal(
-      favoritedEpisodes,
-      name: r'favoritedEpisodesProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$favoritedEpisodesHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef FavoritedEpisodesRef = AutoDisposeFutureProviderRef<List<Episode>>;
-String _$watchFavoritedEpisodeHash() =>
-    r'83ac593413671d32d28c030686c12634a5166fb7';
-
-/// See also [watchFavoritedEpisode].
-@ProviderFor(watchFavoritedEpisode)
-const watchFavoritedEpisodeProvider = WatchFavoritedEpisodeFamily();
-
-/// See also [watchFavoritedEpisode].
-class WatchFavoritedEpisodeFamily extends Family<AsyncValue<bool>> {
-  /// See also [watchFavoritedEpisode].
-  const WatchFavoritedEpisodeFamily();
-
-  /// See also [watchFavoritedEpisode].
-  WatchFavoritedEpisodeProvider call(int episodeId) {
-    return WatchFavoritedEpisodeProvider(episodeId);
-  }
-
-  @override
-  WatchFavoritedEpisodeProvider getProviderOverride(
-    covariant WatchFavoritedEpisodeProvider provider,
-  ) {
-    return call(provider.episodeId);
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'watchFavoritedEpisodeProvider';
-}
-
-/// See also [watchFavoritedEpisode].
-class WatchFavoritedEpisodeProvider extends AutoDisposeFutureProvider<bool> {
-  /// See also [watchFavoritedEpisode].
-  WatchFavoritedEpisodeProvider(int episodeId)
-    : this._internal(
-        (ref) =>
-            watchFavoritedEpisode(ref as WatchFavoritedEpisodeRef, episodeId),
-        from: watchFavoritedEpisodeProvider,
-        name: r'watchFavoritedEpisodeProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$watchFavoritedEpisodeHash,
-        dependencies: WatchFavoritedEpisodeFamily._dependencies,
-        allTransitiveDependencies:
-            WatchFavoritedEpisodeFamily._allTransitiveDependencies,
-        episodeId: episodeId,
+final class FavoritedEpisodesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Episode>>,
+          List<Episode>,
+          FutureOr<List<Episode>>
+        >
+    with $FutureModifier<List<Episode>>, $FutureProvider<List<Episode>> {
+  /// Fetches all favorited episodes from the database.
+  FavoritedEpisodesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'favoritedEpisodesProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
 
-  WatchFavoritedEpisodeProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.episodeId,
-  }) : super.internal();
+  @override
+  String debugGetCreateSourceHash() => _$favoritedEpisodesHash();
 
-  final int episodeId;
+  @$internal
+  @override
+  $FutureProviderElement<List<Episode>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
-  Override overrideWith(
-    FutureOr<bool> Function(WatchFavoritedEpisodeRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: WatchFavoritedEpisodeProvider._internal(
-        (ref) => create(ref as WatchFavoritedEpisodeRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        episodeId: episodeId,
-      ),
-    );
+  FutureOr<List<Episode>> create(Ref ref) {
+    return favoritedEpisodes(ref);
+  }
+}
+
+String _$favoritedEpisodesHash() => r'b90ebb2495f9af5d79495972f2a654a49254ac84';
+
+@ProviderFor(watchFavoritedEpisode)
+final watchFavoritedEpisodeProvider = WatchFavoritedEpisodeFamily._();
+
+final class WatchFavoritedEpisodeProvider
+    extends $FunctionalProvider<AsyncValue<bool>, bool, FutureOr<bool>>
+    with $FutureModifier<bool>, $FutureProvider<bool> {
+  WatchFavoritedEpisodeProvider._({
+    required WatchFavoritedEpisodeFamily super.from,
+    required int super.argument,
+  }) : super(
+         retry: null,
+         name: r'watchFavoritedEpisodeProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$watchFavoritedEpisodeHash();
+
+  @override
+  String toString() {
+    return r'watchFavoritedEpisodeProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  AutoDisposeFutureProviderElement<bool> createElement() {
-    return _WatchFavoritedEpisodeProviderElement(this);
+  $FutureProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<bool> create(Ref ref) {
+    final argument = this.argument as int;
+    return watchFavoritedEpisode(ref, argument);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is WatchFavoritedEpisodeProvider &&
-        other.episodeId == episodeId;
+    return other is WatchFavoritedEpisodeProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, episodeId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin WatchFavoritedEpisodeRef on AutoDisposeFutureProviderRef<bool> {
-  /// The parameter `episodeId` of this provider.
-  int get episodeId;
-}
+String _$watchFavoritedEpisodeHash() =>
+    r'83ac593413671d32d28c030686c12634a5166fb7';
 
-class _WatchFavoritedEpisodeProviderElement
-    extends AutoDisposeFutureProviderElement<bool>
-    with WatchFavoritedEpisodeRef {
-  _WatchFavoritedEpisodeProviderElement(super.provider);
+final class WatchFavoritedEpisodeFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<bool>, int> {
+  WatchFavoritedEpisodeFamily._()
+    : super(
+        retry: null,
+        name: r'watchFavoritedEpisodeProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  WatchFavoritedEpisodeProvider call(int episodeId) =>
+      WatchFavoritedEpisodeProvider._(argument: episodeId, from: this);
 
   @override
-  int get episodeId => (origin as WatchFavoritedEpisodeProvider).episodeId;
+  String toString() => r'watchFavoritedEpisodeProvider';
 }
-
-String _$allEpisodesHash() => r'bfdb52a89188298cb08b87def060325d13cf4e49';
-
-/// See also [AllEpisodes].
-@ProviderFor(AllEpisodes)
-final allEpisodesProvider =
-    AsyncNotifierProvider<AllEpisodes, List<Episode>>.internal(
-      AllEpisodes.new,
-      name: r'allEpisodesProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$allEpisodesHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
-
-typedef _$AllEpisodes = AsyncNotifier<List<Episode>>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

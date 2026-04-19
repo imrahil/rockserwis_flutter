@@ -79,7 +79,7 @@ class AppStartupWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // 1. eagerly initialize appStartupProvider (and all the providers it depends on)
-    final appStartupState = ref.watch(appStartupNotifierProvider);
+    final appStartupState = ref.watch(appStartupProvider);
 
     return appStartupState.when(
       // 2. loading state
@@ -93,7 +93,7 @@ class AppStartupWidget extends ConsumerWidget {
               'Could not load or sync data.\nCheck your Internet connection.',
           // 4. invalidate the appStartupProvider
           onRetry: () async {
-            await ref.read(appStartupNotifierProvider.notifier).retry();
+            await ref.read(appStartupProvider.notifier).retry();
           },
         );
       },
@@ -108,7 +108,7 @@ class AppStartupLoadingWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(appThemeModeNotifierProvider);
+    final themeMode = ref.watch(appThemeModeProvider);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -143,7 +143,7 @@ class AppStartupErrorWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(appThemeModeNotifierProvider);
+    final themeMode = ref.watch(appThemeModeProvider);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,

@@ -6,22 +6,43 @@ part of 'objectbox_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$objectBoxHash() => r'e8a8cd717ae2d93c747598a2f7db6ac12677a2af';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [objectBox].
 @ProviderFor(objectBox)
-final objectBoxProvider = FutureProvider<ObjectBox>.internal(
-  objectBox,
-  name: r'objectBoxProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$objectBoxHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final objectBoxProvider = ObjectBoxProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ObjectBoxRef = FutureProviderRef<ObjectBox>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class ObjectBoxProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<ObjectBox>,
+          ObjectBox,
+          FutureOr<ObjectBox>
+        >
+    with $FutureModifier<ObjectBox>, $FutureProvider<ObjectBox> {
+  ObjectBoxProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'objectBoxProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$objectBoxHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<ObjectBox> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<ObjectBox> create(Ref ref) {
+    return objectBox(ref);
+  }
+}
+
+String _$objectBoxHash() => r'e8a8cd717ae2d93c747598a2f7db6ac12677a2af';

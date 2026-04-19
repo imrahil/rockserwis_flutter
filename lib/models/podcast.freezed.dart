@@ -1,6 +1,5 @@
-// dart format width=80
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -52,6 +51,7 @@ $Res call({
 
 
 
+
 }
 /// @nodoc
 class _$PodcastCopyWithImpl<$Res>
@@ -81,6 +81,136 @@ as bool,
 
 }
 
+
+/// Adds pattern-matching-related methods to [Podcast].
+extension PodcastPatterns on Podcast {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _Podcast value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _Podcast() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _Podcast value)  $default,){
+final _that = this;
+switch (_that) {
+case _Podcast():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _Podcast value)?  $default,){
+final _that = this;
+switch (_that) {
+case _Podcast() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@Id()  int id, @JsonKey(name: 'broadcast_id')  int podcastId, @JsonKey(name: 'broadcast_name')  String podcastName, @JsonKey(name: 'broadcast_broadcasters', fromJson: _authorsFromJson)  ToMany<Author> authors, @JsonKey(name: 'broadcast_times', fromJson: _schedulesFromJson)  ToMany<Schedule> schedules, @JsonKey(name: 'music_only')  bool onlyMusic, @JsonKey(name: 'podcasts_active')  bool isActive, @JsonKey(name: 'has_podcasts')  bool hasEpisodes,  String image,  bool isFavorited)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _Podcast() when $default != null:
+return $default(_that.id,_that.podcastId,_that.podcastName,_that.authors,_that.schedules,_that.onlyMusic,_that.isActive,_that.hasEpisodes,_that.image,_that.isFavorited);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@Id()  int id, @JsonKey(name: 'broadcast_id')  int podcastId, @JsonKey(name: 'broadcast_name')  String podcastName, @JsonKey(name: 'broadcast_broadcasters', fromJson: _authorsFromJson)  ToMany<Author> authors, @JsonKey(name: 'broadcast_times', fromJson: _schedulesFromJson)  ToMany<Schedule> schedules, @JsonKey(name: 'music_only')  bool onlyMusic, @JsonKey(name: 'podcasts_active')  bool isActive, @JsonKey(name: 'has_podcasts')  bool hasEpisodes,  String image,  bool isFavorited)  $default,) {final _that = this;
+switch (_that) {
+case _Podcast():
+return $default(_that.id,_that.podcastId,_that.podcastName,_that.authors,_that.schedules,_that.onlyMusic,_that.isActive,_that.hasEpisodes,_that.image,_that.isFavorited);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@Id()  int id, @JsonKey(name: 'broadcast_id')  int podcastId, @JsonKey(name: 'broadcast_name')  String podcastName, @JsonKey(name: 'broadcast_broadcasters', fromJson: _authorsFromJson)  ToMany<Author> authors, @JsonKey(name: 'broadcast_times', fromJson: _schedulesFromJson)  ToMany<Schedule> schedules, @JsonKey(name: 'music_only')  bool onlyMusic, @JsonKey(name: 'podcasts_active')  bool isActive, @JsonKey(name: 'has_podcasts')  bool hasEpisodes,  String image,  bool isFavorited)?  $default,) {final _that = this;
+switch (_that) {
+case _Podcast() when $default != null:
+return $default(_that.id,_that.podcastId,_that.podcastName,_that.authors,_that.schedules,_that.onlyMusic,_that.isActive,_that.hasEpisodes,_that.image,_that.isFavorited);case _:
+  return null;
+
+}
+}
+
+}
 
 /// @nodoc
 
@@ -133,6 +263,7 @@ abstract mixin class _$PodcastCopyWith<$Res> implements $PodcastCopyWith<$Res> {
 $Res call({
 @Id() int id,@JsonKey(name: 'broadcast_id') int podcastId,@JsonKey(name: 'broadcast_name') String podcastName,@JsonKey(name: 'broadcast_broadcasters', fromJson: _authorsFromJson) ToMany<Author> authors,@JsonKey(name: 'broadcast_times', fromJson: _schedulesFromJson) ToMany<Schedule> schedules,@JsonKey(name: 'music_only') bool onlyMusic,@JsonKey(name: 'podcasts_active') bool isActive,@JsonKey(name: 'has_podcasts') bool hasEpisodes, String image, bool isFavorited
 });
+
 
 
 

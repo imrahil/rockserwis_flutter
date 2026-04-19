@@ -156,7 +156,7 @@ class _MusicPlayerState extends ConsumerState<MusicPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    final themeMode = ref.watch(appThemeModeNotifierProvider);
+    final themeMode = ref.watch(appThemeModeProvider);
 
     return MaterialApp.router(
       title: 'Rockserwis.fm Podcast Player',

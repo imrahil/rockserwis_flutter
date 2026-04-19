@@ -1,6 +1,5 @@
-// dart format width=80
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -50,6 +49,7 @@ $Res call({
 });
 
 
+$EpisodeCopyWith<$Res>? get currentEpisode;
 
 }
 /// @nodoc
@@ -74,9 +74,151 @@ as Episode?,episodes: null == episodes ? _self.episodes : episodes // ignore: ca
 as List<Episode>,
   ));
 }
+/// Create a copy of EpisodePlayerState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$EpisodeCopyWith<$Res>? get currentEpisode {
+    if (_self.currentEpisode == null) {
+    return null;
+  }
 
+  return $EpisodeCopyWith<$Res>(_self.currentEpisode!, (value) {
+    return _then(_self.copyWith(currentEpisode: value));
+  });
+}
 }
 
+
+/// Adds pattern-matching-related methods to [EpisodePlayerState].
+extension EpisodePlayerStatePatterns on EpisodePlayerState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _EpisodePlayerState value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _EpisodePlayerState() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _EpisodePlayerState value)  $default,){
+final _that = this;
+switch (_that) {
+case _EpisodePlayerState():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _EpisodePlayerState value)?  $default,){
+final _that = this;
+switch (_that) {
+case _EpisodePlayerState() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool playing,  AudioProcessingState processingState,  Duration progress,  Duration buffered,  Duration total,  Episode? currentEpisode,  List<Episode> episodes)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _EpisodePlayerState() when $default != null:
+return $default(_that.playing,_that.processingState,_that.progress,_that.buffered,_that.total,_that.currentEpisode,_that.episodes);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool playing,  AudioProcessingState processingState,  Duration progress,  Duration buffered,  Duration total,  Episode? currentEpisode,  List<Episode> episodes)  $default,) {final _that = this;
+switch (_that) {
+case _EpisodePlayerState():
+return $default(_that.playing,_that.processingState,_that.progress,_that.buffered,_that.total,_that.currentEpisode,_that.episodes);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool playing,  AudioProcessingState processingState,  Duration progress,  Duration buffered,  Duration total,  Episode? currentEpisode,  List<Episode> episodes)?  $default,) {final _that = this;
+switch (_that) {
+case _EpisodePlayerState() when $default != null:
+return $default(_that.playing,_that.processingState,_that.progress,_that.buffered,_that.total,_that.currentEpisode,_that.episodes);case _:
+  return null;
+
+}
+}
+
+}
 
 /// @nodoc
 
@@ -133,6 +275,7 @@ $Res call({
 });
 
 
+@override $EpisodeCopyWith<$Res>? get currentEpisode;
 
 }
 /// @nodoc
@@ -158,7 +301,19 @@ as List<Episode>,
   ));
 }
 
+/// Create a copy of EpisodePlayerState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$EpisodeCopyWith<$Res>? get currentEpisode {
+    if (_self.currentEpisode == null) {
+    return null;
+  }
 
+  return $EpisodeCopyWith<$Res>(_self.currentEpisode!, (value) {
+    return _then(_self.copyWith(currentEpisode: value));
+  });
+}
 }
 
 // dart format on

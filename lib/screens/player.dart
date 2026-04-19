@@ -38,7 +38,7 @@ class Player extends ConsumerWidget {
 
     final isFavorited = ref
             .watch(watchFavoritedEpisodeProvider(currentEpisode.episodeId))
-            .valueOrNull ??
+            .value ??
         false;
 
     return Scaffold(
