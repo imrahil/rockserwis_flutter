@@ -20,10 +20,11 @@ class PodcastSyncHelper {
     required this.dbProvider,
   });
 
-  // Method to sync both podcasts and episodes
-  Future<void> syncAll() async {
+  // Method to sync both podcasts and episodes.
+  // Returns episodes newly added to favorited podcasts (for auto-download).
+  Future<List<Episode>> syncAll() async {
     await syncPodcasts();
-    await syncEpisodes();
+    return syncEpisodes();
   }
 
   // Method to compare and add new podcasts to the local database
@@ -49,9 +50,11 @@ class PodcastSyncHelper {
     }
   }
 
-  // Method to compare and add new episodes to the local database
-  Future<void> syncEpisodes() async {
+  // Method to compare and add new episodes to the local database.
+  // Returns episodes newly added to favorited podcasts.
+  Future<List<Episode>> syncEpisodes() async {
     List<Podcast> localPodcasts = await fetchAllPodcastsFromDB();
+    final List<Episode> newFavoritedEpisodes = [];
 
     for (Podcast podcast in localPodcasts) {
       List<Episode> remoteEpisodes =
@@ -76,8 +79,14 @@ class PodcastSyncHelper {
             'Adding ${newEpisodes.length} new episodes to podcast: ${podcast.podcastName}');
 
         await dbProvider.episodeBox.putManyAsync(newEpisodes);
+
+        if (podcast.isFavorited) {
+          newFavoritedEpisodes.addAll(newEpisodes);
+        }
       }
     }
+
+    return newFavoritedEpisodes;
   }
 
   // Method to fetch all podcasts from the local database

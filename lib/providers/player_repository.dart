@@ -9,6 +9,8 @@ import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/models/player_state.dart';
 import 'package:rockserwis_podcaster/providers/audio_service.dart';
+import 'package:rockserwis_podcaster/providers/download_repository.dart';
+import 'package:rockserwis_podcaster/providers/download_settings.dart';
 import 'package:rockserwis_podcaster/providers/episode_repository.dart';
 import 'package:rockserwis_podcaster/utils/audio_handler.dart';
 
@@ -21,6 +23,7 @@ class PlayerRepository extends _$PlayerRepository {
 
   @override
   EpisodePlayerState build() {
+    AudioProcessingState? previousProcessingState;
     _audioHandler.playbackState.listen(
       (PlaybackState playbackState) {
         state = state.copyWith(
@@ -29,6 +32,12 @@ class PlayerRepository extends _$PlayerRepository {
           progress: playbackState.updatePosition,
           buffered: playbackState.bufferedPosition,
         );
+
+        if (playbackState.processingState == AudioProcessingState.completed &&
+            previousProcessingState != AudioProcessingState.completed) {
+          _onEpisodeCompleted();
+        }
+        previousProcessingState = playbackState.processingState;
       },
     );
 
@@ -59,6 +68,16 @@ class PlayerRepository extends _$PlayerRepository {
       buffered: Duration.zero,
       total: Duration.zero,
     );
+  }
+
+  Future<void> _onEpisodeCompleted() async {
+    final episode = state.currentEpisode;
+    if (episode == null) return;
+
+    if (!ref.read(downloadSettingsProvider).autoDeleteAfterPlayed) return;
+    if (episode.downloadedPath == null) return;
+
+    await ref.read(downloadRepositoryProvider).deleteDownload(episode);
   }
 
   Future<void> play() async {

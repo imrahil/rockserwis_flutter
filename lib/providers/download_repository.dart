@@ -52,6 +52,8 @@ class DownloadRepository {
       return;
     }
 
+    await _evictToFitNewDownload();
+
     final apiProvider = ref.read(apiRepositoryProvider);
     final dir = await _downloadsDir();
     final filename = 'episode_${episode.episodeId}.mp3';
@@ -127,6 +129,60 @@ class DownloadRepository {
         .read(allEpisodesProvider.notifier)
         .updateDownloadedPath(episodeId, filePath);
     logger.i('Download complete for episode $episodeId at $filePath');
+  }
+
+  Future<int> currentUsageBytes() async {
+    final episodes = await ref.read(allEpisodesProvider.future);
+    int total = 0;
+    for (final ep in episodes) {
+      final path = ep.downloadedPath;
+      if (path == null) continue;
+      final file = File(path);
+      if (await file.exists()) {
+        total += await file.length();
+      }
+    }
+    return total;
+  }
+
+  /// Evicts oldest-played downloads until there is room for another ~150 MB file.
+  /// A no-op when max storage is 0 (unlimited).
+  Future<void> _evictToFitNewDownload() async {
+    const estimatedFileBytes = 150 * 1024 * 1024;
+    final settings = ref.read(downloadSettingsProvider);
+    if (settings.maxStorageMb <= 0) return;
+
+    final maxBytes = settings.maxStorageMb * 1024 * 1024;
+    int current = await currentUsageBytes();
+    if (current + estimatedFileBytes <= maxBytes) return;
+
+    final episodes = await ref.read(allEpisodesProvider.future);
+    final candidates = episodes
+        .where((e) => e.downloadedPath != null)
+        .toList()
+      ..sort((a, b) => (a.updatedAt ?? DateTime.utc(2000, 1, 1))
+          .compareTo(b.updatedAt ?? DateTime.utc(2000, 1, 1)));
+
+    for (final ep in candidates) {
+      if (current + estimatedFileBytes <= maxBytes) break;
+      final file = File(ep.downloadedPath!);
+      final size = await file.exists() ? await file.length() : 0;
+      await deleteDownload(ep);
+      current -= size;
+      logger.i('Evicted download for episode ${ep.episodeId} to free space');
+    }
+  }
+
+  /// Enqueues auto-downloads for new episodes if the setting is enabled.
+  Future<void> autoDownloadEpisodes(List<Episode> episodes) async {
+    final settings = ref.read(downloadSettingsProvider);
+    if (!settings.downloadsEnabled || !settings.autoDownloadFavorites) return;
+    if (episodes.isEmpty) return;
+
+    logger.i('Auto-downloading ${episodes.length} new favorited episodes');
+    for (final ep in episodes) {
+      await downloadEpisode(ep);
+    }
   }
 
   int? _parseEpisodeId(String taskId) {

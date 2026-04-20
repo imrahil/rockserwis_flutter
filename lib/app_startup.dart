@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/components/error_prompt.dart';
 import 'package:rockserwis_podcaster/providers/audio_service.dart';
+import 'package:rockserwis_podcaster/providers/download_repository.dart';
 import 'package:rockserwis_podcaster/providers/objectbox_repository.dart';
 import 'package:rockserwis_podcaster/providers/podcast_sync_helper.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_data.dart';
@@ -57,9 +58,16 @@ class AppStartupNotifier extends _$AppStartupNotifier {
         lastUpdated == null ||
         now.difference(lastUpdated) > cacheDuration) {
       logger.d('Syncing podcasts and episodes');
-      await ref.read(podcastSyncHelperProvider).syncAll();
+      final newFavoritedEpisodes =
+          await ref.read(podcastSyncHelperProvider).syncAll();
 
       await sharedPreferences.setString(Const.lastUpdatedKey, now.toString());
+
+      if (newFavoritedEpisodes.isNotEmpty) {
+        await ref
+            .read(downloadRepositoryProvider)
+            .autoDownloadEpisodes(newFavoritedEpisodes);
+      }
     } else {
       logger.d('Cache is still valid');
     }
