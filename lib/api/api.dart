@@ -114,8 +114,12 @@ class ApiRepository {
 
 @Riverpod(keepAlive: true)
 ApiRepository apiRepository(Ref ref) {
-  return ApiRepository(
+  final repo = ApiRepository(
     client: http.Client(),
     sharedPreferences: ref.watch(sharedPreferencesProvider).requireValue,
   );
+  // Populate cookie fields from SharedPreferences eagerly so that
+  // getHeaders() is usable before MusicPlayer.initState() runs.
+  repo.isLogged();
+  return repo;
 }
