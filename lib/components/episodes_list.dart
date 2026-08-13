@@ -25,6 +25,7 @@ class EpisodesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final list = ListView.builder(
+      physics: const AlwaysScrollableScrollPhysics(),
       itemCount: episodes.length,
       itemBuilder: (context, index) {
         Episode currentEpisode = episodes[index];

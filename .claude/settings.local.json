@@ -10,7 +10,8 @@
       "Bash(cmd.exe //c \"dart run build_runner build --delete-conflicting-outputs\")",
       "Bash(cmd.exe //c \"flutter analyze\")",
       "Bash(flutter analyze *)",
-      "Bash(flutter test *)"
+      "Bash(flutter test *)",
+      "Bash(dart run *)"
     ],
     "deny": [],
     "ask": []

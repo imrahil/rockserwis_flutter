@@ -34,7 +34,7 @@ final class AppStartupNotifierProvider
 }
 
 String _$appStartupNotifierHash() =>
-    r'e1dbf83db178a09e11b250d16115626917ba68f8';
+    r'1e1db6fe3a9a27ce720e60e29b264091bd603411';
 
 abstract class _$AppStartupNotifier extends $AsyncNotifier<void> {
   FutureOr<void> build();

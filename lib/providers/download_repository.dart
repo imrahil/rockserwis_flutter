@@ -9,6 +9,7 @@ import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/providers/download_settings.dart';
 import 'package:rockserwis_podcaster/providers/episode_repository.dart';
+import 'package:rockserwis_podcaster/providers/player_repository.dart';
 import 'package:rockserwis_podcaster/utils/logger.dart';
 
 part 'download_repository.g.dart';
@@ -24,6 +25,14 @@ class DownloadRepository {
   final Map<int, StreamController<double>> _progressControllers = {};
   final Map<int, double> _lastProgress = {};
   final Map<int, String> _taskToEpisodeId = {};
+
+  /// Episodes that have been enqueued but haven't reached a terminal status
+  /// yet. Accounted for by [_evictToFitNewDownload] since enqueue() returns
+  /// long before the file finishes writing, so completed-download usage
+  /// alone underestimates what a download batch will actually use.
+  final Set<int> _pendingDownloadIds = {};
+
+  static const _estimatedFileBytes = 150 * 1024 * 1024;
 
   void _init() {
     _downloader.updates.listen(_handleUpdate);
@@ -87,12 +96,14 @@ class DownloadRepository {
 
     _lastProgress[episode.episodeId] = 0.0;
     _controllerFor(episode.episodeId).add(0.0);
+    _pendingDownloadIds.add(episode.episodeId);
 
     await _downloader.enqueue(task);
   }
 
   Future<void> cancelDownload(int episodeId) async {
     await _downloader.cancelTaskWithId(_taskIdFor(episodeId));
+    _pendingDownloadIds.remove(episodeId);
     _lastProgress[episodeId] = -1;
     _controllerFor(episodeId).add(-1);
   }
@@ -127,6 +138,7 @@ class DownloadRepository {
         case TaskStatus.failed:
         case TaskStatus.canceled:
         case TaskStatus.notFound:
+          _pendingDownloadIds.remove(episodeId);
           _lastProgress[episodeId] = -1;
           _controllerFor(episodeId).add(-1);
           logger.w(
@@ -141,6 +153,7 @@ class DownloadRepository {
   Future<void> _onComplete(int episodeId, Task task) async {
     final downloadTask = task as DownloadTask;
     final filePath = await downloadTask.filePath();
+    _pendingDownloadIds.remove(episodeId);
     _lastProgress[episodeId] = 1.0;
     _controllerFor(episodeId).add(1.0);
     await ref
@@ -166,23 +179,30 @@ class DownloadRepository {
   /// Evicts oldest-played downloads until there is room for another ~150 MB file.
   /// A no-op when max storage is 0 (unlimited).
   Future<void> _evictToFitNewDownload() async {
-    const estimatedFileBytes = 150 * 1024 * 1024;
     final settings = ref.read(downloadSettingsProvider);
     if (settings.maxStorageMb <= 0) return;
 
     final maxBytes = settings.maxStorageMb * 1024 * 1024;
-    int current = await currentUsageBytes();
-    if (current + estimatedFileBytes <= maxBytes) return;
+    // Account for downloads that are still in flight (enqueued but not yet
+    // complete) — otherwise a batch of auto-downloads all see the same
+    // pre-batch usage snapshot and blow past the cap before eviction ever
+    // catches up.
+    int current = await currentUsageBytes() +
+        (_pendingDownloadIds.length * _estimatedFileBytes);
+    if (current + _estimatedFileBytes <= maxBytes) return;
 
+    final playingEpisodeId =
+        ref.read(playerRepositoryProvider).currentEpisode?.episodeId;
     final episodes = await ref.read(allEpisodesProvider.future);
     final candidates = episodes
-        .where((e) => e.downloadedPath != null)
+        .where((e) =>
+            e.downloadedPath != null && e.episodeId != playingEpisodeId)
         .toList()
       ..sort((a, b) => (a.updatedAt ?? DateTime.utc(2000, 1, 1))
           .compareTo(b.updatedAt ?? DateTime.utc(2000, 1, 1)));
 
     for (final ep in candidates) {
-      if (current + estimatedFileBytes <= maxBytes) break;
+      if (current + _estimatedFileBytes <= maxBytes) break;
       final file = File(ep.downloadedPath!);
       final size = await file.exists() ? await file.length() : 0;
       await deleteDownload(ep);

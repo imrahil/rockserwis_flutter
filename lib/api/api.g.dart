@@ -48,4 +48,4 @@ final class ApiRepositoryProvider
   }
 }
 
-String _$apiRepositoryHash() => r'e1bf9e972ed9fc0ff934c57d2d7a8f85be250c1b';
+String _$apiRepositoryHash() => r'7a55d7fd38af93d3aa5e1ae014d12a5bae30d864';

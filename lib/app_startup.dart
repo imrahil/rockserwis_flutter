@@ -29,6 +29,8 @@ class AppStartupNotifier extends _$AppStartupNotifier {
     await _updateDatabaseFromNetwork();
   }
 
+  Future<void>? _inFlightSync;
+
   Future<void> _updateDatabaseFromNetwork() async {
     state = const AsyncValue.loading();
     await _syncIfNeeded();
@@ -37,7 +39,18 @@ class AppStartupNotifier extends _$AppStartupNotifier {
   /// Runs the podcast/episode sync (and auto-download) if the cache has
   /// expired, without touching [state] — safe to call from a background
   /// resume check without flashing the full-screen loading UI.
-  Future<void> _syncIfNeeded() async {
+  ///
+  /// Guarded against concurrent invocations (e.g. the initial startup sync
+  /// still running when a resume event fires): without this, two calls can
+  /// both read the same "cache expired" snapshot and each insert their own
+  /// copies of the same "new" episodes, since `episodeId` isn't a
+  /// unique-indexed ObjectBox field.
+  Future<void> _syncIfNeeded() {
+    return _inFlightSync ??=
+        _doSyncIfNeeded().whenComplete(() => _inFlightSync = null);
+  }
+
+  Future<void> _doSyncIfNeeded() async {
     final sharedPreferences = ref.watch(sharedPreferencesProvider).requireValue;
 
     if (_forceRefresh) {
