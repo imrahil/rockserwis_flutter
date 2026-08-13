@@ -11,7 +11,8 @@
       "Bash(cmd.exe //c \"flutter analyze\")",
       "Bash(flutter analyze *)",
       "Bash(flutter test *)",
-      "Bash(dart run *)"
+      "Bash(dart run *)",
+      "Bash(flutter devices *)"
     ],
     "deny": [],
     "ask": []
