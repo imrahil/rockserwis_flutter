@@ -8,7 +8,9 @@
       "Read(//c/Users/szcze/fvm/default/**)",
       "Bash(cmd.exe //c \"flutter test\")",
       "Bash(cmd.exe //c \"dart run build_runner build --delete-conflicting-outputs\")",
-      "Bash(cmd.exe //c \"flutter analyze\")"
+      "Bash(cmd.exe //c \"flutter analyze\")",
+      "Bash(flutter analyze *)",
+      "Bash(flutter test *)"
     ],
     "deny": [],
     "ask": []

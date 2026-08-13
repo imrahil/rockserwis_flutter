@@ -22,16 +22,27 @@ class DownloadRepository {
   final FileDownloader _downloader = FileDownloader();
 
   final Map<int, StreamController<double>> _progressControllers = {};
+  final Map<int, double> _lastProgress = {};
   final Map<int, String> _taskToEpisodeId = {};
 
   void _init() {
     _downloader.updates.listen(_handleUpdate);
   }
 
-  Stream<double> progressStream(int episodeId) {
-    return _progressControllers
-        .putIfAbsent(episodeId, () => StreamController<double>.broadcast())
-        .stream;
+  StreamController<double> _controllerFor(int episodeId) {
+    return _progressControllers.putIfAbsent(
+        episodeId, () => StreamController<double>.broadcast());
+  }
+
+  /// Replays the last known progress (if any) before switching to live
+  /// updates, so a subscriber that attaches mid-download (e.g. because
+  /// the episode wasn't visible on screen when an auto-download started)
+  /// still sees where the download currently stands.
+  Stream<double> progressStream(int episodeId) async* {
+    final controller = _controllerFor(episodeId);
+    final last = _lastProgress[episodeId];
+    if (last != null) yield last;
+    yield* controller.stream;
   }
 
   String _taskIdFor(int episodeId) => 'episode_$episodeId';
@@ -74,12 +85,16 @@ class DownloadRepository {
     _taskToEpisodeId[episode.episodeId] =
         p.join(dir, filename); // track expected path
 
+    _lastProgress[episode.episodeId] = 0.0;
+    _controllerFor(episode.episodeId).add(0.0);
+
     await _downloader.enqueue(task);
   }
 
   Future<void> cancelDownload(int episodeId) async {
     await _downloader.cancelTaskWithId(_taskIdFor(episodeId));
-    _progressControllers[episodeId]?.add(-1);
+    _lastProgress[episodeId] = -1;
+    _controllerFor(episodeId).add(-1);
   }
 
   Future<void> deleteDownload(Episode episode) async {
@@ -102,7 +117,8 @@ class DownloadRepository {
     if (episodeId == null) return;
 
     if (update is TaskProgressUpdate) {
-      _progressControllers[episodeId]?.add(update.progress);
+      _lastProgress[episodeId] = update.progress;
+      _controllerFor(episodeId).add(update.progress);
     } else if (update is TaskStatusUpdate) {
       switch (update.status) {
         case TaskStatus.complete:
@@ -111,7 +127,8 @@ class DownloadRepository {
         case TaskStatus.failed:
         case TaskStatus.canceled:
         case TaskStatus.notFound:
-          _progressControllers[episodeId]?.add(-1);
+          _lastProgress[episodeId] = -1;
+          _controllerFor(episodeId).add(-1);
           logger.w(
               'Download ${update.status.name} for episode $episodeId: ${update.exception}');
           break;
@@ -124,7 +141,8 @@ class DownloadRepository {
   Future<void> _onComplete(int episodeId, Task task) async {
     final downloadTask = task as DownloadTask;
     final filePath = await downloadTask.filePath();
-    _progressControllers[episodeId]?.add(1.0);
+    _lastProgress[episodeId] = 1.0;
+    _controllerFor(episodeId).add(1.0);
     await ref
         .read(allEpisodesProvider.notifier)
         .updateDownloadedPath(episodeId, filePath);

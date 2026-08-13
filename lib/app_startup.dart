@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -30,7 +31,13 @@ class AppStartupNotifier extends _$AppStartupNotifier {
 
   Future<void> _updateDatabaseFromNetwork() async {
     state = const AsyncValue.loading();
+    await _syncIfNeeded();
+  }
 
+  /// Runs the podcast/episode sync (and auto-download) if the cache has
+  /// expired, without touching [state] — safe to call from a background
+  /// resume check without flashing the full-screen loading UI.
+  Future<void> _syncIfNeeded() async {
     final sharedPreferences = ref.watch(sharedPreferencesProvider).requireValue;
 
     if (_forceRefresh) {
@@ -54,9 +61,25 @@ class AppStartupNotifier extends _$AppStartupNotifier {
     final lastUpdated =
         lastUpdatedString != null ? DateTime.parse(lastUpdatedString) : null;
 
-    if (_forceRefresh ||
+    final cacheExpired = _forceRefresh ||
         lastUpdated == null ||
-        now.difference(lastUpdated) > cacheDuration) {
+        now.difference(lastUpdated) > cacheDuration;
+
+    if (!cacheExpired) {
+      logger.d('Cache is still valid');
+      return;
+    }
+
+    final connectivity = await Connectivity().checkConnectivity();
+    if (connectivity.contains(ConnectivityResult.none)) {
+      logger.d('No internet connection — using offline data');
+      return;
+    }
+
+    // Sync failures (e.g. no real internet despite a live network
+    // connection, or a flaky server) must not block the app — cached/local
+    // data and downloaded episodes should still be usable offline.
+    try {
       logger.d('Syncing podcasts and episodes');
       final newFavoritedEpisodes =
           await ref.read(podcastSyncHelperProvider).syncAll();
@@ -68,22 +91,60 @@ class AppStartupNotifier extends _$AppStartupNotifier {
             .read(downloadRepositoryProvider)
             .autoDownloadEpisodes(newFavoritedEpisodes);
       }
-    } else {
-      logger.d('Cache is still valid');
+    } catch (e, st) {
+      logger.w('Sync failed, continuing with offline data',
+          error: e, stackTrace: st);
     }
   }
 
   Future<void> retry() async {
     state = await AsyncValue.guard(_updateDatabaseFromNetwork);
   }
+
+  /// Re-checks for new episodes when the app is resumed from the
+  /// background. Reuses the same cache-expiry gate as startup, so it's a
+  /// no-op most of the time, but ensures the check actually gets a chance
+  /// to run for users who resume the app instead of cold-starting it.
+  Future<void> checkForUpdatesInBackground() async {
+    try {
+      await _syncIfNeeded();
+    } catch (e, st) {
+      logger.e('Background update check failed', error: e, stackTrace: st);
+    }
+  }
 }
 
-class AppStartupWidget extends ConsumerWidget {
+class AppStartupWidget extends ConsumerStatefulWidget {
   const AppStartupWidget({super.key, required this.onLoaded});
   final WidgetBuilder onLoaded;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AppStartupWidget> createState() => _AppStartupWidgetState();
+}
+
+class _AppStartupWidgetState extends ConsumerState<AppStartupWidget>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      ref.read(appStartupProvider.notifier).checkForUpdatesInBackground();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     // 1. eagerly initialize appStartupProvider (and all the providers it depends on)
     final appStartupState = ref.watch(appStartupProvider);
 
@@ -104,7 +165,7 @@ class AppStartupWidget extends ConsumerWidget {
         );
       },
       // 5. success - now load the main app
-      data: (_) => onLoaded(context),
+      data: (_) => widget.onLoaded(context),
     );
   }
 }
