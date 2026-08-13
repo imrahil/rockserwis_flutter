@@ -1,8 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:logger/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/utils/const.dart';
+import 'package:rockserwis_podcaster/utils/logger.dart';
 import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,7 +13,6 @@ class ApiRepository {
   static const String favoriteEpisodesKey = 'favoriteEpisodes';
   static const String favoritePodcastsKey = 'favoritePodcasts';
 
-  var logger = Logger();
   final http.Client client;
   final SharedPreferences sharedPreferences;
 
@@ -116,8 +114,12 @@ class ApiRepository {
 
 @Riverpod(keepAlive: true)
 ApiRepository apiRepository(Ref ref) {
-  return ApiRepository(
+  final repo = ApiRepository(
     client: http.Client(),
     sharedPreferences: ref.watch(sharedPreferencesProvider).requireValue,
   );
+  // Populate cookie fields from SharedPreferences eagerly so that
+  // getHeaders() is usable before MusicPlayer.initState() runs.
+  repo.isLogged();
+  return repo;
 }

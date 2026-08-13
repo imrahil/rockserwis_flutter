@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/app_routes.dart';
-import 'package:rockserwis_podcaster/utils/app_theme_mode.dart';
 
 class SharedAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final String title;
@@ -15,8 +14,6 @@ class SharedAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(appThemeModeNotifierProvider);
-
     void logout(context) async {
       await ref.read(apiRepositoryProvider).logout();
 
@@ -31,14 +28,13 @@ class SharedAppBar extends ConsumerWidget implements PreferredSizeWidget {
       title: Text(title),
       actions: [
         IconButton(
-          icon: Icon(
-            themeMode.name == 'dark' ? Icons.dark_mode : Icons.light_mode,
-          ),
-          onPressed: () =>
-              ref.read(appThemeModeNotifierProvider.notifier).toggleTheme(),
+          icon: const Icon(Icons.settings),
+          tooltip: 'Settings',
+          onPressed: () => context.push(AppRoutes.settings),
         ),
         IconButton(
           icon: const Icon(Icons.logout),
+          tooltip: 'Log out',
           onPressed: () => logout(context),
         ),
       ],

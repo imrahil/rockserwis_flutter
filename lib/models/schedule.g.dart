@@ -6,18 +6,16 @@ part of 'schedule.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ScheduleImpl _$$ScheduleImplFromJson(Map<String, dynamic> json) =>
-    _$ScheduleImpl(
-      id: (json['id'] as num?)?.toInt() ?? 0,
-      weekday: (json['weekday'] as num).toInt(),
-      start: json['start'] as String,
-      end: json['end'] as String,
-    );
+_Schedule _$ScheduleFromJson(Map<String, dynamic> json) => _Schedule(
+  id: (json['id'] as num?)?.toInt() ?? 0,
+  weekday: (json['weekday'] as num).toInt(),
+  start: json['start'] as String,
+  end: json['end'] as String,
+);
 
-Map<String, dynamic> _$$ScheduleImplToJson(_$ScheduleImpl instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'weekday': instance.weekday,
-      'start': instance.start,
-      'end': instance.end,
-    };
+Map<String, dynamic> _$ScheduleToJson(_Schedule instance) => <String, dynamic>{
+  'id': instance.id,
+  'weekday': instance.weekday,
+  'start': instance.start,
+  'end': instance.end,
+};

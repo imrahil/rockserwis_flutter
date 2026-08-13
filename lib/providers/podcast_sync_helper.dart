@@ -1,12 +1,11 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:rockserwis_podcaster/app_startup.dart';
 import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 import 'package:rockserwis_podcaster/objectbox.g.dart';
 import 'package:rockserwis_podcaster/providers/episode_repository.dart';
 import 'package:rockserwis_podcaster/providers/objectbox_repository.dart';
 import 'package:rockserwis_podcaster/providers/podcast_repository.dart';
+import 'package:rockserwis_podcaster/utils/logger.dart';
 
 part 'podcast_sync_helper.g.dart';
 
@@ -21,10 +20,11 @@ class PodcastSyncHelper {
     required this.dbProvider,
   });
 
-  // Method to sync both podcasts and episodes
-  Future<void> syncAll() async {
+  // Method to sync both podcasts and episodes.
+  // Returns episodes newly added to favorited podcasts (for auto-download).
+  Future<List<Episode>> syncAll() async {
     await syncPodcasts();
-    await syncEpisodes();
+    return syncEpisodes();
   }
 
   // Method to compare and add new podcasts to the local database
@@ -50,9 +50,11 @@ class PodcastSyncHelper {
     }
   }
 
-  // Method to compare and add new episodes to the local database
-  Future<void> syncEpisodes() async {
+  // Method to compare and add new episodes to the local database.
+  // Returns episodes newly added to favorited podcasts.
+  Future<List<Episode>> syncEpisodes() async {
     List<Podcast> localPodcasts = await fetchAllPodcastsFromDB();
+    final List<Episode> newFavoritedEpisodes = [];
 
     for (Podcast podcast in localPodcasts) {
       List<Episode> remoteEpisodes =
@@ -77,8 +79,14 @@ class PodcastSyncHelper {
             'Adding ${newEpisodes.length} new episodes to podcast: ${podcast.podcastName}');
 
         await dbProvider.episodeBox.putManyAsync(newEpisodes);
+
+        if (podcast.isFavorited) {
+          newFavoritedEpisodes.addAll(newEpisodes);
+        }
       }
     }
+
+    return newFavoritedEpisodes;
   }
 
   // Method to fetch all podcasts from the local database

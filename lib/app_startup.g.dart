@@ -6,22 +6,50 @@ part of 'app_startup.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$appStartupNotifierHash() =>
-    r'be21f7f13a2265b0e2bc2b0bca19460cc87e4f77';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [AppStartupNotifier].
 @ProviderFor(AppStartupNotifier)
-final appStartupNotifierProvider =
-    AutoDisposeAsyncNotifierProvider<AppStartupNotifier, void>.internal(
-  AppStartupNotifier.new,
-  name: r'appStartupNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$appStartupNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final appStartupProvider = AppStartupNotifierProvider._();
 
-typedef _$AppStartupNotifier = AutoDisposeAsyncNotifier<void>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class AppStartupNotifierProvider
+    extends $AsyncNotifierProvider<AppStartupNotifier, void> {
+  AppStartupNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'appStartupProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$appStartupNotifierHash();
+
+  @$internal
+  @override
+  AppStartupNotifier create() => AppStartupNotifier();
+}
+
+String _$appStartupNotifierHash() =>
+    r'1e1db6fe3a9a27ce720e60e29b264091bd603411';
+
+abstract class _$AppStartupNotifier extends $AsyncNotifier<void> {
+  FutureOr<void> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<AsyncValue<void>, void>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<void>, void>,
+              AsyncValue<void>,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}

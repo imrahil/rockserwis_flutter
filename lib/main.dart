@@ -16,6 +16,7 @@ import 'package:rockserwis_podcaster/screens/history_page.dart';
 import 'package:rockserwis_podcaster/screens/login_page.dart';
 import 'package:rockserwis_podcaster/screens/player.dart';
 import 'package:rockserwis_podcaster/screens/podcasts_page.dart';
+import 'package:rockserwis_podcaster/screens/settings_page.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_data.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_mode.dart';
 import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';
@@ -88,6 +89,12 @@ class _MusicPlayerState extends ConsumerState<MusicPlayer> {
           builder: (BuildContext context, GoRouterState state) =>
               const LoginPage(),
         ),
+        GoRoute(
+          path: AppRoutes.settings,
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (BuildContext context, GoRouterState state) =>
+              const SettingsPage(),
+        ),
         StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) {
             return ScaffoldWithNestedNavigation(
@@ -156,7 +163,7 @@ class _MusicPlayerState extends ConsumerState<MusicPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    final themeMode = ref.watch(appThemeModeNotifierProvider);
+    final themeMode = ref.watch(appThemeModeProvider);
 
     return MaterialApp.router(
       title: 'Rockserwis.fm Podcast Player',

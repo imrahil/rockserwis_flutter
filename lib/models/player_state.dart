@@ -5,7 +5,7 @@ import 'package:rockserwis_podcaster/models/episode.dart';
 part 'player_state.freezed.dart';
 
 @freezed
-class EpisodePlayerState with _$EpisodePlayerState {
+abstract class EpisodePlayerState with _$EpisodePlayerState {
   factory EpisodePlayerState({
     required bool playing,
     required AudioProcessingState processingState,

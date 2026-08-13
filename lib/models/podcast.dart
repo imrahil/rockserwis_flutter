@@ -7,7 +7,7 @@ part 'podcast.freezed.dart';
 part 'podcast.g.dart';
 
 @Freezed(toJson: false, addImplicitFinal: false)
-class Podcast with _$Podcast {
+abstract class Podcast with _$Podcast {
   @Entity(realClass: Podcast)
   @JsonSerializable(createToJson: false)
   factory Podcast({

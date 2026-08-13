@@ -6,21 +6,57 @@ part of 'player_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$playerRepositoryHash() => r'a7e8666feebf40161a14c3047191d2897196e05b';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [PlayerRepository].
 @ProviderFor(PlayerRepository)
-final playerRepositoryProvider =
-    NotifierProvider<PlayerRepository, EpisodePlayerState>.internal(
-  PlayerRepository.new,
-  name: r'playerRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$playerRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final playerRepositoryProvider = PlayerRepositoryProvider._();
 
-typedef _$PlayerRepository = Notifier<EpisodePlayerState>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class PlayerRepositoryProvider
+    extends $NotifierProvider<PlayerRepository, EpisodePlayerState> {
+  PlayerRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'playerRepositoryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$playerRepositoryHash();
+
+  @$internal
+  @override
+  PlayerRepository create() => PlayerRepository();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(EpisodePlayerState value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<EpisodePlayerState>(value),
+    );
+  }
+}
+
+String _$playerRepositoryHash() => r'fb41754952903a803934fdebc812c310a770ea88';
+
+abstract class _$PlayerRepository extends $Notifier<EpisodePlayerState> {
+  EpisodePlayerState build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<EpisodePlayerState, EpisodePlayerState>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<EpisodePlayerState, EpisodePlayerState>,
+              EpisodePlayerState,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}

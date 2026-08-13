@@ -6,24 +6,58 @@ part of 'app_theme_mode.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$appThemeModeNotifierHash() =>
-    r'3659ab9f90d3ec52f81687f9decf31914b0fbe4a';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// A notifier used to read and write the themeMode to SharedPreferences
-///
-/// Copied from [AppThemeModeNotifier].
 @ProviderFor(AppThemeModeNotifier)
-final appThemeModeNotifierProvider =
-    AutoDisposeNotifierProvider<AppThemeModeNotifier, ThemeMode>.internal(
-  AppThemeModeNotifier.new,
-  name: r'appThemeModeNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$appThemeModeNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final appThemeModeProvider = AppThemeModeNotifierProvider._();
 
-typedef _$AppThemeModeNotifier = AutoDisposeNotifier<ThemeMode>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class AppThemeModeNotifierProvider
+    extends $NotifierProvider<AppThemeModeNotifier, ThemeMode> {
+  AppThemeModeNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'appThemeModeProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$appThemeModeNotifierHash();
+
+  @$internal
+  @override
+  AppThemeModeNotifier create() => AppThemeModeNotifier();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ThemeMode value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ThemeMode>(value),
+    );
+  }
+}
+
+String _$appThemeModeNotifierHash() =>
+    r'f3ab6d1efa7e5e8eed31f20140c702c04fe99fcf';
+
+abstract class _$AppThemeModeNotifier extends $Notifier<ThemeMode> {
+  ThemeMode build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<ThemeMode, ThemeMode>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<ThemeMode, ThemeMode>,
+              ThemeMode,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}

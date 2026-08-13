@@ -5,7 +5,7 @@ part 'author.freezed.dart';
 part 'author.g.dart';
 
 @Freezed(addImplicitFinal: false)
-class Author with _$Author {
+abstract class Author with _$Author {
   @Entity(realClass: Author)
   factory Author({
     @Id() @Default(0) int id,

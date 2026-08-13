@@ -7,7 +7,7 @@ part 'episode.freezed.dart';
 part 'episode.g.dart';
 
 @Freezed(addImplicitFinal: false, toJson: false)
-class Episode with _$Episode {
+abstract class Episode with _$Episode {
   const Episode._();
 
   @Entity(realClass: Episode)
@@ -24,6 +24,7 @@ class Episode with _$Episode {
     @Property(type: PropertyType.dateNano) DateTime? updatedAt,
     @Default(0) int progress,
     @Default(0) int total,
+    String? downloadedPath,
   }) = _Episode;
 
   factory Episode.fromJson(Map<String, Object?> json) =>
