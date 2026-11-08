@@ -119,7 +119,7 @@ final class AllPodcastsProvider
   AllPodcasts create() => AllPodcasts();
 }
 
-String _$allPodcastsHash() => r'cb37183afda3a1a4f9ba5c042a660d1b7853d554';
+String _$allPodcastsHash() => r'b709464520dfab1d51e1deaa46e2e5c0040789fd';
 
 abstract class _$AllPodcasts extends $AsyncNotifier<List<Podcast>> {
   FutureOr<List<Podcast>> build();

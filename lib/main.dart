@@ -19,6 +19,7 @@ import 'package:rockserwis_podcaster/screens/podcasts_page.dart';
 import 'package:rockserwis_podcaster/screens/settings_page.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_data.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_mode.dart';
+import 'package:rockserwis_podcaster/utils/analytics.dart';
 import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';
 
 import 'utils/firebase_options.dart';
@@ -71,7 +72,7 @@ class MusicPlayer extends ConsumerStatefulWidget {
 }
 
 class _MusicPlayerState extends ConsumerState<MusicPlayer> {
-  late RouterConfig<Object> _routerConfig;
+  late final GoRouter _routerConfig;
 
   @override
   void initState() {
@@ -159,6 +160,25 @@ class _MusicPlayerState extends ConsumerState<MusicPlayer> {
         ),
       ],
     );
+
+    // Log a screen view on every navigation, including bottom-tab switches
+    // inside the StatefulShellRoute, using the route pattern as screen name
+    // (e.g. /podcasts/episodes).
+    _routerConfig.routerDelegate.addListener(_logScreenView);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _logScreenView());
+  }
+
+  void _logScreenView() {
+    final screenName =
+        _routerConfig.routerDelegate.currentConfiguration.fullPath;
+    if (screenName.isEmpty) return;
+    ref.read(analyticsProvider).logScreenView(screenName);
+  }
+
+  @override
+  void dispose() {
+    _routerConfig.routerDelegate.removeListener(_logScreenView);
+    super.dispose();
   }
 
   @override

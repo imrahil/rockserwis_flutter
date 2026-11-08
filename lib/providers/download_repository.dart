@@ -10,6 +10,7 @@ import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/providers/download_settings.dart';
 import 'package:rockserwis_podcaster/providers/episode_repository.dart';
 import 'package:rockserwis_podcaster/providers/player_repository.dart';
+import 'package:rockserwis_podcaster/utils/analytics.dart';
 import 'package:rockserwis_podcaster/utils/logger.dart';
 
 part 'download_repository.g.dart';
@@ -65,7 +66,9 @@ class DownloadRepository {
     return downloads.path;
   }
 
-  Future<void> downloadEpisode(Episode episode) async {
+  /// Enqueues [episode] for download. [auto] marks downloads started by the
+  /// app (auto-download of favorites) rather than by the user.
+  Future<void> downloadEpisode(Episode episode, {bool auto = false}) async {
     final settings = ref.read(downloadSettingsProvider);
     if (!settings.downloadsEnabled) {
       logger.w('Downloads are disabled in settings');
@@ -99,6 +102,8 @@ class DownloadRepository {
     _pendingDownloadIds.add(episode.episodeId);
 
     await _downloader.enqueue(task);
+
+    ref.read(analyticsProvider).logDownloadStart(episode, auto: auto);
   }
 
   Future<void> cancelDownload(int episodeId) async {
@@ -160,6 +165,7 @@ class DownloadRepository {
         .read(allEpisodesProvider.notifier)
         .updateDownloadedPath(episodeId, filePath);
     logger.i('Download complete for episode $episodeId at $filePath');
+    ref.read(analyticsProvider).logDownloadComplete(episodeId);
   }
 
   Future<int> currentUsageBytes() async {
@@ -219,7 +225,7 @@ class DownloadRepository {
 
     logger.i('Auto-downloading ${episodes.length} new favorited episodes');
     for (final ep in episodes) {
-      await downloadEpisode(ep);
+      await downloadEpisode(ep, auto: true);
     }
   }
 

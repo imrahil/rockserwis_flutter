@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/app_routes.dart';
 import 'package:rockserwis_podcaster/components/labeled_checkbox.dart';
+import 'package:rockserwis_podcaster/utils/analytics.dart';
 import 'package:rockserwis_podcaster/utils/logger.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -31,6 +32,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
       if (result && context.mounted) {
         logger.d('Login successful');
+        ref.read(analyticsProvider).logLogin();
 
         while (context.canPop() == true) {
           context.pop();

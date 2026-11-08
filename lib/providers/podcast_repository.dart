@@ -5,6 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/api/data/missing_podcasts.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
 import 'package:rockserwis_podcaster/providers/objectbox_repository.dart';
+import 'package:rockserwis_podcaster/utils/analytics.dart';
 import 'package:rockserwis_podcaster/utils/const.dart';
 
 part 'podcast_repository.g.dart';
@@ -64,6 +65,11 @@ class AllPodcasts extends _$AllPodcasts {
 
     final updatedPodcast = podcast.copyWith(isFavorited: !podcast.isFavorited);
     await objectBox.podcastBox.putAsync(updatedPodcast);
+
+    ref.read(analyticsProvider).logFavoritePodcast(
+          updatedPodcast,
+          favorited: updatedPodcast.isFavorited,
+        );
 
     await update((previousState) => [
           ...previousState.map(
