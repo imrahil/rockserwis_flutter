@@ -31,3 +31,11 @@ analyzer:
   errors:
     # https://pub.dev/packages/freezed#disabling-invalid_annotation_target-warning-and-warning-in-generates-files
     invalid_annotation_target: ignore
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**

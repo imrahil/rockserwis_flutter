@@ -1,0 +1,11 @@
+[tools]
+flutter = "3.47.9"
+java = "temurin-17"
+
+[env]
+ANDROID_HOME = "{{env.HOME}}/Android/Sdk"
+ANDROID_SDK_ROOT = "{{env.HOME}}/Android/Sdk"
+_.path = [
+  "{{env.HOME}}/Android/Sdk/cmdline-tools/latest/bin",
+  "{{env.HOME}}/Android/Sdk/platform-tools",
+]
