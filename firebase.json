@@ -3,20 +3,20 @@
     "platforms": {
       "android": {
         "default": {
-          "projectId": "rockcaster",
-          "appId": "1:833618886347:android:697e3e508e8615e19be54e",
+          "projectId": "rockcaster-crashlytics-v2",
+          "appId": "1:389346973222:android:fd1b82e9dedc98b1f838e7",
           "fileOutput": "android/app/google-services.json"
         }
       },
       "dart": {
-        "lib/firebase_options.dart": {
-          "projectId": "rockcaster",
+        "lib/utils/firebase_options.dart": {
+          "projectId": "rockcaster-crashlytics-v2",
           "configurations": {
-            "android": "1:833618886347:android:697e3e508e8615e19be54e",
-            "ios": "1:833618886347:ios:72f6d20404ec8c3b9be54e",
-            "macos": "1:833618886347:ios:72f6d20404ec8c3b9be54e",
-            "web": "1:833618886347:web:2bfe82dcf517ec749be54e",
-            "windows": "1:833618886347:web:84f65fc00a9bee1e9be54e"
+            "android": "1:389346973222:android:fd1b82e9dedc98b1f838e7",
+            "ios": "1:389346973222:ios:bcfd37d0157a351ef838e7",
+            "macos": "1:389346973222:ios:bcfd37d0157a351ef838e7",
+            "web": "1:389346973222:web:2c8b78412ab5dfaaf838e7",
+            "windows": "1:389346973222:web:8cec7a5b7064083af838e7"
           }
         }
       }

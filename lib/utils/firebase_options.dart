@@ -41,49 +41,46 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDfdaTKVzVxYp23m43-GKzglcboSjDWdFs',
-    appId: '1:833618886347:web:2bfe82dcf517ec749be54e',
-    messagingSenderId: '833618886347',
-    projectId: 'rockcaster',
-    authDomain: 'rockcaster.firebaseapp.com',
-    storageBucket: 'rockcaster.appspot.com',
-    measurementId: 'G-PBSDE2883V',
+    apiKey: 'AIzaSyDBxV_XxAV36thGINrNuzl0jRnysvDeNHk',
+    appId: '1:389346973222:web:2c8b78412ab5dfaaf838e7',
+    messagingSenderId: '389346973222',
+    projectId: 'rockcaster-crashlytics-v2',
+    authDomain: 'rockcaster-crashlytics-v2.firebaseapp.com',
+    storageBucket: 'rockcaster-crashlytics-v2.firebasestorage.app',
+    measurementId: 'G-4Y7ZBR6LJN',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyC1doVY_iYqlTXuwgwEWHJMnqMAfX7L2DA',
-    appId: '1:833618886347:android:697e3e508e8615e19be54e',
-    messagingSenderId: '833618886347',
-    projectId: 'rockcaster',
-    storageBucket: 'rockcaster.appspot.com',
+    apiKey: 'AIzaSyCJDzd5PQ5ErlaQDSZHSSEeN4GP3HY1R8s',
+    appId: '1:389346973222:android:fd1b82e9dedc98b1f838e7',
+    messagingSenderId: '389346973222',
+    projectId: 'rockcaster-crashlytics-v2',
+    storageBucket: 'rockcaster-crashlytics-v2.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCY7TblL6PV9Bg_HT_LaN4q57fk7AWNNa4',
-    appId: '1:833618886347:ios:72f6d20404ec8c3b9be54e',
-    messagingSenderId: '833618886347',
-    projectId: 'rockcaster',
-    storageBucket: 'rockcaster.appspot.com',
+    apiKey: 'AIzaSyAOmnPI5YNnWbgdmeJUSB3H6QzWI3fYYbo',
+    appId: '1:389346973222:ios:bcfd37d0157a351ef838e7',
+    messagingSenderId: '389346973222',
+    projectId: 'rockcaster-crashlytics-v2',
+    storageBucket: 'rockcaster-crashlytics-v2.firebasestorage.app',
     iosBundleId: 'com.imrahil.rockserwisPodcaster',
   );
-
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCY7TblL6PV9Bg_HT_LaN4q57fk7AWNNa4',
-    appId: '1:833618886347:ios:72f6d20404ec8c3b9be54e',
-    messagingSenderId: '833618886347',
-    projectId: 'rockcaster',
-    storageBucket: 'rockcaster.appspot.com',
+    apiKey: 'AIzaSyAOmnPI5YNnWbgdmeJUSB3H6QzWI3fYYbo',
+    appId: '1:389346973222:ios:bcfd37d0157a351ef838e7',
+    messagingSenderId: '389346973222',
+    projectId: 'rockcaster-crashlytics-v2',
+    storageBucket: 'rockcaster-crashlytics-v2.firebasestorage.app',
     iosBundleId: 'com.imrahil.rockserwisPodcaster',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyDfdaTKVzVxYp23m43-GKzglcboSjDWdFs',
-    appId: '1:833618886347:web:84f65fc00a9bee1e9be54e',
-    messagingSenderId: '833618886347',
-    projectId: 'rockcaster',
-    authDomain: 'rockcaster.firebaseapp.com',
-    storageBucket: 'rockcaster.appspot.com',
-    measurementId: 'G-S9HX1Q7JWM',
+    apiKey: 'AIzaSyDBxV_XxAV36thGINrNuzl0jRnysvDeNHk',
+    appId: '1:389346973222:web:8cec7a5b7064083af838e7',
+    messagingSenderId: '389346973222',
+    projectId: 'rockcaster-crashlytics-v2',
+    authDomain: 'rockcaster-crashlytics-v2.firebaseapp.com',
+    storageBucket: 'rockcaster-crashlytics-v2.firebasestorage.app',
+    measurementId: 'G-0PY9BKFXC4',
   );
-
 }
