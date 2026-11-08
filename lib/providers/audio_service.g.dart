@@ -46,4 +46,4 @@ final class AudioServiceProvider
   }
 }
 
-String _$audioServiceHash() => r'36ff69a5630fc76e4b7afdb7943881307821f913';
+String _$audioServiceHash() => r'ae91e535370778f4c31f35fc2885e5c25d214b4b';
