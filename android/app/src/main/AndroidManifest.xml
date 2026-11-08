@@ -8,8 +8,7 @@
     <application
         android:label="Rockcaster"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
-        android:usesCleartextTraffic="true">
+        android:icon="@mipmap/ic_launcher">
 
         <activity
             android:name="com.ryanheise.audioservice.AudioServiceActivity"

@@ -1,9 +1,23 @@
+import 'dart:async';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rockserwis_podcaster/utils/logger.dart';
 
 class MyAudioHandler extends BaseAudioHandler with SeekHandler {
+  /// How long the media session (and its foreground service) is kept alive
+  /// while playback is paused or finished.
+  ///
+  /// Android 17 only lets apps play audio from the background while they hold
+  /// a media playback foreground service that was started while the app was
+  /// visible (or from a notification / media button). The service is
+  /// therefore kept in the foreground across pauses so playback can be resumed
+  /// from any controller, and is released after this timeout, as recommended
+  /// by https://developer.android.com/about/versions/17/changes/bg-audio
+  static const idleTimeout = Duration(minutes: 10);
+
   final _player = AudioPlayer();
+  Timer? _idleTimer;
 
   late MediaItem localMediaItem;
 
@@ -37,6 +51,8 @@ class MyAudioHandler extends BaseAudioHandler with SeekHandler {
       ));
     });
 
+    _player.playerStateStream.listen(_updateIdleTimer);
+
     _player.positionStream.listen((updatePosition) {
       playbackState.add(
         playbackState.value.copyWith(updatePosition: updatePosition),
@@ -61,7 +77,43 @@ class MyAudioHandler extends BaseAudioHandler with SeekHandler {
   Future<void> pause() => _player.pause();
 
   @override
-  Future<void> stop() => _player.stop();
+  Future<void> stop() async {
+    _cancelIdleTimer();
+    // Moving to the idle state makes audio_service stop its foreground service.
+    await _player.stop();
+  }
+
+  void _updateIdleTimer(PlayerState state) {
+    final inactive = state.processingState == ProcessingState.completed ||
+        (!state.playing && state.processingState == ProcessingState.ready);
+
+    if (!inactive) {
+      _cancelIdleTimer();
+    } else {
+      _idleTimer ??= Timer(idleTimeout, _onIdleTimeout);
+    }
+  }
+
+  void _cancelIdleTimer() {
+    _idleTimer?.cancel();
+    _idleTimer = null;
+  }
+
+  Future<void> _onIdleTimeout() async {
+    _idleTimer = null;
+    logger.d('Playback inactive for $idleTimeout, releasing media session');
+
+    if (_player.processingState == ProcessingState.completed) {
+      // just_audio keeps `playing` true after completion. Pause and rewind so
+      // a later play() starts the episode again instead of completing at once.
+      await _player.pause();
+      await _player.seek(Duration.zero);
+    }
+    // The audio source is kept, so play() later reloads it and resumes from
+    // the current position. That play() comes from the UI, the notification
+    // or a media button, so the foreground service may be started again.
+    await stop();
+  }
 
   @override
   Future<void> seek(Duration position) => _player.seek(position);

@@ -11,8 +11,12 @@ Future<MyAudioHandler> audioService(Ref ref) async {
     config: const AudioServiceConfig(
       androidNotificationChannelId: 'com.imrahil.rockserwis.podcaster',
       androidNotificationChannelName: 'Rockserwis.fm Podcast Player',
-      androidNotificationOngoing: true,
-      androidStopForegroundOnPause: true,
+      // Keep the media playback foreground service running while paused, so
+      // playback can be resumed from the background on Android 17+ (see
+      // MyAudioHandler.idleTimeout). audio_service requires the notification
+      // to be dismissible in that mode.
+      androidNotificationOngoing: false,
+      androidStopForegroundOnPause: false,
     ),
   );
 }
