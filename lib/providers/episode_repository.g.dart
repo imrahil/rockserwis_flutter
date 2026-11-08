@@ -155,7 +155,7 @@ final class AllEpisodesProvider
   AllEpisodes create() => AllEpisodes();
 }
 
-String _$allEpisodesHash() => r'8dd105e7e008ac52f3cac82225bf19b4dc37ee3f';
+String _$allEpisodesHash() => r'd3170214a55485d97e0a8a0864a06ceb6a4bef90';
 
 abstract class _$AllEpisodes extends $AsyncNotifier<List<Episode>> {
   FutureOr<List<Episode>> build();

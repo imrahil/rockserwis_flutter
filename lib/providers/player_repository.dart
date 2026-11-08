@@ -12,6 +12,7 @@ import 'package:rockserwis_podcaster/providers/audio_service.dart';
 import 'package:rockserwis_podcaster/providers/download_repository.dart';
 import 'package:rockserwis_podcaster/providers/download_settings.dart';
 import 'package:rockserwis_podcaster/providers/episode_repository.dart';
+import 'package:rockserwis_podcaster/utils/analytics.dart';
 import 'package:rockserwis_podcaster/utils/audio_handler.dart';
 
 part 'player_repository.g.dart';
@@ -73,6 +74,8 @@ class PlayerRepository extends _$PlayerRepository {
   Future<void> _onEpisodeCompleted() async {
     final episode = state.currentEpisode;
     if (episode == null) return;
+
+    ref.read(analyticsProvider).logEpisodeComplete(episode);
 
     if (!ref.read(downloadSettingsProvider).autoDeleteAfterPlayed) return;
     if (episode.downloadedPath == null) return;
@@ -190,5 +193,9 @@ class PlayerRepository extends _$PlayerRepository {
             ? Duration(milliseconds: currentEpisode.progress)
             : Duration.zero);
     _audioHandler.play();
+
+    ref
+        .read(analyticsProvider)
+        .logEpisodePlay(currentEpisode, fromDownload: hasLocal);
   }
 }

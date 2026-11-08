@@ -41,7 +41,7 @@ final class PlayerRepositoryProvider
   }
 }
 
-String _$playerRepositoryHash() => r'fb41754952903a803934fdebc812c310a770ea88';
+String _$playerRepositoryHash() => r'26f1c5ee648c6a2f7a543a156585bea9113b6f3c';
 
 abstract class _$PlayerRepository extends $Notifier<EpisodePlayerState> {
   EpisodePlayerState build();

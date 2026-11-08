@@ -6,6 +6,7 @@ import 'package:rockserwis_podcaster/models/episode.dart';
 import 'package:rockserwis_podcaster/objectbox.g.dart';
 import 'package:rockserwis_podcaster/providers/objectbox_repository.dart';
 import 'package:rockserwis_podcaster/providers/sort_order.dart';
+import 'package:rockserwis_podcaster/utils/analytics.dart';
 import 'package:rockserwis_podcaster/utils/const.dart';
 
 part 'episode_repository.g.dart';
@@ -75,6 +76,11 @@ class AllEpisodes extends _$AllEpisodes {
           episode.copyWith(isFavorited: !episode.isFavorited);
       await objectBox.episodeBox.putAsync(updatedEpisode);
       await updateList(updatedEpisode);
+
+      ref.read(analyticsProvider).logFavoriteEpisode(
+            updatedEpisode,
+            favorited: updatedEpisode.isFavorited,
+          );
     }
   }
 

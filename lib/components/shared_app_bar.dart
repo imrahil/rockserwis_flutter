@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
 import 'package:rockserwis_podcaster/app_routes.dart';
+import 'package:rockserwis_podcaster/utils/analytics.dart';
 
 class SharedAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final String title;
@@ -16,6 +17,7 @@ class SharedAppBar extends ConsumerWidget implements PreferredSizeWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     void logout(context) async {
       await ref.read(apiRepositoryProvider).logout();
+      ref.read(analyticsProvider).logLogout();
 
       while (GoRouter.of(context).canPop() == true) {
         context.pop();
