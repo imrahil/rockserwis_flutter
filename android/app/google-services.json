@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "833618886347",
-    "project_id": "rockcaster",
-    "storage_bucket": "rockcaster.appspot.com"
+    "project_number": "389346973222",
+    "project_id": "rockcaster-crashlytics-v2",
+    "storage_bucket": "rockcaster-crashlytics-v2.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:833618886347:android:697e3e508e8615e19be54e",
+        "mobilesdk_app_id": "1:389346973222:android:fd1b82e9dedc98b1f838e7",
         "android_client_info": {
           "package_name": "com.imrahil.rockserwis_podcaster"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyC1doVY_iYqlTXuwgwEWHJMnqMAfX7L2DA"
+          "current_key": "AIzaSyCJDzd5PQ5ErlaQDSZHSSEeN4GP3HY1R8s"
         }
       ],
       "services": {
