@@ -36,15 +36,15 @@ dependencies:
   audio_service: ^0.18.15
   audio_video_progress_bar: ^2.0.3
   awesome_snackbar_content: ^0.1.4
-  cached_network_image: ^3.4.1
+  cached_network_image: ^4.0.6
   connectivity_plus: ^7.1.1
-  cupertino_icons: ^1.0.8
-  firebase_analytics: ^12.3.0
-  firebase_core: ^4.7.0
-  firebase_crashlytics: ^5.2.0
+  cupertino_icons: ^2.0.0
+  firebase_analytics: ^13.0.1
+  firebase_core: ^5.1.0
+  firebase_crashlytics: ^6.0.1
   flutter_riverpod: ^3.3.1
   freezed_annotation: ^3.1.0
-  go_router: ^17.2.1
+  go_router: ^18.1.3
   http: ^1.2.2
   intl: ^0.20.2
   json_annotation: ^4.11.0
