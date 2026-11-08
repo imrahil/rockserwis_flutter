@@ -38,7 +38,7 @@ class DownloadSettings {
   }
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class DownloadSettingsNotifier extends _$DownloadSettingsNotifier {
   @override
   DownloadSettings build() {
