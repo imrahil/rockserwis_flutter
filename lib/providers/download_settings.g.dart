@@ -20,7 +20,7 @@ final class DownloadSettingsNotifierProvider
         argument: null,
         retry: null,
         name: r'downloadSettingsProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -42,7 +42,7 @@ final class DownloadSettingsNotifierProvider
 }
 
 String _$downloadSettingsNotifierHash() =>
-    r'8e26accd4b2b406f8032b00a77aa35b77212ebf1';
+    r'2bfd59b33fccf5fd522ffe3114524dc59118057d';
 
 abstract class _$DownloadSettingsNotifier extends $Notifier<DownloadSettings> {
   DownloadSettings build();

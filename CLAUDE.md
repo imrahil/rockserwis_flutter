@@ -20,7 +20,7 @@ Rockserwis Podcaster is a Flutter mobile app for streaming podcasts from rockser
 ### Testing & Quality
 - `flutter test` - Run all unit and widget tests
 - `flutter analyze` - Run static analysis (configured in analysis_options.yaml)
-- `dart run custom_lint` - Run Riverpod linting rules
+- `dart analyze` - Run static analysis including Riverpod lint rules (riverpod_lint analyzer plugin; `flutter analyze` does not run plugins)
 
 ### Dependency Management
 - `flutter pub get` - Install dependencies

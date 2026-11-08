@@ -30,21 +30,21 @@ void main() {
         sharedPreferences: sharedPreferences,
       );
 
-      final myApp = ProviderScope(
-        overrides: [
-          sharedPreferencesProvider.overrideWith((ref) => sharedPreferences),
-          apiRepositoryProvider.overrideWith((ref) => api),
-        ],
-        child: MaterialApp(
-          home: Scaffold(
-            body: PodcastsList(
-              podcasts: parsedMockPodcasts,
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWith((ref) => sharedPreferences),
+            apiRepositoryProvider.overrideWith((ref) => api),
+          ],
+          child: MaterialApp(
+            home: Scaffold(
+              body: PodcastsList(
+                podcasts: parsedMockPodcasts,
+              ),
             ),
           ),
         ),
       );
-
-      await tester.pumpWidget(myApp);
 
       expect(find.byType(ListTile), findsNWidgets(parsedMockPodcasts.length));
       expect(find.byType(CachedNetworkImage),
