@@ -31,6 +31,9 @@ jobs:
       with:
         channel: stable
     - run: flutter pub get
+    # dart analyze (unlike flutter analyze) also runs analyzer plugins such as riverpod_lint.
+    - name: Analyze
+      run: dart analyze
     - run: flutter test
     - run: flutter build apk
     - run: flutter build appbundle
