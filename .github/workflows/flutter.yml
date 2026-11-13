@@ -30,6 +30,10 @@ jobs:
       uses: subosito/flutter-action@v2
       with:
         channel: stable
+        # Pinned: Flutter 3.50 pins test_api 0.7.14, which needs analyzer >=13,
+        # while objectbox_generator 5.x requires analyzer <11, so `pub get`
+        # can't resolve. Unpin once objectbox_generator supports analyzer 13+.
+        flutter-version: 3.47.x
     - run: flutter pub get
     # dart analyze (unlike flutter analyze) also runs analyzer plugins such as riverpod_lint.
     - name: Analyze
