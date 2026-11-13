@@ -16,7 +16,12 @@ class MyAudioHandler extends BaseAudioHandler with SeekHandler {
   /// by https://developer.android.com/about/versions/17/changes/bg-audio
   static const idleTimeout = Duration(minutes: 10);
 
-  final _player = AudioPlayer();
+  // Send request headers (the session cookie) natively instead of through
+  // just_audio's local Dart HTTP proxy. The proxy only handles HttpException,
+  // so any SocketException while streaming (lost connection, failed DNS
+  // lookup) escaped as an uncaught async error. Natively, network failures are
+  // reported through the player's error stream instead.
+  final _player = AudioPlayer(useProxyForRequestHeaders: false);
   Timer? _idleTimer;
 
   late MediaItem localMediaItem;
@@ -52,6 +57,10 @@ class MyAudioHandler extends BaseAudioHandler with SeekHandler {
     });
 
     _player.playerStateStream.listen(_updateIdleTimer);
+
+    _player.errorStream.listen((error) {
+      logger.w('Playback error ${error.code}: ${error.message}');
+    });
 
     _player.positionStream.listen((updatePosition) {
       playbackState.add(
