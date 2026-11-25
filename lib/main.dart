@@ -10,6 +10,7 @@ import 'package:rockserwis_podcaster/app_routes.dart';
 import 'package:rockserwis_podcaster/app_startup.dart';
 import 'package:rockserwis_podcaster/components/scaffold.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
+import 'package:rockserwis_podcaster/providers/media_library.dart';
 import 'package:rockserwis_podcaster/screens/episodes_page.dart';
 import 'package:rockserwis_podcaster/screens/favorites.dart';
 import 'package:rockserwis_podcaster/screens/history_page.dart';
@@ -20,6 +21,7 @@ import 'package:rockserwis_podcaster/screens/settings_page.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_data.dart';
 import 'package:rockserwis_podcaster/utils/app_theme_mode.dart';
 import 'package:rockserwis_podcaster/utils/analytics.dart';
+import 'package:rockserwis_podcaster/utils/logger.dart';
 import 'package:rockserwis_podcaster/utils/shared_preferences_provider.dart';
 
 import 'utils/firebase_options.dart';
@@ -48,6 +50,17 @@ Future<void> main() async {
   // * Preload SharedPreferences before calling runApp, as the AppStartupWidget
   // * depends on it in order to load the themeMode
   await container.read(sharedPreferencesProvider.future);
+
+  // * Start the audio service and connect the media library Android Auto
+  // * browses before runApp. When Android Auto starts the app in the
+  // * background there is no activity, so the widget tree (and with it
+  // * appStartupProvider) can't be relied on to do it.
+  try {
+    await container.read(mediaLibraryProvider.future);
+  } catch (e, st) {
+    // AppStartupWidget shows the error and offers a retry.
+    logger.e('Could not start the audio service', error: e, stackTrace: st);
+  }
 
   runApp(
     UncontrolledProviderScope(

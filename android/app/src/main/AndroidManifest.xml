@@ -55,6 +55,12 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <!-- Lists the app in Android Auto as a media app. Android Auto browses
+             and controls it through the AudioService MediaBrowserService above. -->
+        <meta-data
+            android:name="com.google.android.gms.car.application"
+            android:resource="@xml/automotive_app_desc" />
     </application>
 
     <!-- Required to query activities that can process text, see:

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rockserwis_podcaster/api/api.dart';
@@ -14,6 +13,7 @@ import 'package:rockserwis_podcaster/providers/download_settings.dart';
 import 'package:rockserwis_podcaster/providers/episode_repository.dart';
 import 'package:rockserwis_podcaster/utils/analytics.dart';
 import 'package:rockserwis_podcaster/utils/audio_handler.dart';
+import 'package:rockserwis_podcaster/utils/media_library.dart';
 
 part 'player_repository.g.dart';
 
@@ -153,7 +153,7 @@ class PlayerRepository extends _$PlayerRepository {
     );
   }
 
-  void setAudioSource(Episode currentEpisode) async {
+  Future<void> setAudioSource(Episode currentEpisode) async {
     state = state.copyWith(
       currentEpisode: currentEpisode,
     );
@@ -164,16 +164,9 @@ class PlayerRepository extends _$PlayerRepository {
         .updateTimestamp(currentEpisode.episodeId);
 
     final apiProvider = ref.read(apiRepositoryProvider);
-
-    MediaItem item = MediaItem(
-      // Specify a unique ID for each media item
-      id: currentEpisode.episodeId.toString(),
-      // Metadata to display in the notification
-      album: DateFormat("yyyy-MM-dd").format(currentEpisode.date),
-      title: currentEpisode.name,
-      artUri: currentEpisode.imgPath != ""
-          ? Uri.parse(apiProvider.getImagePath(currentEpisode.imgPath))
-          : null,
+    final item = MediaLibrary.episodeMediaItem(
+      currentEpisode,
+      imageUrl: apiProvider.getImagePath,
     );
 
     final localPath = currentEpisode.downloadedPath;
