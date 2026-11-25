@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rockserwis_podcaster/utils/logger.dart';
+import 'package:rockserwis_podcaster/utils/media_library.dart';
 
 class MyAudioHandler extends BaseAudioHandler with SeekHandler {
   /// How long the media session (and its foreground service) is kept alive
@@ -25,6 +26,15 @@ class MyAudioHandler extends BaseAudioHandler with SeekHandler {
   Timer? _idleTimer;
 
   late MediaItem localMediaItem;
+
+  /// What Android Auto can browse and play. Set by mediaLibraryProvider once
+  /// the database is open; until then the browse tree is empty.
+  MediaLibrary? mediaLibrary;
+
+  /// Whether an episode has been loaded since the app started. Set before the
+  /// source is loaded, so a source that fails to load is not retried by
+  /// [play] over and over.
+  bool _sourceRequested = false;
 
   MyAudioHandler() {
     _player.playbackEventStream.listen((event) {
@@ -80,7 +90,37 @@ class MyAudioHandler extends BaseAudioHandler with SeekHandler {
   }
 
   @override
-  Future<void> play() => _player.play();
+  Future<void> play() async {
+    // Nothing loaded yet, e.g. the app was started in the background by
+    // Android Auto or by the system's media resumption controls: resume the
+    // last played episode instead of doing nothing.
+    final library = mediaLibrary;
+    if (!_sourceRequested && library != null) {
+      if (await library.playLastPlayed()) return;
+    }
+    await _player.play();
+  }
+
+  @override
+  Future<List<MediaItem>> getChildren(String parentMediaId,
+          [Map<String, dynamic>? options]) async =>
+      await mediaLibrary?.getChildren(parentMediaId) ?? const [];
+
+  @override
+  Future<MediaItem?> getMediaItem(String mediaId) async =>
+      mediaLibrary?.getMediaItem(mediaId);
+
+  @override
+  Future<void> playFromMediaId(String mediaId,
+      [Map<String, dynamic>? extras]) async {
+    await mediaLibrary?.playFromMediaId(mediaId);
+  }
+
+  @override
+  Future<void> playFromSearch(String query,
+      [Map<String, dynamic>? extras]) async {
+    await mediaLibrary?.playFromSearch(query);
+  }
 
   @override
   Future<void> pause() => _player.pause();
@@ -150,6 +190,7 @@ class MyAudioHandler extends BaseAudioHandler with SeekHandler {
     MediaItem item,
     Duration initialPosition,
   ) async {
+    _sourceRequested = true;
     mediaItem.add(item);
 
     try {
