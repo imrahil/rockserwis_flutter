@@ -179,12 +179,14 @@ class PlayerRepository extends _$PlayerRepository {
             headers: apiProvider.getHeaders(),
           );
 
-    await _audioHandler.setAudioSource(
+    final loaded = await _audioHandler.setAudioSource(
         source,
         item,
         currentEpisode.progress > 0
             ? Duration(milliseconds: currentEpisode.progress)
             : Duration.zero);
+    // On failure the handler has told the UI, which offers a retry.
+    if (!loaded) return;
     _audioHandler.play();
 
     ref

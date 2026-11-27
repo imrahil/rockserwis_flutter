@@ -36,6 +36,30 @@ class MyAudioHandler extends BaseAudioHandler with SeekHandler {
   /// [play] over and over.
   bool _sourceRequested = false;
 
+  /// The last loaded source, kept so playback can be retried after an error.
+  AudioSource? _source;
+
+  /// Where to resume [_source] from when retrying after an error.
+  Duration _resumePosition = Duration.zero;
+
+  /// Whether playback stopped because of an error (e.g. the connection was
+  /// lost). The next [play] then reloads [_source] instead of resuming,
+  /// because the platform player has to be prepared again after an error.
+  bool _failed = false;
+
+  final _playbackErrors = StreamController<PlayerException>.broadcast();
+
+  /// Emits once each time playback stops because of an error, so the UI can
+  /// tell the user and offer a retry.
+  Stream<PlayerException> get playbackErrors => _playbackErrors.stream;
+
+  /// Whether the current source is streamed over the network, as opposed to
+  /// a downloaded file.
+  bool get isStreaming {
+    final source = _source;
+    return source is UriAudioSource && source.uri.scheme.startsWith('http');
+  }
+
   MyAudioHandler() {
     _player.playbackEventStream.listen((event) {
       playbackState.add(playbackState.value.copyWith(
@@ -68,9 +92,7 @@ class MyAudioHandler extends BaseAudioHandler with SeekHandler {
 
     _player.playerStateStream.listen(_updateIdleTimer);
 
-    _player.errorStream.listen((error) {
-      logger.w('Playback error ${error.code}: ${error.message}');
-    });
+    _player.errorStream.listen(_onPlaybackError);
 
     _player.positionStream.listen((updatePosition) {
       playbackState.add(
@@ -97,6 +119,10 @@ class MyAudioHandler extends BaseAudioHandler with SeekHandler {
     final library = mediaLibrary;
     if (!_sourceRequested && library != null) {
       if (await library.playLastPlayed()) return;
+    }
+    final source = _source;
+    if (_failed && source != null) {
+      if (!await _load(source, _resumePosition)) return;
     }
     await _player.play();
   }
@@ -185,22 +211,47 @@ class MyAudioHandler extends BaseAudioHandler with SeekHandler {
     return newPosition;
   }
 
-  Future<void> setAudioSource(
+  /// Loads [source] for [item]. Returns whether it loaded; if it failed
+  /// because of an error, [playbackErrors] has reported it.
+  Future<bool> setAudioSource(
     AudioSource source,
     MediaItem item,
     Duration initialPosition,
   ) async {
     _sourceRequested = true;
+    _source = source;
     mediaItem.add(item);
 
+    return _load(source, initialPosition);
+  }
+
+  Future<bool> _load(AudioSource source, Duration initialPosition) async {
+    _failed = false;
+    _resumePosition = initialPosition;
     try {
       await _player.setAudioSource(source, initialPosition: initialPosition);
+      return true;
     } on PlayerException catch (e) {
-      logger.d('PlayerException: ${e.message}');
+      // Skip if another episode was loaded meanwhile: it reports its own errors.
+      if (identical(source, _source)) _onPlaybackError(e);
     } on PlayerInterruptedException catch (e) {
+      // Another load or stop() interrupted this one: not an error.
       logger.d('PlayerInterruptedException: ${e.message}');
-    } catch (e) {
-      logger.d("All other errors...");
+    } catch (e, st) {
+      logger.e('Could not load the audio source', error: e, stackTrace: st);
     }
+    return false;
+  }
+
+  void _onPlaybackError(PlayerException error) {
+    logger.w('Playback error ${error.code}: ${error.message}');
+    // A failed load reports the same error through the error stream and the
+    // setAudioSource() call: only tell the UI once.
+    if (_failed) return;
+    _failed = true;
+    if (_player.position > Duration.zero) _resumePosition = _player.position;
+    // Show the play button instead of a player stuck "playing" nothing.
+    _player.pause().catchError((Object _) {});
+    _playbackErrors.add(error);
   }
 }
