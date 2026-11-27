@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -10,6 +11,7 @@ import 'package:rockserwis_podcaster/app_routes.dart';
 import 'package:rockserwis_podcaster/app_startup.dart';
 import 'package:rockserwis_podcaster/components/scaffold.dart';
 import 'package:rockserwis_podcaster/models/podcast.dart';
+import 'package:rockserwis_podcaster/providers/audio_service.dart';
 import 'package:rockserwis_podcaster/providers/media_library.dart';
 import 'package:rockserwis_podcaster/screens/episodes_page.dart';
 import 'package:rockserwis_podcaster/screens/favorites.dart';
@@ -77,6 +79,7 @@ final _shellNavigatorPodcastsKey = GlobalKey<NavigatorState>();
 final _shellNavigatorFavoritesKey = GlobalKey<NavigatorState>();
 final _shellNavigatorHistoryKey = GlobalKey<NavigatorState>();
 final _shellPlayerHistoryKey = GlobalKey<NavigatorState>();
+final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
 class MusicPlayer extends ConsumerStatefulWidget {
   const MusicPlayer({super.key});
@@ -86,10 +89,20 @@ class MusicPlayer extends ConsumerStatefulWidget {
 
 class _MusicPlayerState extends ConsumerState<MusicPlayer> {
   late final GoRouter _routerConfig;
+  StreamSubscription<void>? _playbackErrorsSubscription;
 
   @override
   void initState() {
     super.initState();
+
+    // Tell the user when playback stops because of an error (usually a lost
+    // connection) instead of the player silently stopping. The audio service
+    // is null if it failed to start.
+    _playbackErrorsSubscription = ref
+        .read(audioServiceProvider)
+        .value
+        ?.playbackErrors
+        .listen((_) => _showPlaybackError());
 
     final isLogged = ref.read(apiRepositoryProvider).isLogged();
 
@@ -188,8 +201,28 @@ class _MusicPlayerState extends ConsumerState<MusicPlayer> {
     ref.read(analyticsProvider).logScreenView(screenName);
   }
 
+  void _showPlaybackError() {
+    final messenger = _scaffoldMessengerKey.currentState;
+    final audioHandler = ref.read(audioServiceProvider).value;
+    if (messenger == null || audioHandler == null) return;
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        content: Text(audioHandler.isStreaming
+            ? 'Connection lost. Check your network.'
+            : "Couldn't play this episode."),
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 10),
+        action: SnackBarAction(
+          label: 'Retry',
+          onPressed: audioHandler.play,
+        ),
+      ));
+  }
+
   @override
   void dispose() {
+    _playbackErrorsSubscription?.cancel();
     _routerConfig.routerDelegate.removeListener(_logScreenView);
     super.dispose();
   }
@@ -201,6 +234,7 @@ class _MusicPlayerState extends ConsumerState<MusicPlayer> {
     return MaterialApp.router(
       title: 'Rockserwis.fm Podcast Player',
       debugShowCheckedModeBanner: false,
+      scaffoldMessengerKey: _scaffoldMessengerKey,
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: themeMode,
