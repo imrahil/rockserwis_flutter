@@ -11,8 +11,10 @@ import 'package:rockserwis_podcaster/providers/audio_service.dart';
 import 'package:rockserwis_podcaster/providers/download_repository.dart';
 import 'package:rockserwis_podcaster/providers/download_settings.dart';
 import 'package:rockserwis_podcaster/providers/episode_repository.dart';
+import 'package:rockserwis_podcaster/providers/objectbox_repository.dart';
 import 'package:rockserwis_podcaster/utils/analytics.dart';
 import 'package:rockserwis_podcaster/utils/audio_handler.dart';
+import 'package:rockserwis_podcaster/utils/logger.dart';
 import 'package:rockserwis_podcaster/utils/media_library.dart';
 
 part 'player_repository.g.dart';
@@ -147,6 +149,19 @@ class PlayerRepository extends _$PlayerRepository {
         );
   }
 
+  /// Called when the download of [episodeId] completes. If that episode is
+  /// playing, it continues from the file, so it no longer depends on the
+  /// connection.
+  Future<void> onEpisodeDownloaded(int episodeId, String path) async {
+    final current = state.currentEpisode;
+    if (current == null || current.episodeId != episodeId) return;
+
+    state = state.copyWith(
+      currentEpisode: current.copyWith(downloadedPath: path),
+    );
+    await _audioHandler.replaceSource(AudioSource.file(path));
+  }
+
   void setEpisodes(List<Episode> episodes) {
     state = state.copyWith(
       episodes: episodes,
@@ -159,9 +174,20 @@ class PlayerRepository extends _$PlayerRepository {
     );
 
     // update episode's timestamp
-    await ref
-        .read(allEpisodesProvider.notifier)
-        .updateTimestamp(currentEpisode.episodeId);
+    final episodes = ref.read(allEpisodesProvider.notifier);
+    await episodes.updateTimestamp(currentEpisode.episodeId);
+
+    // The caller's copy can be stale: skipToNext()/skipToPrevious() use the
+    // list captured when playback started, so an episode downloaded since
+    // then would be streamed instead of played from the file. Use the stored
+    // episode for the current download path and progress.
+    final objectBox = await ref.read(objectBoxProvider.future);
+    final stored =
+        await episodes.getSingleEpisode(objectBox, currentEpisode.episodeId);
+    if (stored != null) {
+      currentEpisode = stored;
+      state = state.copyWith(currentEpisode: stored);
+    }
 
     final apiProvider = ref.read(apiRepositoryProvider);
     final item = MediaLibrary.episodeMediaItem(
@@ -188,6 +214,20 @@ class PlayerRepository extends _$PlayerRepository {
     // On failure the handler has told the UI, which offers a retry.
     if (!loaded) return;
     _audioHandler.play();
+
+    // With downloads enabled, download the episode while it streams, so a
+    // lost connection doesn't stop it: playback switches to the file once
+    // the download completes (see onEpisodeDownloaded).
+    if (!hasLocal && ref.read(downloadSettingsProvider).downloadsEnabled) {
+      final downloads = ref.read(downloadRepositoryProvider);
+      if (!await downloads.isDownloading(currentEpisode.episodeId)) {
+        unawaited(downloads
+            .downloadEpisode(currentEpisode, auto: true)
+            .catchError((Object e, StackTrace st) {
+          logger.e('Could not start the download', error: e, stackTrace: st);
+        }));
+      }
+    }
 
     ref
         .read(analyticsProvider)

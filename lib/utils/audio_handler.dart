@@ -22,7 +22,24 @@ class MyAudioHandler extends BaseAudioHandler with SeekHandler {
   // so any SocketException while streaming (lost connection, failed DNS
   // lookup) escaped as an uncaught async error. Natively, network failures are
   // reported through the player's error stream instead.
-  final _player = AudioPlayer(useProxyForRequestHeaders: false);
+  //
+  // Buffer up to 15 minutes ahead when streaming (the default is under a
+  // minute), so a short loss of connection doesn't stop playback.
+  final _player = AudioPlayer(
+    useProxyForRequestHeaders: false,
+    audioLoadConfiguration: const AudioLoadConfiguration(
+      androidLoadControl: AndroidLoadControl(
+        minBufferDuration: Duration(minutes: 10),
+        maxBufferDuration: Duration(minutes: 15),
+        // Let the durations above, not the default size limit (about 13 MB),
+        // decide how much is buffered.
+        prioritizeTimeOverSizeThresholds: true,
+      ),
+      darwinLoadControl: DarwinLoadControl(
+        preferredForwardBufferDuration: Duration(minutes: 15),
+      ),
+    ),
+  );
   Timer? _idleTimer;
 
   late MediaItem localMediaItem;
@@ -39,13 +56,18 @@ class MyAudioHandler extends BaseAudioHandler with SeekHandler {
   /// The last loaded source, kept so playback can be retried after an error.
   AudioSource? _source;
 
-  /// Where to resume [_source] from when retrying after an error.
+  /// Where to resume [_source] from when it is reloaded by [play].
   Duration _resumePosition = Duration.zero;
 
   /// Whether playback stopped because of an error (e.g. the connection was
-  /// lost). The next [play] then reloads [_source] instead of resuming,
-  /// because the platform player has to be prepared again after an error.
+  /// lost) and that error has been reported.
   bool _failed = false;
+
+  /// Whether the next [play] has to load [_source] instead of resuming: after
+  /// an error the platform player has to be prepared again, and after
+  /// [replaceSource] while nothing was loaded, the new source isn't loaded
+  /// yet.
+  bool _needsReload = false;
 
   final _playbackErrors = StreamController<PlayerException>.broadcast();
 
@@ -121,7 +143,7 @@ class MyAudioHandler extends BaseAudioHandler with SeekHandler {
       if (await library.playLastPlayed()) return;
     }
     final source = _source;
-    if (_failed && source != null) {
+    if (_needsReload && source != null) {
       if (!await _load(source, _resumePosition)) return;
     }
     await _player.play();
@@ -225,8 +247,33 @@ class MyAudioHandler extends BaseAudioHandler with SeekHandler {
     return _load(source, initialPosition);
   }
 
+  /// Replaces the current source with [source] for the same episode (its
+  /// download finished while it was streaming), keeping the position and
+  /// whether it is playing.
+  Future<void> replaceSource(AudioSource source) async {
+    if (_source == null) return;
+    // Nothing more to play; replacing the source would only restart it.
+    if (_player.processingState == ProcessingState.completed) return;
+
+    _source = source;
+    if (_needsReload || _player.processingState == ProcessingState.idle) {
+      // Nothing is loaded (after an error or stop()): the next play() loads
+      // the new source from where playback stopped.
+      if (!_needsReload) _resumePosition = _player.position;
+      _needsReload = true;
+      return;
+    }
+
+    final wasPlaying = _player.playing;
+    if (await _load(source, _player.position) && wasPlaying) {
+      // play() completes only when playback pauses, so don't wait for it.
+      unawaited(_player.play());
+    }
+  }
+
   Future<bool> _load(AudioSource source, Duration initialPosition) async {
     _failed = false;
+    _needsReload = false;
     _resumePosition = initialPosition;
     try {
       await _player.setAudioSource(source, initialPosition: initialPosition);
@@ -249,6 +296,7 @@ class MyAudioHandler extends BaseAudioHandler with SeekHandler {
     // setAudioSource() call: only tell the UI once.
     if (_failed) return;
     _failed = true;
+    _needsReload = true;
     if (_player.position > Duration.zero) _resumePosition = _player.position;
     // Show the play button instead of a player stuck "playing" nothing.
     _player.pause().catchError((Object _) {});
