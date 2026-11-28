@@ -11,6 +11,7 @@ import 'package:rockserwis_podcaster/providers/audio_service.dart';
 import 'package:rockserwis_podcaster/providers/download_repository.dart';
 import 'package:rockserwis_podcaster/providers/download_settings.dart';
 import 'package:rockserwis_podcaster/providers/episode_repository.dart';
+import 'package:rockserwis_podcaster/providers/objectbox_repository.dart';
 import 'package:rockserwis_podcaster/utils/analytics.dart';
 import 'package:rockserwis_podcaster/utils/audio_handler.dart';
 import 'package:rockserwis_podcaster/utils/media_library.dart';
@@ -159,9 +160,20 @@ class PlayerRepository extends _$PlayerRepository {
     );
 
     // update episode's timestamp
-    await ref
-        .read(allEpisodesProvider.notifier)
-        .updateTimestamp(currentEpisode.episodeId);
+    final episodes = ref.read(allEpisodesProvider.notifier);
+    await episodes.updateTimestamp(currentEpisode.episodeId);
+
+    // The caller's copy can be stale: skipToNext()/skipToPrevious() use the
+    // list captured when playback started, so an episode downloaded since
+    // then would be streamed instead of played from the file. Use the stored
+    // episode for the current download path and progress.
+    final objectBox = await ref.read(objectBoxProvider.future);
+    final stored =
+        await episodes.getSingleEpisode(objectBox, currentEpisode.episodeId);
+    if (stored != null) {
+      currentEpisode = stored;
+      state = state.copyWith(currentEpisode: stored);
+    }
 
     final apiProvider = ref.read(apiRepositoryProvider);
     final item = MediaLibrary.episodeMediaItem(
