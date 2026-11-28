@@ -57,6 +57,12 @@ class DownloadRepository {
 
   String _taskIdFor(int episodeId) => 'episode_$episodeId';
 
+  /// Whether a download of [episodeId] is queued or running, including one
+  /// started before the app was last closed.
+  Future<bool> isDownloading(int episodeId) async =>
+      _pendingDownloadIds.contains(episodeId) ||
+      await _downloader.taskForId(_taskIdFor(episodeId)) != null;
+
   Future<String> _downloadsDir() async {
     final dir = await getApplicationDocumentsDirectory();
     final downloads = Directory(p.join(dir.path, 'downloads'));
@@ -166,6 +172,15 @@ class DownloadRepository {
         .updateDownloadedPath(episodeId, filePath);
     logger.i('Download complete for episode $episodeId at $filePath');
     ref.read(analyticsProvider).logDownloadComplete(episodeId);
+
+    try {
+      await ref
+          .read(playerRepositoryProvider.notifier)
+          .onEpisodeDownloaded(episodeId, filePath);
+    } catch (e, st) {
+      logger.e('Could not switch playback to the downloaded file',
+          error: e, stackTrace: st);
+    }
   }
 
   Future<int> currentUsageBytes() async {
